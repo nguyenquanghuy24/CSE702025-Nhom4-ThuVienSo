@@ -1,0 +1,398 @@
+/* Cố định toàn phần */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: #0077cc;
+}
+
+header.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.nav-links a, .auth a {
+  margin-left: 15px;
+  font-size: 0.95rem;
+}
+
+.welcome-section {
+  text-align: center;
+  padding: 40px 20px;
+  background: #e0f0ff;
+}
+
+.search-box {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.search-box input {
+  width: 300px;
+  padding: 10px;
+  border: 1px solid #bbb;
+  border-radius: 5px 0 0 5px;
+}
+
+.search-box button {
+  padding: 10px 15px;
+  border: 1px solid #bbb;
+  border-left: none;
+  background: #0077cc;
+  color: #fff;
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+}
+
+.new-documents, .events {
+  padding: 40px 20px;
+}
+
+.card-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px;
+  max-width: 1200px;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.card {
+  background: white;
+  padding: 10px;
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.image {
+  background: #ccc;
+  height: 120px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* TUNG */
+
+/* Điều chỉnh phần tin tức */
+.news-section{
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.news-section .subtitle{
+  color:black;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.news-section .title{
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.news-section .desc {
+  color: #555;
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+
+
+/* Điều chỉnh phần thông tin  */
+.news-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 20px;
+  max-width: 1200px;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.card-with-bg {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.card-with-bg:hover {
+  transform: translateY(-5px);
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.news-topic {
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: whitesmoke;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.news-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+
+/* Điều chỉnh nút bấm XEM THÊM */
+.btn-xemthem {
+  background: none;
+  border: none;
+  color: black; 
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 13px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-xemthem:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 3px ;
+  text-underline-offset: 5px;
+}
+
+.btn-wrapper {
+  width: 100%;
+  text-align: right;
+  padding-right: 30px; 
+  margin-top: 20px;
+}
+
+.custom-link {
+  text-decoration: none ;
+  color: #0077cc;                  
+  font-weight: bold;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.custom-link:hover {
+  color: black;
+  text-decoration-color: black;  
+}
+
+
+/* Điều chỉnh phần chú thích thêm  */
+.last_bottom{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  background-color: blueviolet;
+  color: white;
+  margin: 40px auto;
+  padding: 40px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  gap: 40px;
+}
+
+.column {
+  flex: 1;
+  padding: 0 20px;
+  text-align: left;
+}
+.column h1{
+  font-size: 1.5rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #3498db;
+}
+.column p{
+  font-size: 20px;
+  margin: 10px 0;
+  padding-left: 15px;
+  position: relative;
+  line-height: 1.5;
+}
+.column ul>li{
+  margin: 10px 0;
+  padding-left: 15px;
+  position: relative;
+  line-height: 1.5;
+  list-style: none;
+}
+.column ul>li>a{
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+}
+
+.contact-list li{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.contact-list i{
+  margin-right: 10px;
+  font-size: 1.2em;
+  color: white;
+}
+.contact-list span{
+  vertical-align: middle;
+  font-size: 20px ;
+}
+
+/* Điều chỉnh phần cuối */
+.bottom{
+  margin-top: -40px;
+  padding-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: aliceblue;
+  height: 50px;
+}
+
+/* JQ */
+/* Modal đăng nhập */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5);
+  animation: fadeIn 0.3s;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+}
+
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #004c99;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #555;
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.signup-link a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
