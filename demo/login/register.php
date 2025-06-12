@@ -1,6 +1,5 @@
 <?php
 include 'connect.php';
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $user = $_POST['user'];
   $pass = $_POST['pass'];
@@ -17,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $stmt->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>

@@ -1,3 +1,8 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -8,7 +13,6 @@
   <link rel="stylesheet" href="test.css" />
 </head>
 <body>
-
 <header class="navbar">
     <div class="logo">📚 LOGO</div>
     <nav class="nav-links">
@@ -17,18 +21,15 @@
       <a href="#">Help</a>
       <a href="#">Contact</a>
     </nav>
-    <?php session_start(); ?>
     <div class="auth">
-  <?php if (isset($_SESSION['user'])): ?>
-    <span>Xin chào, <?php echo htmlspecialchars($_SESSION['user']); ?>!</span>
-    <a href="login/logout.php">Đăng xuất</a>
-  <?php else: ?>
-    <a href="#" onclick="openLoginModal()">Log in / Sign up</a>
-  <?php endif; ?>
+    <?php if (isset($_SESSION['user'])): ?>
+      <span>Xin chào, <?php echo htmlspecialchars($_SESSION['user']); ?>!</span>
+      <a href="login/logout.php">Đăng xuất</a>
+    <?php else: ?>
+      <a href="#" onclick="openLoginModal()">Log in / Sign up</a>
+    <?php endif; ?>
     </div>
-
 </header>
-
 <section class="welcome-section">
     <h1>Welcome to <span>Thư viện số</span></h1>
     <div class="search-box">
@@ -36,7 +37,6 @@
       <button><span>🔍</span></button>
     </div>
 </section>
-
 <section class="new-documents">
     <h2 class="title">TÀI LIỆU MỚI</h2>
     <div class="card-container">
@@ -59,7 +59,6 @@
       </button>
   </div>
 </section>
-
 <section class="events">
     <div class="section-header">
       <h2 class="title">SỰ KIỆN</h2>
@@ -80,7 +79,6 @@
       </button>
     </div>
 </section>
-
 <!-- TUNG -->
 <section class="news-section">
     <h2 class="title">TIN TỨC</h2>
@@ -116,7 +114,6 @@
         </button>
     </div>
 </section>
-
 <footer>
     <div class="last_bottom">
         <div class="column">
@@ -168,7 +165,6 @@
         </div>
     </div>
 </footer>
-
 <?php if (!isset($_SESSION['user'])): ?>
 <!--= Modal Đăng Nhập -->
 <div id="loginModal" class="modal">
@@ -188,37 +184,31 @@
   </div>
 </div>
 <?php endif; ?>
-
-
 <script>
-  // Mở modal khi nhấn "Log in / Sign in"
-  document.querySelector('.auth a').addEventListener('click', function(event) {
-    event.preventDefault();
+  // Mở modal đăng nhập
+  function openLoginModal() {
     document.getElementById('loginModal').style.display = 'block';
-  });
-
+  }
   // Đóng modal
   function closeModal() {
     document.getElementById('loginModal').style.display = 'none';
   }
-
-  // Đóng khi nhấn ngoài modal
+  // Đóng modal nếu click ngoài vùng nội dung
   window.onclick = function(event) {
     const modal = document.getElementById('loginModal');
     if (event.target === modal) {
       modal.style.display = 'none';
     }
   }
-const authLink = document.querySelector('.auth a');
-if (authLink && document.getElementById('loginModal')) {
-  authLink.addEventListener('click', function(event) {
-    event.preventDefault();
-    document.getElementById('loginModal').style.display = 'block';
+  // Phân biệt Log in / Đăng xuất
+  document.querySelectorAll('.auth a').forEach(function(link) {
+    link.addEventListener('click', function(event) {
+      if (this.getAttribute('href') === "#") {
+        event.preventDefault(); // chỉ chặn nếu là link modal
+        openLoginModal();
+      }
+    });
   });
-}
 </script>
-
-
-
 </body>
 </html>
