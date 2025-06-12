@@ -50,65 +50,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Đăng ký tài khoản</title>
-  <link rel="stylesheet" href="../test.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f2f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .register-container {
-      background: white;
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 350px;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-    }
-    p.error {
-      color: red;
-      text-align: center;
-    }
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <title>Đăng ký</title>
+  <link rel="stylesheet" href="resister.css">
 </head>
 <body>
+  <!-- Thanh điều hướng -->
+  <header class="navbar">
+    <div class="logo">📚 LOGO</div>
+    <div class="nav-links">
+      <a href="#">Thư viện</a>
+      <a href="#">Dịch vụ</a>
+      <a href="#">Help</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="auth">
+      <a href="#">Log in / Sign in</a>
+    </div>
+  </header>
+
+  <!-- Phần đăng ký -->
   <div class="register-container">
     <h2>Đăng ký</h2>
-
-    <?php if (isset($_SESSION['register_error'])): ?>
-      <p class="error"><?php echo $_SESSION['register_error']; unset($_SESSION['register_error']); ?></p>
-    <?php endif; ?>
-
-    <form method="POST" action="">
-      <label for="user">Tên đăng nhập:</label>
-      <input type="text" name="user" id="user" required>
-
-      <label for="email">Email:</label>
-      <input type="email" name="email" id="email" required>
-
-      <label for="pass">Mật khẩu:</label>
-      <input type="password" name="pass" id="pass" required>
-
-      <label for="confirm">Xác nhận mật khẩu:</label>
-      <input type="password" name="confirm" id="confirm" required>
-
-      <button type="submit">Tạo tài khoản</button>
+    <form>
+      <input type="text" placeholder="Tên đăng nhập" required>
+      <input type="email" placeholder="Email" required>
+      <input type="password" placeholder="Mật khẩu" required>
+      <input type="password" placeholder="Xác nhận mật khẩu" required>
+      <button type="submit">Đăng ký</button>
     </form>
-    <p style="text-align: center; margin-top: 10px;">
-      <a href="../index.php">← Quay lại trang chính</a>
-    </p>
+    <div class="signup-link">
+      <p>Đã có tài khoản? <a href="#">Đăng nhập</a></p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="last_bottom">
+    <div class="column">
+      <h1>About</h1>
+      <p>Đây là thư viện số. Bạn muốn viết thêm gì thì có viết thêm vào đây.</p>
+    </div>
+    <div class="column">
+      <h1>Thông tin</h1>
+      <ul>
+        <li><a href="#">Dịch vụ hỗ trợ nghiên cứu</a></li>
+        <li><a href="#">Câu hỏi thường gặp</a></li>
+        <li><a href="#">Tìm tài sản thất lạc</a></li>
+      </ul>
+    </div>
+    <div class="column">
+      <h1>Liên hệ</h1>
+      <ul class="contact-list">
+        <li><i class="ri-map-pin-fill"></i><span>Đại học Phenikaa</span></li>
+        <li><i class="ri-mail-fill"></i><span> elib@phenikaa-uni.edu.vn</span></li>
+        <li><i class="ri-phone-fill"></i> <span> 0246.6291 8118 | Số máy lẻ: 117</span></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="bottom">
+    <p>Copyright Group 4_Software Engineering</p>
+    <div class="right_footer">
+      <div class="icons">
+        <i class="ri-facebook-fill"></i>
+        <i class="ri-instagram-fill"></i>
+        <i class="ri-youtube-fill"></i>
+      </div>
+    </div>
   </div>
 </body>
 </html>
