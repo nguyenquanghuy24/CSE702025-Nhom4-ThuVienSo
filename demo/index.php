@@ -166,16 +166,20 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
 </footer>
 <?php if (!isset($_SESSION['user'])): ?>
-<!--= Modal Đăng Nhập -->
-<div id="loginModal" class="modal">
+<div id="loginModal" class="modal" style="<?php if (isset($_SESSION['login_error'])) echo 'display:block;'; ?>">
   <div class="modal-content">
     <span class="close-btn" onclick="closeModal()">&times;</span>
     <h2>Đăng nhập</h2>
-    <form action="login/login.php" method="POST">
-      <label for="username">Tên đăng nhập hoặc Email</label>
+
+    <?php if (isset($_SESSION['login_error'])): ?>
+      <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
+    <?php endif; ?>
+
+    <form method="POST" action="login/login.php">
+      <label for="user">Tên đăng nhập:</label>
       <input type="text" id="user" name="user" required>
 
-      <label for="password">Mật khẩu</label>
+      <label for="pass">Mật khẩu:</label>
       <input type="password" id="pass" name="pass" required>
 
       <button type="submit">Đăng nhập</button>
@@ -184,6 +188,7 @@ if (session_status() === PHP_SESSION_NONE) {
   </div>
 </div>
 <?php endif; ?>
+
 <script>
   // Mở modal đăng nhập
   function openLoginModal() {
