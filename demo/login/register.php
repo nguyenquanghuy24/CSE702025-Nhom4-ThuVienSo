@@ -70,18 +70,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </header>
 
   <!-- Phần đăng ký -->
-  <div class="register-container">
+<div class="register-container">
     <h2>Đăng ký</h2>
-    <form>
-      <input type="text" placeholder="Tên đăng nhập" required>
-      <input type="email" placeholder="Email" required>
-      <input type="password" placeholder="Mật khẩu" required>
-      <input type="password" placeholder="Xác nhận mật khẩu" required>
-      <button type="submit">Đăng ký</button>
+    <?php if (isset($_SESSION['register_error'])): ?>
+      <p class="error"><?php echo $_SESSION['register_error']; unset($_SESSION['register_error']); ?></p>
+    <?php endif; ?>
+    <form method="POST" action="">
+      <label for="user">Tên đăng nhập:</label>
+      <input type="text" name="user" id="user" required>
+
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" required>
+
+      <label for="pass">Mật khẩu:</label>
+      <input type="password" name="pass" id="pass" required>
+
+      <label for="confirm">Xác nhận mật khẩu:</label>
+      <input type="password" name="confirm" id="confirm" required>
+
+      <button type="submit">Tạo tài khoản</button>
     </form>
-    <div class="signup-link">
-      <p>Đã có tài khoản? <a href="#">Đăng nhập</a></p>
-    </div>
+    <p style="text-align: center; margin-top: 10px;">
+      <a href="../index.php">← Quay lại trang chính</a>
+    </p>
+</div>
+
   </div>
 
   <!-- Footer -->
