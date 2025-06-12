@@ -15,7 +15,7 @@ if (ini_get("session.use_cookies")) {
         $params["path"], $params["domain"],
         $params["secure"], $params["httponly"]
     );
-}
+} 
 // Chuyển hướng về trang chủ sau 1 giây
 header("Refresh: 1; URL=../index.php");
 exit();

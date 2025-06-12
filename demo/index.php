@@ -23,7 +23,7 @@ if (session_status() === PHP_SESSION_NONE) {
     </nav>
     <div class="auth">
     <?php if (isset($_SESSION['user'])): ?>
-      <span>Xin chào, <?php echo htmlspecialchars($_SESSION['user']); ?>!</span>
+      <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
       <a href="login/logout.php">Đăng xuất</a>
     <?php else: ?>
       <a href="#" onclick="openLoginModal()">Log in / Sign up</a>
@@ -188,7 +188,6 @@ if (session_status() === PHP_SESSION_NONE) {
   </div>
 </div>
 <?php endif; ?>
-
 <script>
   // Mở modal đăng nhập
   function openLoginModal() {
