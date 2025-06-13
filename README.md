@@ -1,5 +1,14 @@
 # Quản lý thư viện
 
+## Mô tả
+Hệ thống web giúp quản lý sách, mượn/trả, đăng ký - đăng nhập người dùng và thống kê hoạt động thư viện. Hỗ trợ cả người dùng lẫn quản trị viên.
+
+## Tính năng
+- Đăng ký / Đăng nhập người dùng
+- Quản lý sách (thêm, sửa, xóa, tìm kiếm)
+- Mượn / Trả sách và tạo phiếu
+- Thống kê sách và người mượn
+
 ### Danh sách thành viên 
 
 | Tên thành viên     | Mã sinh viên | Email                           |
