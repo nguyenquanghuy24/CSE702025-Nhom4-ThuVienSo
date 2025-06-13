@@ -1,205 +1,161 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thư viện số</title>
-  <link rel="stylesheet" href="test.css" />
+  <link rel="stylesheet" href="test.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-
-<header class="navbar">
+  <header class="navbar">
     <div class="logo">📚 LOGO</div>
-    <nav class="nav-links">
-      <a href="#">Thư viện</a>
-      <a href="#">Dịch vụ</a>
-      <a href="#">Help</a>
-      <a href="#">Contact</a>
-    </nav>
+    <div class="nav-links">
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Thư viện <i class="fas fa-caret-down"></i></a>
+        <div class="dropdown-menu">
+          <a href="/ebooks"><i class="fas fa-book"></i> Tài liệu số</a>
+          <a href="/books"><i class="fas fa-book-open"></i> Sách in</a>
+          <a href="/journals"><i class="fas fa-newspaper"></i> Tạp chí khoa học</a>
+          <a href="/theses"><i class="fas fa-file-alt"></i> Luận văn & Luận án</a>
+          <a href="/databases"><i class="fas fa-database"></i> Cơ sở dữ liệu</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Dịch vụ <i class="fas fa-caret-down"></i></a>
+        <div class="dropdown-menu">
+          <a href="#"><i class="fas fa-info-circle"></i> Hỗ trợ nghiên cứu</a>
+          <a href="#"><i class="fas fa-question-circle"></i> Hướng dẫn sử dụng</a>
+          <a href="#"><i class="fas fa-cog"></i> Dịch vụ kỹ thuật</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Help <i class="fas fa-caret-down"></i></a>
+        <div class="dropdown-menu">
+          <a href="#"><i class="fas fa-question"></i> FAQ</a>
+          <a href="#"><i class="fas fa-life-ring"></i> Hỗ trợ trực tuyến</a>
+          <a href="#"><i class="fas fa-book"></i> Tài liệu hướng dẫn</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <a href="#" class="dropdown-toggle">Contact <i class="fas fa-caret-down"></i></a>
+        <div class="dropdown-menu">
+          <a href="#"><i class="fas fa-envelope"></i> Email</a>
+          <a href="#"><i class="fas fa-phone"></i> Hotline</a>
+          <a href="#"><i class="fas fa-map-marker-alt"></i> Địa chỉ</a>
+        </div>
+      </div>
+    </div>
     <div class="auth">
       <a href="#">Log in / Sign in</a>
     </div>
-</header>
+  </header>
 
-<section class="welcome-section">
-    <h1>Welcome to <span>Thư viện số</span></h1>
+  <section class="welcome-section">
+    <h1>Welcome to Thư viện số</h1>
     <div class="search-box">
-      <input type="text" placeholder="Tìm kiếm tài liệu..." />
-      <button><span>🔍</span></button>
+      <input type="text" placeholder="Search...">
+      <button><i class="fas fa-search"></i></button>
     </div>
-</section>
+  </section>
 
-<section class="new-documents">
-    <h2 class="title">TÀI LIỆU MỚI</h2>
-    <div class="card-container">
-      <div class="card">
-        <div class="image"></div>
-        <p class="title">Tiêu đề tài liệu</p>
-      </div>
-      <div class="card">
-        <div class="image"></div>
-        <p class="title">Tiêu đề tài liệu</p>
-      </div>
-      <div class="card">
-        <div class="image"></div>
-        <p class="title">Tiêu đề tài liệu</p>
-      </div>
-    </div>
-    <div class="btn-wrapper">
-      <button class="btn-xemthem">
-          <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
-      </button>
-  </div>
-</section>
-
-<section class="events">
+  <section class="new-documents">
     <div class="section-header">
-      <h2 class="title">SỰ KIỆN</h2>
+      <h2>TÀI LIỆU MỚI</h2>
     </div>
     <div class="card-container">
-      <div class="card">
-        <div class="image"></div>
-        <p class="title">Sự kiện A</p>
-      </div>
-      <div class="card">
-        <div class="image"></div>
-        <p class="title">Sự kiện B</p>
-      </div>
+      <div class="card"><div class="image"></div><div class="title">Tiêu đề tài liệu</div></div>
+      <div class="card"><div class="image"></div><div class="title">Tiêu đề tài liệu</div></div>
+      <div class="card"><div class="image"></div><div class="title">Tiêu đề tài liệu</div></div>
     </div>
     <div class="btn-wrapper">
-      <button class="btn-xemthem">
-          <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
-      </button>
+      <button class="btn-xemthem">XEM THÊM <i class="fas fa-arrow-right"></i></button>
     </div>
-</section>
+  </section>
 
-<!-- TUNG -->
-<section class="news-section">
+  <section class="events">
+    <div class="section-header">
+      <h2>SỰ KIỆN</h2>
+    </div>
+    <div class="card-container">
+      <div class="card"><div class="image"></div><div class="title">Sự kiện A</div></div>
+      <div class="card"><div class="image"></div><div class="title">Sự kiện B</div></div>
+    </div>
+    <div class="btn-wrapper">
+      <button class="btn-xemthem">XEM THÊM <i class="fas fa-arrow-right"></i></button>
+    </div>
+  </section>
+
+  <section class="news-section">
+    <div class="subtitle">Cập nhật</div>
     <h2 class="title">TIN TỨC</h2>
     <p class="desc">Cập nhật tin tức, thông báo</p>
-
     <div class="news-container">
-        <!--Box 1 -->
-        <div class="news-card card-with-bg" style="background-image: url('image1.jpg');">
-            <div class="overlay">
-              <p class="news-topic">Văn hóa đọc</p>
-              <h3 class="news-title">Lễ trao giải các cuộc thi Ngày Sách và Văn hóa đọc</h3>
-            </div>
+      <div class="card-with-bg" style="background-image: url('https://via.placeholder.com/400x300');">
+        <div class="overlay">
+          <div class="news-topic">Văn hóa đọc</div>
+          <div class="news-title">Lễ trao giải các cuộc thi Ngày Sách và Văn hóa đọc</div>
         </div>
-        <!--Box 2-->
-        <div class="news-card card-with-bg" style="background-image: url('image2.jpg');">
-            <div class="overlay">
-              <p class="news-topic">Topic2</p>
-              <h3 class="news-title">Ứng dụng AI hỗ trợ học tập và nghiên cứu khoa học</h3>
-            </div>
+      </div>
+      <div class="card-with-bg" style="background-image: url('https://via.placeholder.com/400x300');">
+        <div class="overlay">
+          <div class="news-topic">Topic2</div>
+          <div class="news-title">Ứng dụng AI hỗ trợ học tập và nghiên cứu khoa học</div>
         </div>
-        <!--Box 3-->
-        <div class="news-card card-with-bg" style="background-image: url('image3.jpg');">
-            <div class="overlay">
-              <p class="news-topic">Triển lãm</p>
-              <h3 class="news-title">Đọc sách thông minh – Bảo vệ bản quyền</h3>
-            </div>
+      </div>
+      <div class="card-with-bg" style="background-image: url('https://via.placeholder.com/400x300');">
+        <div class="overlay">
+          <div class="news-topic">Triển lãm</div>
+          <div class="news-title">Đọc sách thông minh – Bảo vệ bản quyền</div>
         </div>
+      </div>
     </div>
-
     <div class="btn-wrapper">
-        <button class="btn-xemthem">
-            <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
-        </button>
+      <button class="btn-xemthem">XEM THÊM <i class="fas fa-arrow-right"></i></button>
     </div>
-</section>
+  </section>
 
-<footer>
-    <div class="last_bottom">
-        <div class="column">
-            <h1 id="about">About</h1>
-            <p>Đây là thư viện số. <br>Bạn muốn viết thêm gì thì có viết thêm vào đây. </br> </p>
-        </div>
-        <div class="column">
-            <h1 id="info">Thông tin</h1>
-            <ul>
-                <li>
-                    <a href="Support">Dịch vụ hỗ trợ nghiên cứu</a>
-                </li>
-                <li>
-                    <a href="Question">Câu hỏi thường gặp</a>
-                </li>
-                <li>
-                    <a href="Search">Tìm tài sản thất lạc</a>
-                </li>
-            </ul>
-        </div>
-        <div class="column">
-            <h1 id="contact">Liên hệ</h1>
-            <ul class="contact-list">
-                <li>
-                    <i class="ri-map-pin-fill"></i>
-                    <span>Đại học Phenikaa</span>
-                </li>
-                <li>
-                    <i class="ri-mail-fill"></i> 
-                    <span> elib@phenikaa-uni.edu.vn</span>
-                </li>
-                <li>
-                    <i class="ri-phone-fill"></i> 
-                    <span> 0246.6291 8118 | Số máy lẻ: 117</span>
-                </li>
-            </ul>
-        </div>
+  <footer class="last_bottom">
+    <div class="column">
+      <h1>About</h1>
+      <p>Đây là thư viện số. Bạn muốn viết thêm gì thì có viết thêm vào đây.</p>
     </div>
-    <div class="bottom">        
-        <div class="left-footer">
-            <p>Copyright  Group 4_Software Engineering</p>
-        </div>
-        <div class="right_footer">
-            <div class="icons">
-                <i class="ri-facebook-fill"></i>
-                <i class="ri-instagram-fill"></i>
-                <i class="ri-youtube-fill"></i>`
-            </div>
-        </div>
+    <div class="column">
+      <h1>Thông tin</h1>
+      <ul>
+        <li><a href="#">Dịch vụ hỗ trợ nghiên cứu</a></li>
+        <li><a href="#">Câu hỏi thường gặp</a></li>
+        <li><a href="#">Tìm tài sản thất lạc</a></li>
+      </ul>
     </div>
-</footer>
+    <div class="column">
+      <h1>Liên hệ</h1>
+      <ul class="contact-list">
+        <li><i class="fas fa-university"></i><span>Đại học Phenikaa</span></li>
+        <li><i class="fas fa-envelope"></i><span>library@phenikaa.edu.vn</span></li>
+        <li><i class="fas fa-phone"></i><span>0246.6291 8118 | Số máy lẻ: 117</span></li>
+      </ul>
+    </div>
+  </footer>
 
-<!--= Modal Đăng Nhập -->
-<div id="loginModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
-    <h2>Đăng nhập</h2>
-    <form>
-      <label for="username">Tên đăng nhập hoặc Email</label>
-      <input type="text" id="username" name="username" required>
-
-      <label for="password">Mật khẩu</label>
-      <input type="password" id="password" name="password" required>
-
-      <button type="submit">Đăng nhập</button>
-      <p class="signup-link">Chưa có tài khoản? <a href="#">Đăng ký</a></p>
-    </form>
+  <div class="bottom">
+    <p>Copyright Group 4_Software Engineering</p>
   </div>
-</div>
 
-<script>
-  // Mở modal khi nhấn "Log in / Sign in"
-  document.querySelector('.auth a').addEventListener('click', function(event) {
-    event.preventDefault();
-    document.getElementById('loginModal').style.display = 'block';
-  });
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">×</span>
+      <h2>Đăng nhập</h2>
+      <input type="text" placeholder="Tên đăng nhập hoặc Email">
+      <input type="password" placeholder="Mật khẩu">
+      <button>Đăng nhập</button>
+      <div class="signup-link">
+        <p>Chưa có tài khoản? <a href="#">Đăng ký</a></p>
+      </div>
+    </div>
+  </div>
 
-  // Đóng modal
-  function closeModal() {
-    document.getElementById('loginModal').style.display = 'none';
-  }
-
-  // Đóng khi nhấn ngoài modal
-  window.onclick = function(event) {
-    const modal = document.getElementById('loginModal');
-    if (event.target === modal) {
-      modal.style.display = 'none';
-    }
-  }
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>

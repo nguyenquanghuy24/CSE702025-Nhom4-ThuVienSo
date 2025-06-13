@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', Arial, sans-serif;
   background: #f5f5f5;
   color: #333;
 }
@@ -16,6 +16,7 @@ a {
   color: #0077cc;
 }
 
+/* Header */
 header.navbar {
   display: flex;
   justify-content: space-between;
@@ -30,11 +31,71 @@ header.navbar {
   font-size: 1.2rem;
 }
 
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
 .nav-links a, .auth a {
-  margin-left: 15px;
   font-size: 0.95rem;
 }
 
+/* Dropdown Menu */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  font-size: 0.95rem;
+  color: #0077cc;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dropdown-menu {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color: #e0f0ff;
+  color: #0077cc;
+}
+
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* Welcome Section */
 .welcome-section {
   text-align: center;
   padding: 40px 20px;
@@ -64,13 +125,14 @@ header.navbar {
   cursor: pointer;
 }
 
+/* New Documents & Events */
 .new-documents, .events {
   padding: 40px 20px;
 }
 
 .card-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   max-width: 1200px;
   justify-content: center;
@@ -98,25 +160,20 @@ header.navbar {
   margin-bottom: 5px;
 }
 
-
-
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-
-/* TUNG */
-
-/* Điều chỉnh phần tin tức */
-.news-section{
+/* News Section */
+.news-section {
   text-align: center;
   padding: 60px 20px;
 }
 
-.news-section .subtitle{
-  color:black;
+.news-section .subtitle {
+  color: black;
   text-transform: uppercase;
   font-weight: bold;
   margin-bottom: 10px;
@@ -124,7 +181,7 @@ header.navbar {
   letter-spacing: 1px;
 }
 
-.news-section .title{
+.news-section .title {
   font-size: 36px;
   font-weight: bold;
   margin-bottom: 10px;
@@ -136,12 +193,9 @@ header.navbar {
   font-size: 16px;
 }
 
-
-
-/* Điều chỉnh phần thông tin  */
 .news-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); 
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   max-width: 1200px;
   justify-content: center;
@@ -191,12 +245,11 @@ header.navbar {
   line-height: 1.4;
 }
 
-
-/* Điều chỉnh nút bấm XEM THÊM */
+/* Buttons */
 .btn-xemthem {
   background: none;
   border: none;
-  color: black; 
+  color: black;
   font-weight: bold;
   text-transform: uppercase;
   font-size: 13px;
@@ -209,36 +262,19 @@ header.navbar {
 
 .btn-xemthem:hover {
   text-decoration: underline;
-  text-decoration-thickness: 3px ;
+  text-decoration-thickness: 3px;
   text-underline-offset: 5px;
 }
 
 .btn-wrapper {
   width: 100%;
   text-align: right;
-  padding-right: 30px; 
+  padding-right: 30px;
   margin-top: 20px;
 }
 
-.custom-link {
-  text-decoration: none ;
-  color: #0077cc;                  
-  font-weight: bold;
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  font-family: sans-serif;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.custom-link:hover {
-  color: black;
-  text-decoration-color: black;  
-}
-
-
-/* Điều chỉnh phần chú thích thêm  */
-.last_bottom{
+/* Footer */
+.last_bottom {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-content: space-between;
@@ -257,50 +293,42 @@ header.navbar {
   padding: 0 20px;
   text-align: left;
 }
-.column h1{
+
+.column h1 {
   font-size: 1.5rem;
   color: #2c3e50;
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 2px solid #3498db;
 }
-.column p{
+
+.column p, .column ul>li>a, .contact-list span {
   font-size: 20px;
   margin: 10px 0;
-  padding-left: 15px;
-  position: relative;
   line-height: 1.5;
 }
-.column ul>li{
-  margin: 10px 0;
+
+.column ul>li {
   padding-left: 15px;
   position: relative;
   line-height: 1.5;
   list-style: none;
 }
-.column ul>li>a{
-  text-decoration: none;
-  font-size: 20px;
-  color: white;
-}
 
-.contact-list li{
+.contact-list li {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
-.contact-list i{
+
+.contact-list i {
   margin-right: 10px;
   font-size: 1.2em;
   color: white;
 }
-.contact-list span{
-  vertical-align: middle;
-  font-size: 20px ;
-}
 
-/* Điều chỉnh phần cuối */
-.bottom{
+/* Bottom Bar */
+.bottom {
   margin-top: -40px;
   padding-top: 0;
   display: flex;
@@ -308,10 +336,10 @@ header.navbar {
   justify-content: space-between;
   background-color: aliceblue;
   height: 50px;
+  padding: 0 20px;
 }
 
-/* JQ */
-/* Modal đăng nhập */
+/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -395,4 +423,18 @@ header.navbar {
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    min-width: 150px;
+    left: 0;
+  }
+  .card-container, .news-container {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    width: 100%;
+  }
 }
