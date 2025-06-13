@@ -4,14 +4,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = document.querySelector('#loginModal');
   const closeBtn = document.querySelector('.close-btn');
 
-  loginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    modal.style.display = 'block';
-  });
+  if (loginLink) {
+    loginLink.addEventListener('click', (e) => {
+      if (loginLink.getAttribute('href') === '#') {
+        e.preventDefault();
+        modal.style.display = 'block';
+      }
+    });
+  }
 
-  closeBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-  });
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+  }
 
   window.addEventListener('click', (e) => {
     if (e.target === modal) {

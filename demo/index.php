@@ -56,7 +56,7 @@ if (session_status() === PHP_SESSION_NONE) {
       <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
       <a href="login/logout.php">Đăng xuất</a>
     <?php else: ?>
-      <a href="#" onclick="openLoginModal()">Log in / Sign up</a>
+      <a href="#" onclick="openLoginModal()">Log in / Sign in</a>
     <?php endif; ?>
     </div>
 </header>
@@ -193,27 +193,6 @@ if (session_status() === PHP_SESSION_NONE) {
   </div>
 </div>
 <?php endif; ?>
-<script>
-  function openLoginModal() {
-    document.getElementById('loginModal').style.display = 'block';
-  }
-  function closeModal() {
-    document.getElementById('loginModal').style.display = 'none';
-  }
-  window.onclick = function(event) {
-    const modal = document.getElementById('loginModal');
-    if (event.target === modal) {
-      modal.style.display = 'none';
-    }
-  }
-  document.querySelectorAll('.auth a').forEach(function(link) {
-    link.addEventListener('click', function(event) {
-      if (this.getAttribute('href') === "#") {
-        event.preventDefault();
-        openLoginModal();
-      }
-    });
-  });
-</script>
+<script src="script.js"></script>
 </body>
 </html>
