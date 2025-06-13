@@ -56,7 +56,7 @@ if (session_status() === PHP_SESSION_NONE) {
       <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
       <a href="login/logout.php">Đăng xuất</a>
     <?php else: ?>
-      <a href="#" onclick="openLoginModal()">Log in / Sign in</a>
+      <a href="#" onclick="openLoginModal()">Log in / Sign up</a>
     <?php endif; ?>
     </div>
 </header>
@@ -142,14 +142,14 @@ if (session_status() === PHP_SESSION_NONE) {
     <div class="last_bottom">
         <div class="column">
             <h1 id="about">About</h1>
-            <p>Đây là thư viện số. Bạn muốn viết thêm gì thì có viết thêm vào đây.</p>
+            <p>Đây là thư viện số. <br>Bạn muốn viết thêm gì thì có viết thêm vào đây. </br> </p>
         </div>
         <div class="column">
             <h1 id="info">Thông tin</h1>
             <ul>
-                <li><a href="#">Dịch vụ hỗ trợ nghiên cứu</a></li>
-                <li><a href="#">Câu hỏi thường gặp</a></li>
-                <li><a href="#">Tìm tài sản thất lạc</a></li>
+                <li><a href="Support">Dịch vụ hỗ trợ nghiên cứu</a></li>
+                <li><a href="Question">Câu hỏi thường gặp</a></li>
+                <li><a href="Search">Tìm tài sản thất lạc</a></li>
             </ul>
         </div>
         <div class="column">
