@@ -22,29 +22,23 @@ header.navbar {
   justify-content: space-between;
   align-items: center;
   background: #ffffff;
-  padding: 15px 30px;
+  padding: 10px 20px;
   border-bottom: 1px solid #ddd;
 }
 
 .logo {
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 40px;
 }
 
 .nav-links a, .auth a {
-  font-size: 1rem;
-  color: #333;
-  transition: color 0.2s ease;
-}
-
-.nav-links a:hover, .auth a:hover {
-  color: #0077cc;
+  font-size: 0.95rem;
 }
 
 /* Dropdown Menu */
@@ -53,15 +47,17 @@ header.navbar {
   display: inline-block;
 }
 
-.dropdown > a {
-  font-size: 1rem;
-  color: #333;
+.dropdown-toggle {
+  font-size: 0.95rem;
+  color: #0077cc;
   cursor: pointer;
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
-.dropdown-content {
-  display: none;
+.dropdown-menu {
+  display: block;
   position: absolute;
   top: 100%;
   left: 0;
@@ -71,11 +67,16 @@ header.navbar {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   min-width: 200px;
   z-index: 100;
+  opacity: 0;
+  transform: translateY(-20px);
   transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
 }
 
-.dropdown-content a {
-  display: block;
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   padding: 10px 15px;
   font-size: 0.9rem;
   color: #333;
@@ -83,13 +84,15 @@ header.navbar {
   transition: background-color 0.2s ease;
 }
 
-.dropdown-content a:hover {
+.dropdown-menu a:hover {
   background-color: #e0f0ff;
   color: #0077cc;
 }
 
-.dropdown:hover .dropdown-content {
-  display: block;
+.dropdown:hover .dropdown-menu {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 /* Welcome Section */
@@ -424,7 +427,7 @@ header.navbar {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .dropdown-content {
+  .dropdown-menu {
     min-width: 150px;
     left: 0;
   }
@@ -433,11 +436,5 @@ header.navbar {
   }
   .card {
     width: 100%;
-  }
-  .nav-links {
-    gap: 15px;
-  }
-  header.navbar {
-    padding: 10px 15px;
   }
 }

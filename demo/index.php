@@ -17,7 +17,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <div class="logo">📚 LOGO</div>
     <nav class="nav-links">
       <div class="dropdown">
-        <a href="#">Thư viện</a>
+        <a href="#" class="dropdown-toggle">Thư viện</a>
         <div class="dropdown-content">
           <a href="#">Tài liệu số</a>
           <a href="#">Sách in</a>
@@ -27,7 +27,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
       </div>
       <div class="dropdown">
-        <a href="#">Dịch vụ</a>
+        <a href="#" class="dropdown-toggle">Dịch vụ</a>
         <div class="dropdown-content">
           <a href="#">Hỗ trợ nghiên cứu</a>
           <a href="#">Hướng dẫn sử dụng</a>
@@ -35,7 +35,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
       </div>
       <div class="dropdown">
-        <a href="#">Help</a>
+        <a href="#" class="dropdown-toggle">Help</a>
         <div class="dropdown-content">
           <a href="#">FAQ</a>
           <a href="#">Hỗ trợ trực tuyến</a>
@@ -43,7 +43,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
       </div>
       <div class="dropdown">
-        <a href="#">Contact</a>
+        <a href="#" class="dropdown-toggle">Contact</a>
         <div class="dropdown-content">
           <a href="#">Email</a>
           <a href="#">Hotline</a>
@@ -52,14 +52,10 @@ if (session_status() === PHP_SESSION_NONE) {
       </div>
     </nav>
     <div class="auth">
-    <?php if (isset($_SESSION['user'])): ?>
-      <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
-      <a href="login/logout.php">Đăng xuất</a>
-    <?php else: ?>
       <a href="#" onclick="openLoginModal()">Log in / Sign in</a>
-    <?php endif; ?>
     </div>
 </header>
+
 <section class="welcome-section">
     <h1>Welcome to <span>Thư viện số</span></h1>
     <div class="search-box">
@@ -67,6 +63,7 @@ if (session_status() === PHP_SESSION_NONE) {
       <button><span>🔍</span></button>
     </div>
 </section>
+
 <section class="new-documents">
     <h2 class="title">TÀI LIỆU MỚI</h2>
     <div class="card-container">
@@ -85,14 +82,13 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
     <div class="btn-wrapper">
       <button class="btn-xemthem">
-          <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
+          <a href="#" class="custom-link">XEM THÊM ›</a>
       </button>
     </div>
 </section>
+
 <section class="events">
-    <div class="section-header">
-      <h2 class="title">SỰ KIỆN</h2>
-    </div>
+    <h2 class="title">SỰ KIỆN</h2>
     <div class="card-container">
       <div class="card">
         <div class="image"></div>
@@ -105,26 +101,32 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
     <div class="btn-wrapper">
       <button class="btn-xemthem">
-          <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
+          <a href="#" class="custom-link">XEM THÊM ›</a>
       </button>
     </div>
 </section>
+
+<?php if (!isset($_SESSION['user'])): ?>
+<!-- TUNG -->
 <section class="news-section">
     <h2 class="title">TIN TỨC</h2>
     <p class="desc">Cập nhật tin tức, thông báo</p>
     <div class="news-container">
+        <!--Box 1 -->
         <div class="news-card card-with-bg" style="background-image: url('image1.jpg');">
             <div class="overlay">
               <p class="news-topic">Văn hóa đọc</p>
               <h3 class="news-title">Lễ trao giải các cuộc thi Ngày Sách và Văn hóa đọc</h3>
             </div>
         </div>
+        <!--Box 2-->
         <div class="news-card card-with-bg" style="background-image: url('image2.jpg');">
             <div class="overlay">
               <p class="news-topic">Topic2</p>
               <h3 class="news-title">Ứng dụng AI hỗ trợ học tập và nghiên cứu khoa học</h3>
             </div>
         </div>
+        <!--Box 3-->
         <div class="news-card card-with-bg" style="background-image: url('image3.jpg');">
             <div class="overlay">
               <p class="news-topic">Triển lãm</p>
@@ -134,7 +136,7 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
     <div class="btn-wrapper">
         <button class="btn-xemthem">
-            <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
+            <a href="#" class="custom-link">XEM THÊM ›</a>
         </button>
     </div>
 </section>
@@ -147,23 +149,38 @@ if (session_status() === PHP_SESSION_NONE) {
         <div class="column">
             <h1 id="info">Thông tin</h1>
             <ul>
-                <li><a href="Support">Dịch vụ hỗ trợ nghiên cứu</a></li>
-                <li><a href="Question">Câu hỏi thường gặp</a></li>
-                <li><a href="Search">Tìm tài sản thất lạc</a></li>
+                <li>
+                    <a href="Support">Dịch vụ hỗ trợ nghiên cứu</a>
+                </li>
+                <li>
+                    <a href="Question">Câu hỏi thường gặp</a>
+                </li>
+                <li>
+                    <a href="Search">Tìm tài sản thất lạc</a>
+                </li>
             </ul>
         </div>
         <div class="column">
             <h1 id="contact">Liên hệ</h1>
             <ul class="contact-list">
-                <li><i class="ri-map-pin-fill"></i><span>Đại học Phenikaa</span></li>
-                <li><i class="ri-mail-fill"></i><span>elib@phenikaa-uni.edu.vn</span></li>
-                <li><i class="ri-phone-fill"></i><span>0246.6291 8118 | Số máy lẻ: 117</span></li>
+                <li>
+                    <i class="ri-map-pin-fill"></i>
+                    <span>Đại học Phenikaa</span>
+                </li>
+                <li>
+                    <i class="ri-mail-fill"></i> 
+                    <span> elib@phenikaa-uni.edu.vn</span>
+                </li>
+                <li>
+                    <i class="ri-phone-fill"></i> 
+                    <span> 0246.6291 8118 | Số máy lẻ: 117</span>
+                </li>
             </ul>
         </div>
     </div>
     <div class="bottom">        
         <div class="left-footer">
-            <p>Copyright Group 4_Software Engineering</p>
+            <p>Copyright  Group 4_Software Engineering</p>
         </div>
         <div class="right_footer">
             <div class="icons">
@@ -174,10 +191,12 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
     </div>
 </footer>
+<?php endif; ?>
+
 <?php if (!isset($_SESSION['user'])): ?>
 <div id="loginModal" class="modal" style="<?php if (isset($_SESSION['login_error'])) echo 'display:block;'; ?>">
   <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <span class="close-btn" onclick="closeModal()">×</span>
     <h2>Đăng nhập</h2>
     <?php if (isset($_SESSION['login_error'])): ?>
       <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
@@ -193,6 +212,31 @@ if (session_status() === PHP_SESSION_NONE) {
   </div>
 </div>
 <?php endif; ?>
-<script src="script.js"></script>
+<script>
+  // Mở modal đăng nhập
+  function openLoginModal() {
+    document.getElementById('loginModal').style.display = 'block';
+  }
+  // Đóng modal
+  function closeModal() {
+    document.getElementById('loginModal').style.display = 'none';
+  }
+  // Đóng modal nếu click ngoài vùng nội dung
+  window.onclick = function(event) {
+    const modal = document.getElementById('loginModal');
+    if (event.target === modal) {
+      modal.style.display = 'none';
+    }
+  }
+  // Phân biệt Log in / Đăng xuất
+  document.querySelectorAll('.auth a').forEach(function(link) {
+    link.addEventListener('click', function(event) {
+      if (this.getAttribute('href') === "#") {
+        event.preventDefault(); // chỉ chặn nếu là link modal
+        openLoginModal();
+      }
+    });
+  });
+</script>
 </body>
 </html>
