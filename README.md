@@ -5,7 +5,8 @@ Hệ thống web giúp quản lý sách, mượn/trả, đăng ký - đăng nh�
 
 ## Tính năng
 - Đăng ký / Đăng nhập người dùng
-- Tìm kiếm sách ( thống kê người xem )
+- Tìm kiếm sách
+- Thông tin sách
 - Mượn / Trả sách
 - Hỗ trợ người dùng
 
