@@ -52,22 +52,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <meta charset="UTF-8">
   <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
   <title>Đăng ký</title>
-  <link rel="stylesheet" href="resister.css">
+  <link rel="stylesheet" href="dangki.css" />
 </head>
 <body>
   <!-- Thanh điều hướng -->
-  <header class="navbar">
-    <div class="logo">📚 LOGO</div>
-    <div class="nav-links">
-      <a href="#">Thư viện</a>
-      <a href="#">Dịch vụ</a>
-      <a href="#">Help</a>
-      <a href="#">Contact</a>
+<header class="navbar">
+    <div class="logo">
+      <a href="#">
+        <img src="../assets/logo.jpg" alt="Logo Thư viện số">
+      </a>
     </div>
-    <div class="auth">
-      <a href="#">Log in / Sign in</a>
-    </div>
-  </header>
+      <div class="nav-links">
+        <div class="dropdown">
+          <span class="dropdown-toggle">Thư viện</span>
+          <div class="dropdown-menu">
+              <a href="#">Giới thiệu</a>
+              <a href="#">Nội Quy</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <span class="dropdown-toggle">Dịch vụ</span>
+          <div class="dropdown-menu">
+              <a href="#">Mượn, Trả sách</a>
+          </div>
+        </div>
+        <div class="dropdown">
+            <span class="dropdown-toggle">Help</span>
+            <div class="dropdown-menu">
+              <a href="#">FAQ</a>
+              <a href="#">Góp ý, hỗ trợ người dùng</a>
+             </div>
+        </div>
+        <div class="dropdown">
+            <span class="dropdown-toggle">Contact</span>
+        </div>
+      </div>
+</header>
+
 
   <!-- Phần đăng ký -->
 <div class="register-container">
@@ -98,37 +119,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </div>
 
   <!-- Footer -->
-  <footer class="last_bottom">
-    <div class="column">
-      <h1>About</h1>
-      <p>Đây là thư viện số. Bạn muốn viết thêm gì thì có viết thêm vào đây.</p>
-    </div>
-    <div class="column">
-      <h1>Thông tin</h1>
-      <ul>
-        <li><a href="#">Dịch vụ hỗ trợ nghiên cứu</a></li>
-        <li><a href="#">Câu hỏi thường gặp</a></li>
-        <li><a href="#">Tìm tài sản thất lạc</a></li>
-      </ul>
-    </div>
-    <div class="column">
-      <h1>Liên hệ</h1>
-      <ul class="contact-list">
-        <li><i class="ri-map-pin-fill"></i><span>Đại học Phenikaa</span></li>
-        <li><i class="ri-mail-fill"></i><span> elib@phenikaa-uni.edu.vn</span></li>
-        <li><i class="ri-phone-fill"></i> <span> 0246.6291 8118 | Số máy lẻ: 117</span></li>
-      </ul>
-    </div>
-  </footer>
-  <div class="bottom">
-    <p>Copyright Group 4_Software Engineering</p>
-    <div class="right_footer">
-      <div class="icons">
-        <i class="ri-facebook-fill"></i>
-        <i class="ri-instagram-fill"></i>
-        <i class="ri-youtube-fill"></i>
-      </div>
-    </div>
-  </div>
+<footer class="footer">
+        <div class="footer-top">
+            <div class="footer-column">
+                <span>📍</span>
+                <h3>LOCATION</h3>
+                <p>Phenikaa University<br>XP7X+286, Yên Nghĩa, Hà Đông, Hà Nội</p>
+            </div>
+            <div class="footer-column">
+                <span>⏰</span>
+                <h3>SERVICE TIMES</h3>
+                <p>Monday to Friday: 7:00AM - 9:00PM<br>Saturdays at 8:00AM - Sunset</p>
+            </div>
+            <div class="footer-column">
+                <span>💬</span>
+                <h3>GET IN TOUCH</h3>
+                <p>Email: elib@phenikaa-uni.edu.vn<br>Phone: 0246.6291 8118</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-column">
+                <h3>About</h3>
+                <p>Đây là thư viện số. Bạn muốn viết thêm gì thì có viết thêm vào đây.</p>
+                <button class="read-more-btn">Read More</button>
+            </div>
+            <div class="footer-column">
+                <h3>Dịch vụ</h3>
+                <p>Hỗ trợ nghiên cứu<br>Câu hỏi thường gặp<br>Tìm đồ thất lạc</p>
+            </div>
+            <div class="footer-column">
+                <h3>Liên hệ</h3>
+                <p>Đại học Phenikaa<br>elib@phenikaa-uni.edu.vn<br>0246.6291 8118 | Số máy lẻ: 117</p>
+            </div>
+            <div class="footer-column">
+                <h3>Social</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="ri-facebook-box-fill"></i></a>
+                    <a href="#"><i class="ri-instagram-line"></i></a>
+                    <a href="#"><i class="ri-twitter-line"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>Copyright © 2025 All Rights Reserved | This template is made with ♥ by Group 4</p>
+        </div>
+</footer>
 </body>
 </html>
