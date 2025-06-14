@@ -5,7 +5,7 @@ Hệ thống web giúp quản lý sách, mượn/trả, đăng ký - đăng nh�
 
 ## Tính năng
 - Đăng ký / Đăng nhập người dùng
-- Quản lý sách (thêm, sửa, xóa, tìm kiếm)
+- Tìm kiếm sách
 - Mượn / Trả sách và tạo phiếu
 - Thống kê sách và người mượn
 
