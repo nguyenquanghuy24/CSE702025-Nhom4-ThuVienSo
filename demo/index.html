@@ -1,160 +1,211 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thư viện số</title>
-  <link rel="stylesheet" href="test.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư viện số</title>
+    <link rel="stylesheet" href="test.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <header class="navbar">
-    <div class="logo">📚 LOGO</div>
-    <div class="nav-links">
-      <div class="dropdown">
-        <a href="#" class="dropdown-toggle">Thư viện <i class="fas fa-caret-down"></i></a>
-        <div class="dropdown-menu">
-          <a href="/ebooks"><i class="fas fa-book"></i> Tài liệu số</a>
-          <a href="/books"><i class="fas fa-book-open"></i> Sách in</a>
-          <a href="/journals"><i class="fas fa-newspaper"></i> Tạp chí khoa học</a>
-          <a href="/theses"><i class="fas fa-file-alt"></i> Luận văn & Luận án</a>
-          <a href="/databases"><i class="fas fa-database"></i> Cơ sở dữ liệu</a>
-        </div>
-      </div>
-      <div class="dropdown">
-        <a href="#" class="dropdown-toggle">Dịch vụ <i class="fas fa-caret-down"></i></a>
-        <div class="dropdown-menu">
-          <a href="#"><i class="fas fa-info-circle"></i> Hỗ trợ nghiên cứu</a>
-          <a href="#"><i class="fas fa-question-circle"></i> Hướng dẫn sử dụng</a>
-          <a href="#"><i class="fas fa-cog"></i> Dịch vụ kỹ thuật</a>
-        </div>
-      </div>
-      <div class="dropdown">
-        <a href="#" class="dropdown-toggle">Help <i class="fas fa-caret-down"></i></a>
-        <div class="dropdown-menu">
-          <a href="#"><i class="fas fa-question"></i> FAQ</a>
-          <a href="#"><i class="fas fa-life-ring"></i> Hỗ trợ trực tuyến</a>
-          <a href="#"><i class="fas fa-book"></i> Tài liệu hướng dẫn</a>
-        </div>
-      </div>
-      <div class="dropdown">
-        <a href="#" class="dropdown-toggle">Contact <i class="fas fa-caret-down"></i></a>
-        <div class="dropdown-menu">
-          <a href="#"><i class="fas fa-envelope"></i> Email</a>
-          <a href="#"><i class="fas fa-phone"></i> Hotline</a>
-          <a href="#"><i class="fas fa-map-marker-alt"></i> Địa chỉ</a>
-        </div>
-      </div>
-    </div>
-    <div class="auth">
-      <a href="#">Log in / Sign in</a>
-    </div>
-  </header>
-
-  <section class="welcome-section">
-    <h1>Welcome to Thư viện số</h1>
-    <div class="search-box">
-      <input type="text" placeholder="Search...">
-      <button><i class="fas fa-search"></i></button>
-    </div>
-  </section>
-
-  <section class="new-documents">
-    <div class="section-header">
-      <h2>TÀI LIỆU MỚI</h2>
-    </div>
-    <div class="card-container">
-      <div class="card"><div class="image"></div><div class="title">Tiêu đề tài liệu</div></div>
-      <div class="card"><div class="image"></div><div class="title">Tiêu đề tài liệu</div></div>
-      <div class="card"><div class="image"></div><div class="title">Tiêu đề tài liệu</div></div>
-    </div>
-    <div class="btn-wrapper">
-      <button class="btn-xemthem">XEM THÊM <i class="fas fa-arrow-right"></i></button>
-    </div>
-  </section>
-
-  <section class="events">
-    <div class="section-header">
-      <h2>SỰ KIỆN</h2>
-    </div>
-    <div class="card-container">
-      <div class="card"><div class="image"></div><div class="title">Sự kiện A</div></div>
-      <div class="card"><div class="image"></div><div class="title">Sự kiện B</div></div>
-    </div>
-    <div class="btn-wrapper">
-      <button class="btn-xemthem">XEM THÊM <i class="fas fa-arrow-right"></i></button>
-    </div>
-  </section>
-
-  <section class="news-section">
-    <h2 class="title">TIN TỨC</h2>
-    <p class="desc">Cập nhật tin tức, thông báo</p>
-    <div class="news-container">
-      <div class="card-with-bg" style="background-image: url('');">
-        <div class="overlay">
-          <div class="news-topic">Văn hóa đọc</div>
-          <div class="news-title">Lễ trao giải các cuộc thi Ngày Sách và Văn hóa đọc</div>
-        </div>
-      </div>
-      <div class="card-with-bg" style="background-image: url('');">
-        <div class="overlay">
-          <div class="news-topic">Topic2</div>
-          <div class="news-title">Ứng dụng AI hỗ trợ học tập và nghiên cứu khoa học</div>
-        </div>
-      </div>
-      <div class="card-with-bg" style="background-image: url('');">
-        <div class="overlay">
-          <div class="news-topic">Triển lãm</div>
-          <div class="news-title">Đọc sách thông minh – Bảo vệ bản quyền</div>
-        </div>
-      </div>
-    </div>
-    <div class="btn-wrapper">
-      <button class="btn-xemthem">XEM THÊM <i class="fas fa-arrow-right"></i></button>
-    </div>
-  </section>
-
-  <footer class="last_bottom">
-    <div class="column">
-      <h1>About</h1>
-      <p>Đây là thư viện số. Bạn muốn viết thêm gì thì có viết thêm vào đây.</p>
-    </div>
-    <div class="column">
-      <h1>Thông tin</h1>
-      <ul>
-        <li><a href="#">Dịch vụ hỗ trợ nghiên cứu</a></li>
-        <li><a href="#">Câu hỏi thường gặp</a></li>
-        <li><a href="#">Tìm tài sản thất lạc</a></li>
-      </ul>
-    </div>
-    <div class="column">
-      <h1>Liên hệ</h1>
-      <ul class="contact-list">
-        <li><i class="fas fa-university"></i><span>Đại học Phenikaa</span></li>
-        <li><i class="fas fa-envelope"></i><span>library@phenikaa.edu.vn</span></li>
-        <li><i class="fas fa-phone"></i><span>0246.6291 8118 | Số máy lẻ: 117</span></li>
-      </ul>
-    </div>
-  </footer>
-
-  <div class="bottom">
-    <p>Copyright Group 4_Software Engineering</p>
+    <!-- Header -->
+    <header class="navbar">
+  <div class="logo">
+    <a href="#">
+        <picture>
+            <img src="assets/logo.jpg" alt="Logo">
+        </picture>
+    </a>
   </div>
+        <div class="nav-links">
+            <div class="dropdown">
+                <span class="dropdown-toggle">Thư viện</span>
+                <div class="dropdown-menu">
+                    <a href="#">Tài liệu số</a>
+                    <a href="#">Sách in</a>
+                    <a href="#">Bộ sưu tập</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Dịch vụ</span>
+                <div class="dropdown-menu">
+                    <a href="#">Quản lý sách</a>
+                    <a href="#">Mượn, Trả sách và tạo phiếu</a>
+                    <a href="#">Thống kê sách và người mượn</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Help</span>
+                <div class="dropdown-menu">
+                    <a href="#">FAQ</a>
+                    <a href="#">Hỗ trợ trực tuyến</a>
+                    <a href="#">Tài liệu hướng dẫn</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Contact</span>
+                <div class="dropdown-menu">
+                    <a href="#">Email</a>
+                    <a href="#">Hotline</a>
+                    <a href="#">Địa chỉ</a>
+                </div>
+            </div>
+        </div>
+        <div class="auth"><a href="#" onclick="openLoginModal()">Log in / Sign in</a></div>
+    </header>
 
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn">×</span>
-      <h2>Đăng nhập</h2>
-      <input type="text" placeholder="Tên đăng nhập hoặc Email">
-      <input type="password" placeholder="Mật khẩu">
-      <button>Đăng nhập</button>
-      <div class="signup-link">
-        <p>Chưa có tài khoản? <a href="#">Đăng ký</a></p>
-      </div>
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <h1>Welcome to Thư viện số</h1>
+        <div class="search-box">
+            <input type="text" placeholder="Tìm kiếm...">
+            <button>Search</button>
+        </div>
+    </section>
+
+    <!-- New Documents -->
+    <section class="new-documents">
+        <h2 class="title">TÀI LIỆU MỚI</h2>
+        <div class="card-container">
+            <div class="card">
+                <div class="image"></div>
+                <div class="card-content">
+                    <div class="category">Category</div>
+                    <h3 class="title">Tiêu đề tài liệu</h3>
+                    <p class="description">Mô tả ngắn gọn về tài liệu.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image"></div>
+                <div class="card-content">
+                    <div class="category">Category</div>
+                    <h3 class="title">Tiêu đề tài liệu</h3>
+                    <p class="description">Mô tả ngắn gọn về tài liệu.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image"></div>
+                <div class="card-content">
+                    <div class="category">Category</div>
+                    <h3 class="title">Tiêu đề tài liệu</h3>
+                    <p class="description">Mô tả ngắn gọn về tài liệu.</p>
+                </div>
+            </div>
+        </div>
+        <div class="btn-wrapper"><button class="btn-xemthem"><a href="#">XEM THÊM</a></button></div>
+    </section>
+
+    <!-- Events -->
+    <section class="events">
+        <h2 class="title">SỰ KIỆN</h2>
+        <div class="card-container">
+            <div class="card">
+                <div class="image"></div>
+                <div class="card-content">
+                    <div class="category">Category</div>
+                    <h3 class="title">Sự kiện A</h3>
+                    <p class="description">Mô tả ngắn gọn về sự kiện.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="image"></div>
+                <div class="card-content">
+                    <div class="category">Category</div>
+                    <h3 class="title">Sự kiện B</h3>
+                    <p class="description">Mô tả ngắn gọn về sự kiện.</p>
+                </div>
+            </div>
+        </div>
+        <div class="btn-wrapper"><button class="btn-xemthem"><a href="#">XEM THÊM</a></button></div>
+    </section>
+
+    <!-- News Section -->
+    <section class="news-section">
+        <h2 class="title">TIN TỨC</h2>
+        <p class="desc">Cập nhật tin tức, thông báo</p>
+        <div class="news-container">
+            <div class="card-with-bg" style="background: url('https://via.placeholder.com/400x300');">
+                <div class="overlay">
+                    <div class="news-topic">Văn hóa đọc</div>
+                    <h3 class="news-title">Lễ trao giải các cuộc thi Ngày Sách và Văn hóa đọc</h3>
+                </div>
+            </div>
+            <div class="card-with-bg" style="background: url('https://via.placeholder.com/400x300');">
+                <div class="overlay">
+                    <div class="news-topic">Topic2</div>
+                    <h3 class="news-title">Ứng dụng AI hỗ trợ học tập và nghiên cứu khoa học</h3>
+                </div>
+            </div>
+            <div class="card-with-bg" style="background: url('https://via.placeholder.com/400x300');">
+                <div class="overlay">
+                    <div class="news-topic">Triển lãm</div>
+                    <h3 class="news-title">Đọc sách thông minh – Bảo vệ bản quyền</h3>
+                </div>
+            </div>
+        </div>
+        <div class="btn-wrapper"><button class="btn-xemthem"><a href="#">XEM THÊM</a></button></div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-top">
+            <div class="footer-column">
+                <span>📍</span>
+                <h3>LOCATION</h3>
+                <p>Phenikaa University<br>XP7X+286, Yên Nghĩa, Hà Đông, Hà Nội</p>
+            </div>
+            <div class="footer-column">
+                <span>⏰</span>
+                <h3>SERVICE TIMES</h3>
+                <p>Monday to Friday: 7:00AM - 9:00PM<br>Saturdays at 8:00AM - Sunset</p>
+            </div>
+            <div class="footer-column">
+                <span>💬</span>
+                <h3>GET IN TOUCH</h3>
+                <p>Email: elib@phenikaa-uni.edu.vn<br>Phone: 0246.6291 8118</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-column">
+                <h3>About</h3>
+                <p>Đây là thư viện số. Bạn muốn viết thêm gì thì có viết thêm vào đây.</p>
+                <button class="read-more-btn">Read More</button>
+            </div>
+            <div class="footer-column">
+                <h3>Dịch vụ</h3>
+                <p>Hỗ trợ nghiên cứu<br>Câu hỏi thường gặp<br>Tìm đồ thất lạc</p>
+            </div>
+            <div class="footer-column">
+                <h3>Liên hệ</h3>
+                <p>Đại học Phenikaa<br>elib@phenikaa-uni.edu.vn<br>0246.6291 8118 | Số máy lẻ: 117</p>
+            </div>
+            <div class="footer-column">
+                <h3>Social</h3>
+                <div class="social-icons">
+                    <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>Copyright © 2025 All Rights Reserved | This template is made with ♥ by Group 4</p>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">×</span>
+            <h2>Đăng nhập</h2>
+            <input type="text" placeholder="Tên đăng nhập">
+            <input type="password" placeholder="Mật khẩu">
+            <button>Đăng nhập</button>
+            <div class="signup-link">Chưa có tài khoản? <a href="#">Đăng ký</a></div>
+        </div>
     </div>
-  </div>
 
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
