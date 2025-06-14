@@ -8,7 +8,7 @@ Hệ thống web giúp quản lý sách, mượn/trả, đăng ký - đăng nh�
 - Tìm kiếm sách
 - Thông tin sách
 - Mượn / Trả sách
-- Góp ý
+- Góp ý, hỗ trợ người dùng
 
 ### Danh sách thành viên 
 
