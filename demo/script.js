@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Login Modal
-  const loginLink = document.querySelector('.auth a');
+  const loginLink = document.querySelector('.auth-link');
   const modal = document.querySelector('#loginModal');
   const closeBtn = document.querySelector('.close-btn');
 
