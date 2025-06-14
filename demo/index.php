@@ -40,66 +40,81 @@ if (session_status() === PHP_SESSION_NONE) {
 <section class="new-documents">
     <h2 class="title">TÀI LIỆU MỚI</h2>
     <div class="card-container">
-      <div class="card">
-        <div class="image"></div>
-        <p class="title">Tiêu đề tài liệu</p>
-      </div>
-      <div class="card">
-        <div class="image"></div>
-        <p class="title">Tiêu đề tài liệu</p>
-      </div>
-      <div class="card">
-        <div class="image"></div>
-        <p class="title">Tiêu đề tài liệu</p>
-      </div>
+        <div class="card">
+            <div class="image" style="background-image: url('path/to/doc1.jpg');"></div>
+            <div class="card-content">
+                <p class="category">Khoa học</p>
+                <h3 class="title">Tiêu đề tài liệu 1</h3>
+                <p class="description">Mô tả ngắn về tài liệu mới, giới thiệu nội dung chính.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="image" style="background-image: url('path/to/doc2.jpg');"></div>
+            <div class="card-content">
+                <p class="category">Công nghệ</p>
+                <h3 class="title">Tiêu đề tài liệu 2</h3>
+                <p class="description">Tóm tắt nội dung tài liệu, thu hút người đọc.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="image" style="background-image: url('path/to/doc3.jpg');"></div>
+            <div class="card-content">
+                <p class="category">Văn học</p>
+                <h3 class="title">Tiêu đề tài liệu 3</h3>
+                <p class="description">Giới thiệu tài liệu một cách hấp dẫn.</p>
+            </div>
+        </div>
     </div>
     <div class="btn-wrapper">
-      <button class="btn-xemthem">
-          <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
-      </button>
-  </div>
+        <button class="btn-xemthem">
+            <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
+        </button>
+    </div>
 </section>
 <section class="events">
     <div class="section-header">
-      <h2 class="title">SỰ KIỆN</h2>
+        <h2 class="title">SỰ KIỆN</h2>
     </div>
     <div class="card-container">
-      <div class="card">
-        <div class="image"></div>
-        <p class="title">Sự kiện A</p>
-      </div>
-      <div class="card">
-        <div class="image"></div>
-        <p class="title">Sự kiện B</p>
-      </div>
+        <div class="card">
+            <div class="image" style="background-image: url('path/to/event1.jpg');"></div>
+            <div class="card-content">
+                <p class="category">Hội thảo</p>
+                <h3 class="title">Sự kiện A</h3>
+                <p class="description">Sự kiện về công nghệ AI, ngày 20/06/2025.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="image" style="background-image: url('path/to/event2.jpg');"></div>
+            <div class="card-content">
+                <p class="category">Triển lãm</p>
+                <h3 class="title">Sự kiện B</h3>
+                <p class="description">Triển lãm sách số, ngày 25/06/2025.</p>
+            </div>
+        </div>
     </div>
     <div class="btn-wrapper">
-      <button class="btn-xemthem">
-          <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
-      </button>
+        <button class="btn-xemthem">
+            <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
+        </button>
     </div>
 </section>
-<!-- TUNG -->
 <section class="news-section">
     <h2 class="title">TIN TỨC</h2>
     <p class="desc">Cập nhật tin tức, thông báo</p>
-
     <div class="news-container">
-        <!--Box 1 -->
         <div class="news-card card-with-bg" style="background-image: url('image1.jpg');">
             <div class="overlay">
               <p class="news-topic">Văn hóa đọc</p>
               <h3 class="news-title">Lễ trao giải các cuộc thi Ngày Sách và Văn hóa đọc</h3>
             </div>
         </div>
-        <!--Box 2-->
         <div class="news-card card-with-bg" style="background-image: url('image2.jpg');">
             <div class="overlay">
               <p class="news-topic">Topic2</p>
               <h3 class="news-title">Ứng dụng AI hỗ trợ học tập và nghiên cứu khoa học</h3>
             </div>
         </div>
-        <!--Box 3-->
         <div class="news-card card-with-bg" style="background-image: url('image3.jpg');">
             <div class="overlay">
               <p class="news-topic">Triển lãm</p>
@@ -107,7 +122,6 @@ if (session_status() === PHP_SESSION_NONE) {
             </div>
         </div>
     </div>
-
     <div class="btn-wrapper">
         <button class="btn-xemthem">
             <a href="#" class="custom-link">XEM THÊM &rsaquo;</a>
@@ -170,49 +184,20 @@ if (session_status() === PHP_SESSION_NONE) {
   <div class="modal-content">
     <span class="close-btn" onclick="closeModal()">&times;</span>
     <h2>Đăng nhập</h2>
-
     <?php if (isset($_SESSION['login_error'])): ?>
       <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
     <?php endif; ?>
-
     <form method="POST" action="login/login.php">
       <label for="user">Tên đăng nhập:</label>
       <input type="text" id="user" name="user" required>
-
       <label for="pass">Mật khẩu:</label>
       <input type="password" id="pass" name="pass" required>
-
       <button type="submit">Đăng nhập</button>
       <p class="signup-link">Chưa có tài khoản? <a href="login/register.php">Đăng ký</a></p>
     </form>
   </div>
 </div>
 <?php endif; ?>
-<script>
-  // Mở modal đăng nhập
-  function openLoginModal() {
-    document.getElementById('loginModal').style.display = 'block';
-  }
-  // Đóng modal
-  function closeModal() {
-    document.getElementById('loginModal').style.display = 'none';
-  }
-  // Đóng modal nếu click ngoài vùng nội dung
-  window.onclick = function(event) {
-    const modal = document.getElementById('loginModal');
-    if (event.target === modal) {
-      modal.style.display = 'none';
-    }
-  }
-  // Phân biệt Log in / Đăng xuất
-  document.querySelectorAll('.auth a').forEach(function(link) {
-    link.addEventListener('click', function(event) {
-      if (this.getAttribute('href') === "#") {
-        event.preventDefault(); // chỉ chặn nếu là link modal
-        openLoginModal();
-      }
-    });
-  });
-</script>
+<script src="script.js"></script>
 </body>
 </html>

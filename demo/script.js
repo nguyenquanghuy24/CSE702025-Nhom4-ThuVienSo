@@ -18,4 +18,26 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.style.display = 'none';
     }
   });
+
+  // Card animation on load
+  const cards = document.querySelectorAll('.card');
+  cards.forEach((card, index) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    setTimeout(() => {
+      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    }, index * 100);
+  });
 });
+
+// Mở modal đăng nhập
+function openLoginModal() {
+  document.getElementById('loginModal').style.display = 'block';
+}
+
+// Đóng modal
+function closeModal() {
+  document.getElementById('loginModal').style.display = 'none';
+}
