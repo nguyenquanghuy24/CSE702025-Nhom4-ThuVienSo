@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page</title>
+    <link rel="stylesheet" href="ticket.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <a href="#">
+                <img src="assets/logo.jpg" alt="Logo">
+            </a>
+        </div>
+        <div class="nav-links">
+            <div class="dropdown">
+                <span class="dropdown-toggle">Thư viện</span>
+                <div class="dropdown-menu">
+                    <a href="#">Giới thiệu</a>
+                    <a href="#">Nội Quy</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Dịch vụ</span>
+                <div class="dropdown-menu">
+                    <a href="#">Mượn, Trả sách</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Help</span>
+                <div class="dropdown-menu">
+                    <a href="#">FAQ</a>
+                    <a href="#">Góp ý, hỗ trợ người dùng</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Contact</span>
+            </div>
+        </div>
+        <div class="auth">
+            <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
+        </div>
+    </header>
+    
+    <main class="contact-form-section">
+        <div class="form-container">
+            <h2>Hãy cho chúng tôi biết vấn đề của bạn</h2>
+            <form action="#" method="post">
+                <input type="text" name="title" placeholder="Tiêu đề">
+                <input type="text" name="fullname" placeholder="Họ Tên">
+                <input type="email" name="email" placeholder="Email">
+                <textarea name="content" placeholder="Nội dung" rows="8"></textarea>
+                <button type="submit" class="submit-btn">GỬI</button>
+            </form>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="footer-column">
+                <h3>About</h3>
+                <p>Đây là thư viện số.</p>
+                <button class="read-more-btn">Read More</button>
+            </div>
+            <div class="footer-column">
+                <h3>Dịch vụ</h3>
+                <p>Hỗ trợ nghiên cứu<br>Câu hỏi thường gặp<br>Tìm đồ thất lạc</p>
+            </div>
+            <div class="footer-column">
+                <h3>Liên hệ</h3>
+                <p>Đại học Phenikaa<br>elib@phenikaa-uni.edu.vn<br>0246.6291 8118 | Số máy lẻ: 117</p>
+            </div>
+            <div class="footer-column">
+                <h3>Social</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>Copyright © 2025 All Rights Reserved | This template is made with ♥ by Group 4</p>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">×</span>
+            <h2>Đăng nhập</h2>
+            <input type="text" placeholder="Tên đăng nhập">
+            <input type="password" placeholder="Mật khẩu">
+            <button>Đăng nhập</button>
+            <div class="signup-link">
+                <p>Chưa có tài khoản? <a href="#">Đăng ký</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="ticket.js"></script>
+</body>
+</html>

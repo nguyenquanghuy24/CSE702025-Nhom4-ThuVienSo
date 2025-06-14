@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Câu hỏi thường gặp</title>
+    <link rel="stylesheet" href="faq.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <a href="#">
+                <img src="assets/logo.jpg" alt="Logo">
+            </a>
+        </div>
+        <div class="nav-links">
+            <div class="dropdown">
+                <span class="dropdown-toggle">Thư viện</span>
+                <div class="dropdown-menu">
+                    <a href="#">Giới thiệu</a>
+                    <a href="#">Nội Quy</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Dịch vụ</span>
+                <div class="dropdown-menu">
+                    <a href="#">Mượn, Trả sách</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Help</span>
+                <div class="dropdown-menu">
+                    <a href="#">FAQ</a>
+                    <a href="#">Góp ý, hỗ trợ người dùng</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Contact</span>
+            </div>
+        </div>
+        <div class="auth">
+            <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
+        </div>
+    </header>
+
+    <main class="faq-section">
+        <h1>Câu Hỏi Thường Gặp</h1>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Tôi có thể gửi túi xách, đồ dùng cá nhân ở đâu?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Bạn có thể gửi túi xách, balo và các vật dụng cá nhân tại khu vực gửi đồ gần cổng vào Thư viện, có tủ khóa an toàn cho người dùng.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Khu vực học qua đêm ở đâu? Thời gian hoạt động? Đăng ký như thế nào?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p><strong>Vị trí:</strong> Tầng 6-A10</p>
+                    <p><strong>Thời gian hoạt động:</strong> Từ 22:00 đến 6:00 sáng hôm sau.</p>
+                    <p><strong>Cách đăng ký:</strong> Sinh viên cần đăng ký trực tiếp tại quầy thông tin hoặc qua cổng thông tin điện tử của thư viện trước 17:00 mỗi ngày.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Liên hệ với ai và ở đâu để làm lại Thẻ sinh viên đã bị mất?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Bạn vui lòng đến quầy thủ tục để khai báo mất thẻ. Sau đó, điền vào mẫu đơn cấp lại và nộp phí theo quy định.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Nơi mượn và trả sách cho mượn về?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Bạn đến quầy thủ tục tại tầng 4 để thực hiện thủ tục mượn/trả tài liệu. Đừng quên mang theo thẻ sinh viên.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Tìm lại tài sản bị thất lạc thì cần liên lạc với ai? Ở đâu?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Nếu bị mất đồ, bạn hãy đến bàn thủ tục hoặc phòng công tác sinh viên, hoặc gửi email cho bộ phận quản lý cơ sở vật chất để được hỗ trợ kiểm tra.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="footer-column">
+                <h3>About</h3>
+                <p>Đây là thư viện số.</p>
+                <button class="read-more-btn">Read More</button>
+            </div>
+            <div class="footer-column">
+                <h3>Dịch vụ</h3>
+                <p>Hỗ trợ nghiên cứu<br>Câu hỏi thường gặp<br>Tìm đồ thất lạc</p>
+            </div>
+            <div class="footer-column">
+                <h3>Liên hệ</h3>
+                <p>Đại học Phenikaa<br>elib@phenikaa-uni.edu.vn<br>0246.6291 8118 | Số máy lẻ: 117</p>
+            </div>
+            <div class="footer-column">
+                <h3>Social</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>Copyright © 2025 All Rights Reserved | This template is made with ♥ by Group 4</p>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">×</span>
+            <h2>Đăng nhập</h2>
+            <input type="text" placeholder="Tên đăng nhập">
+            <input type="password" placeholder="Mật khẩu">
+            <button>Đăng nhập</button>
+            <div class="signup-link">
+                <p>Chưa có tài khoản? <a href="#">Đăng ký</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="faq.js"></script>
+</body>
+</html>
