@@ -1,4 +1,7 @@
-/* Cố định toàn phần */
+html {
+  scroll-behavior: smooth;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -24,7 +27,7 @@ header.navbar {
   background: #ffffff;
   padding: 10px 20px;
   border-bottom: 1px solid #ddd;
-  min-height: 80px; /* Đảm bảo navbar đủ cao để chứa logo */
+  min-height: 80px;
 }
 
 .logo {
@@ -37,38 +40,37 @@ header.navbar {
 }
 
 .logo img {
-  height: 60px; /* Chiều cao logo */
-  max-width: 150px; /* Giới hạn chiều rộng tối đa */
-  width: auto; /* Đảm bảo giữ tỷ lệ */
-  object-fit: contain; /* Giữ tỷ lệ và không làm méo hình */
+  height: 60px;
+  max-width: 150px;
+  width: auto;
+  object-fit: contain;
   vertical-align: middle;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 50px; /* Tăng khoảng cách giữa các mục nav */
+  gap: 50px;
 }
 
 .nav-links a, .auth a {
   font-size: 0.95rem;
 }
 
-/* Kiểu cho liên kết Đăng nhập */
 .auth-link {
-  font-size: 1rem; /* Tăng kích thước chữ */
-  font-weight: bold; /* Chữ đậm */
-  color: #ffffff; /* Màu trắng */
-  background: #0077cc; /* Màu nền xanh */
+  font-size: 1rem;
+  font-weight: bold;
+  color: #ffffff;
+  background: #0077cc;
   padding: 8px 16px; /* Khoảng đệm để giống nút */
-  border-radius: 5px; /* Bo góc */
+  border-radius: 5px;
   transition: background 0.3s ease, transform 0.2s ease; /* Hiệu ứng mượt */
 }
 
 .auth-link:hover {
-  background: #005c99; /* Màu nền tối hơn khi hover */
-  transform: translateY(-2px); /* Nâng nhẹ khi hover */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Thêm bóng */
+  background: #005c99;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* Dropdown Menu */
@@ -191,7 +193,7 @@ header.navbar {
 .image {
   width: 100%;
   height: 180px;
-  object-fit: cover; /* Đảm bảo hình ảnh vừa khung mà không méo */
+  object-fit: cover;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
@@ -521,8 +523,8 @@ header.navbar {
 /* Responsive */
 @media (max-width: 768px) {
   .logo img {
-    height: 40px; /* Giảm chiều cao trên mobile */
-    max-width: 100px; /* Giảm chiều rộng tối đa */
+    height: 40px;
+    max-width: 100px;
   }
   .dropdown-menu {
     min-width: 150px;
@@ -535,7 +537,7 @@ header.navbar {
     max-width: 100%;
   }
   .image {
-    height: 150px; /* Giảm chiều cao hình ảnh trên mobile */
+    height: 150px;
   }
   .footer-top, .footer-bottom {
     flex-direction: column;
@@ -545,7 +547,7 @@ header.navbar {
     margin-bottom: 20px;
   }
   .auth-link {
-    padding: 6px 12px; /* Giảm kích thước trên mobile */
-    font-size: 0.9rem; /* Giảm cỡ chữ */
+    padding: 6px 12px;
+    font-size: 0.9rem;
   }
 }

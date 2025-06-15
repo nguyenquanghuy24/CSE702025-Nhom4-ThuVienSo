@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -16,10 +20,6 @@ body {
 a {
   text-decoration: none;
   color: #0077cc;
-}
-
-a:hover {
-    text-decoration: underline;
 }
 
 /* Header */
@@ -73,7 +73,6 @@ header.navbar {
   background: #005c99;
   transform: translateY(-2px);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  text-decoration: none;
 }
 
 /* Dropdown Menu */
@@ -122,7 +121,6 @@ header.navbar {
 .dropdown-menu a:hover {
   background-color: #e0f0ff;
   color: #0077cc;
-  text-decoration: none;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -131,93 +129,97 @@ header.navbar {
   pointer-events: auto;
 }
 
-/* ==== BẮT ĐẦU STYLE TRANG GIỚI THIỆU ==== */
-.intro-section {
+/* ==== FAQ ==== */
+.faq-section {
   flex-grow: 1;
-  background-color: #fff;
-  padding: 40px 20px;
-}
-
-.intro-container {
+  width: 100%;
   max-width: 900px;
   margin: 0 auto;
+  padding: 50px 20px;
 }
 
-.intro-container h1 {
+.faq-section h1 {
   text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2c3e50;
   margin-bottom: 40px;
+  color: #2c3e50;
+  font-size: 2.2rem;
+  font-weight: 700;
 }
 
-.intro-container h2 {
-    font-size: 1.5rem;
-    color: #0056b3;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e0f0ff;
+.faq-container {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
 
-.intro-container h4 {
-    font-size: 1.2rem;
-    color: #333;
-    margin-top: 20px;
-    margin-bottom: 10px;
+.faq-item {
+  background-color: #fff;
+  border-bottom: 1px solid #e7e7e7;
 }
 
-.intro-block {
-    margin-bottom: 40px;
+.faq-item:last-child {
+  border-bottom: none;
 }
 
-.intro-block p {
-    line-height: 1.8;
-    color: #555;
-    margin-bottom: 15px;
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 20px 25px;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #333;
+  transition: background-color 0.3s ease;
 }
 
-.intro-block ul {
-    list-style: none;
-    padding-left: 0;
+.faq-question:hover {
+  background-color: #f5f8ff;
 }
 
-.intro-block li {
+.faq-question.active {
+  background-color: #eaf2ff;
+  color: #0056b3;
+  font-weight: 600;
+}
+
+.faq-question i {
+  transition: transform 0.3s ease-in-out;
+  font-size: 1rem;
+  color: #0077cc;
+}
+
+.faq-question.active i {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out;
+  background-color: #fdfdfd;
+}
+
+.faq-answer p {
+  padding: 0 25px 25px 25px;
+  margin: 0;
   line-height: 1.7;
   color: #555;
-  padding-left: 25px;
-  position: relative;
-  margin-bottom: 12px;
+  font-size: 1rem;
 }
 
-.intro-block li::before {
-  content: '✓';
-  position: absolute;
-  left: 0;
-  top: 1px;
-  color: #0077cc;
-  font-weight: bold;
+.faq-answer p + p {
+    margin-top: 15px;
 }
 
-ul.link-list li::before {
-    content: '🔗';
-}
-
-.mission-statement {
-    background-color: #eaf2ff;
-    border-left: 5px solid #0077cc;
-    padding: 20px 25px;
-    margin: 40px 0;
-    border-radius: 0 5px 5px 0;
-}
-
-.mission-statement p {
-    font-size: 1.05rem;
-    line-height: 1.7;
+.faq-answer strong {
     color: #333;
-    margin: 0;
 }
-/* ==== KẾT THÚC STYLE TRANG GIỚI THIỆU ==== */
-
 
 /* Footer */
 .footer {
@@ -397,15 +399,5 @@ ul.link-list li::before {
   }
   .nav-links {
       display: none;
-  }
-  
-  .intro-container {
-    padding: 0 10px;
-  }
-  .intro-container h1 {
-    font-size: 1.6rem;
-  }
-   .intro-container h2 {
-    font-size: 1.3rem;
   }
 }
