@@ -8,6 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $pass = $_POST['pass'];
   $confirm = $_POST['confirm'];
   $email = $_POST['email'];
+  $hoTen = $_POST['hoTen'];
+  $maSV = $_POST['maSV'];
 
   if ($pass !== $confirm) {
     $_SESSION['register_error'] = "Mật khẩu xác nhận không khớp.";
@@ -28,8 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
 
   // Thêm người dùng mới
-  $stmt = $conn->prepare("INSERT INTO tbl_user (user, pass, email) VALUES (?, ?, ?)");
-  $stmt->bind_param("sss", $user, $pass, $email);
+  $stmt = $conn->prepare("INSERT INTO tbl_user (user, pass, email, hoTen, maSV) VALUES (?, ?, ?, ?, ?)");
+  $stmt->bind_param("sssss", $user, $pass, $email, $hoTen, $maSV);
 
   if ($stmt->execute()) {
     $_SESSION['user'] = $user;
@@ -97,6 +99,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       <p class="error"><?php echo $_SESSION['register_error']; unset($_SESSION['register_error']); ?></p>
     <?php endif; ?>
     <form method="POST" action="">
+      <label for="hoTen">Họ và tên:</label>
+      <input type="text" name="hoTen" id="hoTen" required>
+
+      <label for="maSV">Mã sinh viên:</label>
+      <input type="text" name="maSV" id="maSV" required>
+      
       <label for="user">Tên đăng nhập:</label>
       <input type="text" name="user" id="user" required>
 
