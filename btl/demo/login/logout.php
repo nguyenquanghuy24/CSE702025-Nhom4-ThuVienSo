@@ -1,11 +1,8 @@
 <?php
-// Bắt đầu hoặc tiếp tục session
 session_start();
 
-// Xoá toàn bộ biến trong session
+// Xóa tất cả session
 session_unset();
-
-// Hủy session
 session_destroy();
 
 // Xóa cookie session nếu có
@@ -15,8 +12,10 @@ if (ini_get("session.use_cookies")) {
         $params["path"], $params["domain"],
         $params["secure"], $params["httponly"]
     );
-} 
-// Chuyển hướng về trang chủ sau 1 giây
-header("Refresh: 1; URL=../index.php");
+}
+
+// Nếu có redirect được truyền vào thì quay lại đó, không thì về index
+$redirect = isset($_GET['redirect']) ? $_GET['redirect'] : '../index.php';
+header("Location: $redirect");
 exit();
 ?>

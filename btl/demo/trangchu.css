@@ -57,20 +57,23 @@ header.navbar {
   font-size: 0.95rem;
 }
 
-.auth-link {
+
+.auth a {
   font-size: 1rem;
   font-weight: bold;
   color: #ffffff;
-  background: #0077cc;
-  padding: 8px 16px; /* Khoảng đệm để giống nút */
-  border-radius: 5px;
-  transition: background 0.3s ease, transform 0.2s ease; /* Hiệu ứng mượt */
+  background-color: #007bff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 10px;
 }
 
-.auth-link:hover {
-  background: #005c99;
-  transform: translateY(-2px);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+.auth a:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
 }
 
 /* Dropdown Menu */

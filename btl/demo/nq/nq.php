@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -10,16 +13,16 @@
 <body>
     <header class="navbar">
         <div class="logo">
-            <a href="index.html">
-                <img src="assets/logo.jpg" alt="Logo">
+            <a href="../index.php">
+                <img src="../assets/logo.jpg" alt="Logo">
             </a>
         </div>
         <div class="nav-links">
             <div class="dropdown">
                 <span class="dropdown-toggle">Thư viện</span>
                 <div class="dropdown-menu">
-                    <a href="gt.html">Giới thiệu</a>
-                    <a href="nq.html">Nội Quy</a>
+                    <a href="../gt/gt.php">Giới thiệu</a>
+                    <a href="nq.php">Nội Quy</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -31,8 +34,8 @@
             <div class="dropdown">
                 <span class="dropdown-toggle">Help</span>
                 <div class="dropdown-menu">
-                    <a href="faq.html">FAQ</a>
-                    <a href="ticket.html">Góp ý, hỗ trợ người dùng</a>
+                    <a href="../faq/faq.php">FAQ</a>
+                    <a href="../ticket/ticket.php">Góp ý, hỗ trợ người dùng</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -40,8 +43,13 @@
             </div>
         </div>
         <div class="auth">
-            <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
-        </div>
+            <?php if (isset($_SESSION['user'])): ?>
+                <span class="auth-user"><?php echo htmlspecialchars($_SESSION['user']); ?></span>
+                <a href="../login/logout.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>" class="auth-link">Đăng xuất</a>
+            <?php else: ?>
+                <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
+            <?php endif; ?>
+        </div>       
     </header>
 
     <main class="rules-section">
@@ -149,18 +157,26 @@
         </div>
     </footer>
 
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn">×</span>
-            <h2>Đăng nhập</h2>
-            <input type="text" placeholder="Tên đăng nhập">
-            <input type="password" placeholder="Mật khẩu">
-            <button>Đăng nhập</button>
-            <div class="signup-link">
-                <p>Chưa có tài khoản? <a href="#">Đăng ký</a></p>
+    <?php if (!isset($_SESSION['user'])): ?>
+            <div id="loginModal" class="modal" style="<?php if (isset($_SESSION['login_error'])) echo 'display:block;'; ?>">
+                <div class="modal-content">
+                    <span class="close-btn" onclick="closeModal()">&times;</span>
+                    <h2>Đăng nhập</h2>
+                <?php if (isset($_SESSION['login_error'])): ?>
+                    <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
+                <?php endif; ?>
+                <form method="POST" action="../login/login.php">
+                    <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+                    <label for="user">Tên đăng nhập:</label>
+                    <input type="text" id="user" name="user" required>
+                    <label for="pass">Mật khẩu:</label>
+                    <input type="password" id="pass" name="pass" required>
+                    <button type="submit">Đăng nhập</button>
+                    <p class="signup-link">Chưa có tài khoản? <a href="../login/register.php">Đăng ký</a></p>
+                </form>
             </div>
         </div>
-    </div>
+    <?php endif; ?>           
 
     <script src="nq.js"></script>
 </body>

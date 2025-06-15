@@ -15,7 +15,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
 <header class="navbar">
     <div class="logo">
-      <a href="#">
+      <a href="index.php">
         <img src="assets/logo.jpg" alt="Logo Thư viện số">
       </a>
     </div>
@@ -23,8 +23,8 @@ if (session_status() === PHP_SESSION_NONE) {
         <div class="dropdown">
           <span class="dropdown-toggle">Thư viện</span>
           <div class="dropdown-menu">
-              <a href="#">Giới thiệu</a>
-              <a href="#">Nội Quy</a>
+              <a href="gt/gt.php">Giới thiệu</a>
+              <a href="nq/nq.php">Nội Quy</a>
           </div>
         </div>
         <div class="dropdown">
@@ -36,8 +36,8 @@ if (session_status() === PHP_SESSION_NONE) {
         <div class="dropdown">
             <span class="dropdown-toggle">Help</span>
             <div class="dropdown-menu">
-              <a href="#">FAQ</a>
-              <a href="#">Góp ý, hỗ trợ người dùng</a>
+              <a href="faq/faq.php">FAQ</a>
+              <a href="ticket/ticket.php">Góp ý, hỗ trợ người dùng</a>
              </div>
         </div>
         <div class="dropdown">
@@ -45,12 +45,12 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
       </div>
     <div class="auth">
-    <?php if (isset($_SESSION['user'])): ?>
-      <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
-      <a href="login/logout.php">Đăng xuất</a>
-    <?php else: ?>
-      <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
-    <?php endif; ?>
+        <?php if (isset($_SESSION['user'])): ?>
+            <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
+            <a href="login/logout.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Đăng xuất</a>
+        <?php else: ?>
+            <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
+        <?php endif; ?>
     </div>
 </header>
 
@@ -203,12 +203,13 @@ if (session_status() === PHP_SESSION_NONE) {
       <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
     <?php endif; ?>
     <form method="POST" action="login/login.php">
-      <label for="user">Tên đăng nhập:</label>
-      <input type="text" id="user" name="user" required>
-      <label for="pass">Mật khẩu:</label>
-      <input type="password" id="pass" name="pass" required>
-      <button type="submit">Đăng nhập</button>
-      <p class="signup-link">Chưa có tài khoản? <a href="login/register.php">Đăng ký</a></p>
+        <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
+        <label for="user">Tên đăng nhập:</label>
+        <input type="text" id="user" name="user" required>
+        <label for="pass">Mật khẩu:</label>
+        <input type="password" id="pass" name="pass" required>
+        <button type="submit">Đăng nhập</button>
+        <p class="signup-link">Chưa có tài khoản? <a href="login/register.php">Đăng ký</a></p>
     </form>
   </div>
 </div>

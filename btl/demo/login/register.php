@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <!-- Thanh điều hướng -->
 <header class="navbar">
     <div class="logo">
-      <a href="#">
+      <a href="../index.php">
         <img src="../assets/logo.jpg" alt="Logo Thư viện số">
       </a>
     </div>
@@ -66,8 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="dropdown">
           <span class="dropdown-toggle">Thư viện</span>
           <div class="dropdown-menu">
-              <a href="#">Giới thiệu</a>
-              <a href="#">Nội Quy</a>
+              <a href="../gt/gt.php">Giới thiệu</a>
+              <a href="../nq/nq.php">Nội Quy</a>
           </div>
         </div>
         <div class="dropdown">
@@ -79,8 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="dropdown">
             <span class="dropdown-toggle">Help</span>
             <div class="dropdown-menu">
-              <a href="#">FAQ</a>
-              <a href="#">Góp ý, hỗ trợ người dùng</a>
+              <a href="../faq/faq.php">FAQ</a>
+              <a href="../ticket/ticket.php">Góp ý, hỗ trợ người dùng</a>
              </div>
         </div>
         <div class="dropdown">
