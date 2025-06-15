@@ -1,5 +1,29 @@
 <?php
 session_start();
+require_once '../login/connect.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $hoTen = $_POST['hoTen'] ?? '';
+    $maSV = $_POST['maSV'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $subject = $_POST['subject'] ?? '';
+    $message = $_POST['message'] ?? '';
+
+    if (!empty($hoTen) && !empty($maSV) && !empty($email) && !empty($subject) && !empty($message)) {
+        $stmt = $conn->prepare("INSERT INTO ticket_tbl (hoTen, maSV, email, subject, message) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $hoTen, $maSV, $email, $subject, $message);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Gửi phản hồi thành công!'); window.location.href = 'ticket.php';</script>";
+        } else {
+            echo "<script>alert('Gửi thất bại: " . $stmt->error . "');</script>";
+        }
+
+        $stmt->close();
+    } else {
+        echo "<script>alert('Vui lòng điền đầy đủ thông tin.');</script>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -55,12 +79,25 @@ session_start();
     <main class="contact-form-section">
         <div class="form-container">
             <h2>Hãy cho chúng tôi biết vấn đề của bạn</h2>
-            <form action="#" method="post">
-                <input type="text" name="title" placeholder="Tiêu đề">
-                <input type="text" name="fullname" placeholder="Họ Tên">
-                <input type="email" name="email" placeholder="Email">
-                <textarea name="content" placeholder="Nội dung" rows="8"></textarea>
-                <button type="submit" class="submit-btn">GỬI</button>
+            <?php if (!empty($thongBao)) echo "<p class='thong-bao'>$thongBao</p>"; ?>
+
+            <form id="ticketForm" method="POST">
+                <label for="hoTen">Họ và Tên:</label>
+                <input type="text" id="hoTen" name="hoTen" required>
+
+                <label for="maSV">Mã Sinh Viên:</label>
+                <input type="text" id="maSV" name="maSV" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="subject">Tiêu đề:</label>
+                <input type="text" id="subject" name="subject" required>
+
+                <label for="message">Nội dung:</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+
+                <button type="submit">Gửi</button>
             </form>
         </div>
     </main>
