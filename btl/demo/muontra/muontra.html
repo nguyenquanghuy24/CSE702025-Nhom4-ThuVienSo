@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mượn Trả Sách - Thư Viện Số</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="muontra.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <a href="#">
+                <img src="../assets/logo.jpg" alt="Logo">
+            </a>
+        </div>
+        <div class="nav-links">
+            <div class="dropdown">
+                <span class="dropdown-toggle">Thư viện</span>
+                <div class="dropdown-menu">
+                    <a href="../gt/gt.php">Giới thiệu</a>
+                    <a href="../nq/nq.php">Nội Quy</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Dịch vụ</span>
+                <div class="dropdown-menu">
+                    <a href="#">Mượn, Trả sách</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Help</span>
+                <div class="dropdown-menu">
+                    <a href="../faq/faq.php">FAQ</a>
+                    <a href="../ticket/ticket.php">Góp ý, hỗ trợ người dùng</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Contact</span>
+            </div>
+        </div>
+        <div class="auth">
+            <a href="#" id="login-auth-link" class="auth-link">Đăng nhập</a>
+        </div>
+    </header>
+
+    <main class="page-main-content">
+        <div class="content-container">
+            <section class="book-section">
+                <h2>Sách đề xuất</h2>
+                <div class="recommend-grid">
+                    <div class="book-card-simple">
+                        <img src="https://placehold.co/200x280/0077cc/FFF?text=Bìa+Sách" alt="Bìa sách">
+                        <p class="book-title">Tên sách 1</p>
+                    </div>
+                    <div class="book-card-simple">
+                        <img src="https://placehold.co/200x280/5cb85c/FFF?text=Bìa+Sách" alt="Bìa sách">
+                        <p class="book-title">Tên sách 2</p>
+                    </div>
+                    <div class="book-card-simple">
+                        <img src="https://placehold.co/200x280/d9534f/FFF?text=Bìa+Sách" alt="Bìa sách">
+                        <p class="book-title">Tên sách 3</p>
+                    </div>
+                    <div class="book-card-simple">
+                        <img src="https://placehold.co/200x280/f0ad4e/FFF?text=Bìa+Sách" alt="Bìa sách">
+                        <p class="book-title">Tên sách 4</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="book-section">
+                <h2>Sách đang mượn</h2>
+                <div class="borrowed-list">
+                    <div class="borrowed-item">
+                        <div class="borrowed-item-cover">
+                           <img src="https://placehold.co/100x140/333/FFF?text=Bìa" alt="Bìa sách">
+                           <p class="book-title-small">Lược sử loài người</p>
+                        </div>
+                        <div class="borrowed-item-info">
+                            <p><strong>Thông tin sách</strong></p>
+                            <p>Ngày mượn: 01/06/2025</p>
+                            <p>Ngày hết hạn: 15/06/2025</p>
+                        </div>
+                        <button class="btn-return">Trả sách</button>
+                    </div>
+                    <div class="borrowed-item">
+                        <div class="borrowed-item-cover">
+                           <img src="https://placehold.co/100x140/333/FFF?text=Bìa" alt="Bìa sách">
+                           <p class="book-title-small">Nhà giả kim</p>
+                        </div>
+                        <div class="borrowed-item-info">
+                            <p><strong>Thông tin sách</strong></p>
+                            <p>Ngày mượn: 10/06/2025</p>
+                            <p>Ngày hết hạn: 24/06/2025</p>
+                        </div>
+                        <button class="btn-return">Trả sách</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="footer-column">
+                <h3>About</h3>
+                <p>Đây là thư viện số. Bạn muốn viết thêm gì thì có viết thêm vào đây.</p> 
+                <button class="read-more-btn">Read More</button>
+            </div>
+            <div class="footer-column">
+                <h3>Dịch vụ</h3>
+                <p>Hỗ trợ nghiên cứu<br>Câu hỏi thường gặp<br>Tìm đồ thất lạc</p>
+            </div>
+            <div class="footer-column">
+                <h3>Liên hệ</h3>
+                <p>Đại học Phenikaa<br>elib@phenikaa-uni.edu.vn<br>0246.6291 8118 | Số máy lẻ: 117</p>
+            </div>
+            <div class="footer-column">
+                <h3>Social</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>Copyright © 2025 All Rights Reserved | This template is made with ♥ by Group 4</p>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">×</span>
+            <h2>Đăng nhập</h2>
+            <input type="text" placeholder="Tên đăng nhập">
+            <input type="password" placeholder="Mật khẩu">
+            <button>Đăng nhập</button>
+            <div class="signup-link">
+                <p>Chưa có tài khoản? <a href="#">Đăng ký</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="muon.js"></script>
+</body>
+</html>

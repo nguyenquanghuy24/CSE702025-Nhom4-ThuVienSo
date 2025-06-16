@@ -30,7 +30,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <div class="dropdown">
           <span class="dropdown-toggle">Dịch vụ</span>
           <div class="dropdown-menu">
-              <a href="#">Mượn, Trả sách</a>
+              <a href="muontra/muontra.html">Mượn, Trả sách</a>
           </div>
         </div>
         <div class="dropdown">

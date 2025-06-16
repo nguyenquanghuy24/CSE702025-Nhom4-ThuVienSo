@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kết quả tìm kiếm - Thư viện số</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="timkiem.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <a href="../index.php">
+                <img src="../assets/logo.jpg" alt="Logo">
+            </a>
+        </div>
+        <div class="nav-links">
+            <div class="dropdown">
+                <span class="dropdown-toggle">Thư viện</span>
+                <div class="dropdown-menu">
+                    <a href="../gt/gt.php">Giới thiệu</a>
+                    <a href="../nq/nq.php">Nội Quy</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Dịch vụ</span>
+                <div class="dropdown-menu">
+                    <a href="#">Mượn, Trả sách</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Help</span>
+                <div class="dropdown-menu">
+                    <a href="../faq/faq.php">FAQ</a>
+                    <a href="../ticket/ticket.php">Góp ý, hỗ trợ người dùng</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <span class="dropdown-toggle">Contact</span>
+            </div>
+        </div>
+        <div class="auth">
+            <a href="#" id="login-auth-link" class="auth-link">Đăng nhập</a>
+        </div>
+    </header>
+
+    <main class="search-main-content">
+        <div class="search-container">
+            <div class="search-bar-wrapper">
+                <input type="text" class="search-input" placeholder="Nhập tên sách, tác giả để tìm kiếm..." value="Rải tích">
+                <button class="search-button"><i class="fa fa-search"></i></button>
+            </div>
+
+            <div class="search-page-body">
+                <aside class="filter-sidebar">
+                    <h3><i class="fas fa-filter"></i> Lọc kết quả</h3>
+                    <div class="filter-group">
+                        <h4>Thể loại</h4>
+                        <div class="filter-option"><input type="checkbox" id="cat1" name="cat1"> <label for="cat1">Khoa học máy tính</label></div>
+                        <div class="filter-option"><input type="checkbox" id="cat2" name="cat2"> <label for="cat2">Lập trình</label></div>
+                        <div class="filter-option"><input type="checkbox" id="cat3" name="cat3"> <label for="cat3">Toán học</label></div>
+                    </div>
+                    <div class="filter-group">
+                        <h4>Năm xuất bản</h4>
+                        <div class="filter-option"><input type="checkbox" id="year1" name="year1"> <label for="year1">Sau 2020</label></div>
+                        <div class="filter-option"><input type="checkbox" id="year2" name="year2"> <label for="year2">2015 - 2020</label></div>
+                        <div class="filter-option"><input type="checkbox" id="year3" name="year3"> <label for="year3">Trước 2015</label></div>
+                    </div>
+                    <div class="filter-group">
+                        <h4>Ngôn ngữ</h4>
+                        <div class="filter-option"><input type="checkbox" id="lang1" name="lang1"> <label for="lang1">Tiếng Việt</label></div>
+                        <div class="filter-option"><input type="checkbox" id="lang2" name="lang2"> <label for="lang2">Tiếng Anh</label></div>
+                    </div>
+                    <button class="apply-filter-btn">Áp dụng</button>
+                </aside>
+
+                <section class="search-results">
+                    <h2>"giải tích"</h2>
+                    <p class="results-count">Tìm thấy 3 kết quả</p>
+                    <div class="results-grid">
+                        <div class="book-card">
+                            <img src="" alt="Bìa sách">
+                            <div class="book-card-info">
+                                <h4>giải tích 1</h4>
+                                <p class="author">Nguyễn Văn A</p>
+                                <p class="description">Sách cung cấp kiến thức nền tảng về giải tích...</p>
+                                <button class="btn-view-details">Xem chi tiết</button>
+                            </div>
+                        </div>
+                        <div class="book-card">
+                            <img src="" alt="Bìa sách">
+                            <div class="book-card-info">
+                                <h4>giải tích 2</h4>
+                                <p class="author">Trần Thị B</p>
+                                <p class="description">Đi sâu vào các chủ đề phức tạp như giải tích...</p>
+                                <button class="btn-view-details">Xem chi tiết</button>
+                            </div>
+                        </div>
+                        <div class="book-card">
+                            <img src="" alt="Bìa sách">
+                            <div class="book-card-info">
+                                <h4>giải tích 3</h4>
+                                <p class="author">Lê Văn C</p>
+                                <p class="description">Hướng dẫn đạo hàm....</p>
+                                <button class="btn-view-details">Xem chi tiết</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <div class="footer-column">
+                <h3>About</h3>
+                <p>Đây là thư viện số.</p>
+                <button class="read-more-btn">Read More</button>
+            </div>
+            <div class="footer-column">
+                <h3>Dịch vụ</h3>
+                <p>Hỗ trợ nghiên cứu<br>Câu hỏi thường gặp<br>Tìm đồ thất lạc</p>
+            </div>
+            <div class="footer-column">
+                <h3>Liên hệ</h3>
+                <p>Đại học Phenikaa<br>elib@phenikaa-uni.edu.vn<br>0246.6291 8118 | Số máy lẻ: 117</p>
+            </div>
+            <div class="footer-column">
+                <h3>Social</h3>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>Copyright © 2025 All Rights Reserved | This template is made with ♥ by Group 4</p>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">×</span>
+            <h2>Đăng nhập</h2>
+            <input type="text" placeholder="Tên đăng nhập">
+            <input type="password" placeholder="Mật khẩu">
+            <button>Đăng nhập</button>
+            <div class="signup-link">
+                <p>Chưa có tài khoản? <a href="#">Đăng ký</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="timkiem.js"></script>
+</body>
+</html>
