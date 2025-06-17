@@ -47,7 +47,7 @@
     <main class="search-main-content">
         <div class="search-container">
             <div class="search-bar-wrapper">
-                <input type="text" class="search-input" placeholder="Nhập tên sách, tác giả để tìm kiếm..." value="Rải tích">
+                <input type="text" class="search-input" placeholder="Nhập tên sách, tác giả để tìm kiếm..." value="giải tích">
                 <button class="search-button"><i class="fa fa-search"></i></button>
             </div>
 
@@ -77,31 +77,40 @@
                 <section class="search-results">
                     <h2>"giải tích"</h2>
                     <p class="results-count">Tìm thấy 3 kết quả</p>
-                    <div class="results-grid">
-                        <div class="book-card">
-                            <img src="" alt="Bìa sách">
-                            <div class="book-card-info">
-                                <h4>giải tích 1</h4>
-                                <p class="author">Nguyễn Văn A</p>
-                                <p class="description">Sách cung cấp kiến thức nền tảng về giải tích...</p>
+                    <div class="results-list">
+                        <div class="book-list-item">
+                            <img src="text=Bìa+Sách" alt="Bìa sách" class="book-item-image">
+                            <div class="book-item-info">
+                                <h4 class="book-title">giải tích 1</h4>
+                                <p class="book-author">Tác giả: Nguyễn Văn A</p>
+                                <p class="book-description">Sách cung cấp kiến thức nền tảng về giải tích.</p>
+                                <p class="book-year" style="display:none;">2021</p>
+                            </div>
+                            <div class="book-item-actions">
                                 <button class="btn-view-details">Xem chi tiết</button>
                             </div>
                         </div>
-                        <div class="book-card">
-                            <img src="" alt="Bìa sách">
-                            <div class="book-card-info">
-                                <h4>giải tích 2</h4>
-                                <p class="author">Trần Thị B</p>
-                                <p class="description">Đi sâu vào các chủ đề phức tạp như giải tích...</p>
+                        <div class="book-list-item">
+                            <img src="text=Bìa+Sách" alt="Bìa sách" class="book-item-image">
+                            <div class="book-item-info">
+                                <h4 class="book-title">giải tích 2</h4>
+                                <p class="book-author">Tác giả: Trần Thị B</p>
+                                <p class="book-description">Đi sâu vào các chủ đề phức tạp như giải tích vector.</p>
+                                <p class="book-year" style="display:none;">2022</p>
+                            </div>
+                            <div class="book-item-actions">
                                 <button class="btn-view-details">Xem chi tiết</button>
                             </div>
                         </div>
-                        <div class="book-card">
-                            <img src="" alt="Bìa sách">
-                            <div class="book-card-info">
-                                <h4>giải tích 3</h4>
-                                <p class="author">Lê Văn C</p>
-                                <p class="description">Hướng dẫn đạo hàm....</p>
+                        <div class="book-list-item">
+                            <img src="text=Bìa+Sách" alt="Bìa sách" class="book-item-image">
+                            <div class="book-item-info">
+                                <h4 class="book-title">giải tích 3</h4>
+                                <p class="book-author">Tác giả: Lê Văn C</p>
+                                <p class="book-description">Hướng dẫn về chuỗi số, chuỗi hàm và các phép biến đổi.</p>
+                                <p class="book-year" style="display:none;">2023</p>
+                            </div>
+                            <div class="book-item-actions">
                                 <button class="btn-view-details">Xem chi tiết</button>
                             </div>
                         </div>
@@ -152,6 +161,38 @@
             </div>
         </div>
     </div>
+
+    <div id="bookDetailModal" class="modal">
+        <div class="modal-content-large">
+            <span class="close-btn-large">&times;</span>
+            <div class="modal-body-large">
+                <div class="modal-book-cover">
+                    <img id="modal-book-image" src="" alt="Bìa sách">
+                </div>
+                <div class="modal-book-details">
+                    <h2 id="modal-book-title"></h2>
+                    <div class="modal-action-buttons">
+                        <button class="btn-action btn-view-online"><i class="fas fa-book-open"></i> Xem online</button>
+                        <button class="btn-action btn-borrow-book"><i class="fas fa-hand-holding-heart"></i> Mượn sách</button>
+                    </div>
+                    <h3>Details</h3>
+                    <dl class="details-list">
+                        <dt>Tác giả</dt>
+                        <dd id="modal-book-author"></dd>
+                        <dt>Năm xuất bản</dt>
+                        <dd id="modal-book-year"></dd>
+                        <dt>Mô tả</dt>
+                        <dd id="modal-book-description"></dd>
+                        <dt>Ngôn ngữ</dt>
+                        <dd>Tiếng Việt</dd>
+                        <dt>Chủ đề</dt>
+                        <dd>Toán học, Giáo trình</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="timkiem.js"></script>
 </body>

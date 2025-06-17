@@ -87,23 +87,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_id'])) {
 
     <main class="page-main-content">
         <div class="content-container">
+            <section class="book-section search-feature">
+                <form action="search.php" method="GET" class="search-bar">
+                    <input type="text" name="query" placeholder="Tìm kiếm sách theo tên, tác giả..." class="search-input">
+                    <button type="submit" class="search-button">Search</button>
+                </form>
+            </section>
+
             <section class="book-section">
                 <h2>Sách đề xuất</h2>
                 <div class="recommend-grid">
                     <div class="book-card-simple">
-                        <img src="https://placehold.co/200x280/0077cc/FFF?text=Bìa+Sách" alt="Bìa sách">
+                        <img src="" alt="Bìa sách">
                         <p class="book-title">Tên sách 1</p>
                     </div>
                     <div class="book-card-simple">
-                        <img src="https://placehold.co/200x280/5cb85c/FFF?text=Bìa+Sách" alt="Bìa sách">
+                        <img src="" alt="Bìa sách">
                         <p class="book-title">Tên sách 2</p>
                     </div>
                     <div class="book-card-simple">
-                        <img src="https://placehold.co/200x280/d9534f/FFF?text=Bìa+Sách" alt="Bìa sách">
+                        <img src="" alt="Bìa sách">
                         <p class="book-title">Tên sách 3</p>
                     </div>
                     <div class="book-card-simple">
-                        <img src="https://placehold.co/200x280/f0ad4e/FFF?text=Bìa+Sách" alt="Bìa sách">
+                        <img src="" alt="Bìa sách">
                         <p class="book-title">Tên sách 4</p>
                     </div>
                 </div>
