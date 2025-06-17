@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_id'])) {
     <main class="page-main-content">
         <div class="content-container">
             <section class="book-section search-feature">
-                <form action="search.php" method="GET" class="search-bar">
+                <form action="../search/search.php" method="GET" class="search-bar">
                     <input type="text" name="query" placeholder="Tìm kiếm sách theo tên, tác giả..." class="search-input">
                     <button type="submit" class="search-button">Search</button>
                 </form>

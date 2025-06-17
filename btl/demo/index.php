@@ -10,7 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
   <title>Thư viện số</title>
-  <link rel="stylesheet" href="trangchu.css" />
+  <link rel="stylesheet" href="home.css" />
 </head>
 <body>
 <header class="navbar">
@@ -57,7 +57,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 <section class="welcome-section">
     <h1>Welcome to Thư viện số</h1>
-     <form action="timkiem.php" method="GET" class="search-box">
+     <form action="search/search.php" method="GET" class="search-box">
          <input type="text" name="query" placeholder="Tìm kiếm sách, tài liệu...">
         <button type="submit">Search</button>
     </form>
