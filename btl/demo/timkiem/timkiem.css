@@ -279,33 +279,6 @@ header.navbar {
   to { opacity: 1; }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .logo img {
-    height: 40px;
-    width: 40px;
-  }
-  .dropdown-menu {
-    min-width: 150px;
-    left: 0;
-  }
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-  }
-    .footer-column {
-        margin-bottom: 20px;
-        text-align: center;
-    }
-  .auth-link {
-    padding: 6px 12px;
-    font-size: 0.9rem;
-  }
-  .nav-links {
-      display: none;
-  }
-}
-
 .search-main-content {
     flex-grow: 1;
 }
@@ -347,13 +320,13 @@ header.navbar {
 }
 
 
-/* Page Body */
+/* Page Body Layout */
 .search-page-body {
     display: flex;
     gap: 30px;
 }
 
-/* Sidebar */
+/* Filter Sidebar */
 .filter-sidebar {
     flex-basis: 250px;
     flex-shrink: 0;
@@ -429,6 +402,7 @@ header.navbar {
     margin-bottom: 20px;
 }
 
+/* Styles for List View */
 .results-list {
     display: flex;
     flex-direction: column;
@@ -446,10 +420,11 @@ header.navbar {
     padding: 20px;
     background-color: #fff;
     transition: background-color 0.3s;
+    cursor: pointer; /* Added cursor pointer */
 }
 
 .book-list-item:hover {
-    background-color: #f9f9f9;
+    background-color: #f0f8ff; /* A light blue hover effect */
 }
 
 .book-item-image {
@@ -463,6 +438,7 @@ header.navbar {
 
 .book-item-info {
     flex-grow: 1;
+    min-width: 0; /* Prevents text from overflowing */
 }
 
 .book-item-info .book-title {
@@ -489,21 +465,7 @@ header.navbar {
     text-overflow: ellipsis;
 }
 
-.book-item-actions .btn-view-details {
-    background-color: #0077cc;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.book-item-actions .btn-view-details:hover {
-    background-color: #005c99;
-}
-
-/* NEW styles for the large Book Detail Modal */
+/* Styles for the large Book Detail Modal */
 .modal-content-large {
     background-color: #fff;
     margin: 5% auto;
@@ -640,5 +602,28 @@ header.navbar {
     }
     #modal-book-title {
         font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-column {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    .auth-link {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+    .nav-links {
+        display: none;
+    }
+    .book-list-item {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
     }
 }

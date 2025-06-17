@@ -18,11 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // --- NEW: Xử lý Modal Chi tiết Sách ---
+  // --- Xử lý Modal Chi tiết Sách ---
   const bookDetailModal = document.getElementById('bookDetailModal');
   if (bookDetailModal) {
     const detailCloseBtn = bookDetailModal.querySelector('.close-btn-large');
-    const viewDetailButtons = document.querySelectorAll('.btn-view-details');
+    // THAY ĐỔI: Chọn toàn bộ mục sách thay vì chỉ nút bấm
+    const bookItems = document.querySelectorAll('.book-list-item');
 
     // Lấy các phần tử trong modal để điền dữ liệu
     const modalImage = document.getElementById('modal-book-image');
@@ -31,22 +32,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalYear = document.getElementById('modal-book-year');
     const modalDescription = document.getElementById('modal-book-description');
 
-    // Thêm sự kiện cho tất cả các nút "Xem chi tiết"
-    viewDetailButtons.forEach(button => {
-      button.addEventListener('click', (event) => {
-        // Tìm mục sách cha gần nhất
-        const bookItem = event.target.closest('.book-list-item');
+    // Thêm sự kiện cho tất cả các MỤC SÁCH
+    bookItems.forEach(item => {
+      item.addEventListener('click', (event) => {
+        // 'item' chính là 'book-list-item' được nhấn vào
+        const bookItem = event.currentTarget;
 
         // Lấy dữ liệu từ các phần tử con của mục sách
         const title = bookItem.querySelector('.book-title').textContent;
         const author = bookItem.querySelector('.book-author').textContent;
-        const fullDescription = bookItem.querySelector('.book-description').textContent; // Lấy mô tả đầy đủ
+        const fullDescription = bookItem.querySelector('.book-description').textContent;
         const year = bookItem.querySelector('.book-year').textContent;
         const imageSrc = bookItem.querySelector('.book-item-image').src;
 
         // Điền dữ liệu vào modal
         modalTitle.textContent = title;
-        modalAuthor.textContent = author.replace('Tác giả: ', ''); // Bỏ tiền tố "Tác giả: "
+        modalAuthor.textContent = author.replace('Tác giả: ', '');
         modalYear.textContent = year;
         modalDescription.textContent = fullDescription;
         modalImage.src = imageSrc;
@@ -68,10 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('click', (event) => {
     const loginModal = document.getElementById('loginModal');
     const bookDetailModal = document.getElementById('bookDetailModal');
-    if (event.target === loginModal) {
+    if (loginModal && event.target === loginModal) {
       loginModal.style.display = 'none';
     }
-    if (event.target === bookDetailModal) {
+    if (bookDetailModal && event.target === bookDetailModal) {
       bookDetailModal.style.display = 'none';
     }
   });
