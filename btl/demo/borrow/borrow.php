@@ -2,9 +2,12 @@
 session_start();
 include("../login/connect.php");
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+
+// Logic xử lý mượn sách qua AJAX POST từ popup
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_id'])) {
     if (!isset($_SESSION['user_id'])) {
-        echo "<script>openLoginModal();</script>";
+        // Gửi tín hiệu chữ để JavaScript nhận biết và gọi modal đăng nhập
+        echo "login_required";
         exit;
     }
 
@@ -32,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_id'])) {
     } else {
         echo "Sách đã hết hoặc không tồn tại.";
     }
+    exit; // Dừng tại đây để không gửi toàn bộ HTML về cho AJAX
 }
 ?>
 <!DOCTYPE html>
@@ -97,21 +101,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_id'])) {
             <section class="book-section">
                 <h2>Sách đề xuất</h2>
                 <div class="recommend-grid">
-                    <div class="book-card-simple">
-                        <img src="" alt="Bìa sách">
-                        <p class="book-title">Tên sách 1</p>
+                    <div class="book-card-simple" 
+                         data-book-id="1" 
+                         data-title="Giải Tích I" 
+                         data-author="Nguyễn Đình Trí" 
+                         data-description="Cuốn sách Giải Tích I cung cấp các kiến thức cơ bản và nền tảng nhất của giải tích, bao gồm giới hạn, đạo hàm, và tích phân." 
+                         data-img-src="assets/giaitich1.jpg">
+                        <img src="assets/giaitich1.jpg" alt="Bìa sách Giải Tích I">
+                        <p class="book-title">Giải Tích I</p>
                     </div>
-                    <div class="book-card-simple">
-                        <img src="" alt="Bìa sách">
-                        <p class="book-title">Tên sách 2</p>
+                    <div class="book-card-simple" 
+                         data-book-id="2" 
+                         data-title="Giải Tích II" 
+                         data-author="Nguyễn Đình Trí" 
+                         data-description="Tiếp nối Giải Tích I, cuốn sách này đi sâu vào các chủ đề nâng cao như giải tích hàm nhiều biến, tích phân bội, và phương trình vi phân." 
+                         data-img-src="assets/giaitich2.jpg">
+                        <img src="assets/giaitich2.jpg" alt="Bìa sách Giải Tích II">
+                        <p class="book-title">Giải Tích II</p>
                     </div>
-                    <div class="book-card-simple">
-                        <img src="" alt="Bìa sách">
-                        <p class="book-title">Tên sách 3</p>
-                    </div>
-                    <div class="book-card-simple">
-                        <img src="" alt="Bìa sách">
-                        <p class="book-title">Tên sách 4</p>
+                    <div class="book-card-simple" 
+                         data-book-id="3" 
+                         data-title="Giải Tích III" 
+                         data-author="Nguyễn Đình Trí" 
+                         data-description="Cuốn sách cuối cùng trong bộ ba, tập trung vào các khái niệm về chuỗi số, chuỗi hàm, và các phép biến đổi quan trọng như Fourier và Laplace." 
+                         data-img-src="assets/giaitich3.jpg">
+                        <img src="assets/giaitich3.jpg" alt="Bìa sách Giải Tích III">
+                        <p class="book-title">Giải Tích III</p>
                     </div>
                 </div>
             </section>
@@ -151,7 +166,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_id'])) {
                     } else {
                         echo "<p>Chưa mượn sách nào.</p>";
                     }
-
                     $stmt->close();
                 } else {
                     echo "<p>Vui lòng <a href='#' onclick='openLoginModal()'>đăng nhập</a> để xem sách đã mượn.</p>";
@@ -210,6 +224,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_id'])) {
             </div>
         </div>
     <?php endif; ?>    
+
+    <div id="bookDetailModal" class="modal">
+        <div class="popup-content">
+            <span id="close-popup-btn" class="popup-close-btn">&times;</span>
+            <h2 id="modal-book-title" class="popup-title"></h2>
+            <div class="popup-body">
+                <div class="popup-left-column">
+                    <img id="modal-book-image" src="" alt="Bìa sách">
+                </div>
+                <div class="popup-right-column">
+                    <div class="popup-actions">
+                        <button class="popup-btn btn-view"><i class="fas fa-book-open"></i> Xem online</button>
+                        <button id="modal-borrow-button" class="popup-btn btn-borrow"><i class="fas fa-hand-holding-heart"></i> Mượn sách</button>
+                    </div>
+                    <h4 class="popup-details-header">Details</h4>
+                    <dl class="popup-details-list">
+                        <dt>Tác giả</dt>
+                        <dd id="modal-book-author"></dd>
+                        <dt>Mô tả</dt>
+                        <dd id="modal-book-description"></dd>
+                        <dt>Năm xuất bản</dt>
+                        <dd>2021</dd> <dt>Ngôn ngữ</dt>
+                        <dd>Tiếng Việt</dd> </dl>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="borrow.js"></script>
 </body>

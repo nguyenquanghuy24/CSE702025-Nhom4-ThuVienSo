@@ -175,21 +175,8 @@ header.navbar {
   border-top: 1px solid #333;
 }
 
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 100;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0,0,0,0.5);
-  animation: fadeIn 0.3s;
-}
-
-.modal-content {
+/* Modal Đăng nhập (giữ nguyên) */
+#loginModal .modal-content {
   background-color: #fff;
   margin: 10% auto;
   padding: 30px;
@@ -249,16 +236,6 @@ header.navbar {
 
 .signup-link a:hover {
   text-decoration: underline;
-}
-
-@keyframes slideIn {
-  from { transform: translateY(-50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 .page-main-content {
@@ -329,25 +306,28 @@ header.navbar {
 /* Thanh đề xuất sách */
 .recommend-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
 }
 
 .book-card-simple {
     text-align: center;
+    cursor: pointer;
 }
 
 .book-card-simple img {
     width: 100%;
-    height: auto;
+    height: 300px;
+    object-fit: cover;
     border-radius: 8px;
     margin-bottom: 15px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s;
 }
 
 .book-card-simple:hover img {
-    transform: scale(1.03);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
 }
 
 .book-card-simple .book-title {
@@ -417,6 +397,160 @@ header.navbar {
     background-color: #c9302c;
 }
 
+/* === TOÀN BỘ CSS CHO POPUP CHI TIẾT SÁCH === */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+  animation: fadeIn 0.3s;
+}
+
+.popup-content {
+    background-color: #fff;
+    margin: 8% auto;
+    padding: 25px 35px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 750px;
+    position: relative;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+    animation: slideIn 0.4s ease-out;
+}
+
+.popup-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: 300;
+    color: #888;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.popup-close-btn:hover {
+    color: #000;
+}
+
+.popup-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.popup-body {
+    display: flex;
+    gap: 30px;
+}
+
+.popup-left-column {
+    flex-basis: 35%;
+}
+
+.popup-left-column img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.popup-right-column {
+    flex-basis: 65%;
+    text-align: left;
+}
+
+.popup-actions {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.popup-btn {
+    flex-grow: 1;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.popup-btn .fas {
+    font-size: 1em;
+}
+
+.btn-view {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.btn-view:hover {
+    background-color: #0069d9;
+}
+
+.btn-borrow {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.btn-borrow:hover {
+    background-color: #e2e6ea;
+}
+
+.popup-details-header {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+}
+
+.popup-details-list {
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.popup-details-list dt {
+    font-weight: 600;
+    color: #333;
+    float: left;
+    width: 100px;
+    clear: left;
+}
+
+.popup-details-list dd {
+    margin-left: 110px;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+
 @media (max-width: 768px) {
     .nav-links { display: none; }
     .footer-bottom { flex-direction: column; text-align: center; }
@@ -435,5 +569,9 @@ header.navbar {
     
     .btn-return {
         align-self: flex-end;
+    }
+
+    .popup-body {
+        flex-direction: column;
     }
 }
