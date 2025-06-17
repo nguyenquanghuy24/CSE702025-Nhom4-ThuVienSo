@@ -170,7 +170,6 @@ ALTER TABLE `tbl_user`
 --
 ALTER TABLE `borrow_tbl`
   ADD CONSTRAINT `fk_book` FOREIGN KEY (`book_id`) REFERENCES `book_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_borrow_book` FOREIGN KEY (`book_id`) REFERENCES `book_tbl` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_borrow_user` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`id`) ON DELETE CASCADE;
 COMMIT;
 
