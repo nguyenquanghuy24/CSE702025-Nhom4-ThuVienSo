@@ -55,12 +55,12 @@ if (session_status() === PHP_SESSION_NONE) {
 </header>
 
 
- <section class="welcome-section">
-        <h1>Welcome to Thư viện số</h1>
-        <div class="search-box">
-            <input type="text" placeholder="Search">
-            <button>Search</button>
-        </div>
+<section class="welcome-section">
+    <h1>Welcome to Thư viện số</h1>
+     <form action="timkiem.php" method="GET" class="search-box">
+         <input type="text" name="query" placeholder="Tìm kiếm sách, tài liệu...">
+        <button type="submit">Search</button>
+    </form>
  </section>
 
 <section class="new-documents">
