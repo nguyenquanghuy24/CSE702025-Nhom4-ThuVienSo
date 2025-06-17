@@ -1,6 +1,7 @@
 <?php
 session_start();
 include("../login/connect.php");
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['book_id'])) {
     if (!isset($_SESSION['user_id'])) {
         echo "<script>openLoginModal();</script>";

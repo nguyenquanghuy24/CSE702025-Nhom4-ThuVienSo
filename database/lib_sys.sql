@@ -153,7 +153,7 @@ ALTER TABLE `book_tbl`
 -- AUTO_INCREMENT for table `borrow_tbl`
 --
 ALTER TABLE `borrow_tbl`
-  MODIFY `borrow_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `borrow_id` int(11) NOT NULL AUTO_INC`REMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_user`
