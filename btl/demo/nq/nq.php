@@ -28,7 +28,7 @@ session_start();
             <div class="dropdown">
                 <span class="dropdown-toggle">Dịch vụ</span>
                 <div class="dropdown-menu">
-                    <a href="#">Mượn, Trả sách</a>
+                    <a href="../borrow/borrow.php">Mượn, Trả sách</a>
                 </div>
             </div>
             <div class="dropdown">

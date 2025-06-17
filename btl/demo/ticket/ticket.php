@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="dropdown">
                 <span class="dropdown-toggle">Dịch vụ</span>
                 <div class="dropdown-menu">
-                    <a href="#">Mượn, Trả sách</a>
+                    <a href="../borrow/borrow.php">Mượn, Trả sách</a>
                 </div>
             </div>
             <div class="dropdown">
