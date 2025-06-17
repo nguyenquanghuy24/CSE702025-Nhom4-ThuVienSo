@@ -22,7 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['borrow_id'])) {
             // Tăng số lượng sách
             $update_sql = "UPDATE book_tbl SET soLuong = soLuong + 1 WHERE id = $book_id";
             mysqli_query($conn, $update_sql);
-            echo "Trả sách thành công!";
+
+            // Hiện thông báo và chuyển trang
+            echo "<script>
+                alert('Trả sách thành công!');
+                setTimeout(function() {
+                    window.location.href = 'borrow.php';
+                }, 200); 
+            </script>";
         } else {
             echo "Lỗi khi trả sách.";
         }

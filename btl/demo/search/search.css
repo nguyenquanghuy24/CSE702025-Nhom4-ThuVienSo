@@ -319,11 +319,53 @@ header.navbar {
     background-color: #005c99;
 }
 
+.search-form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1500px; /* Kích thước lớn hơn */
+    margin: 20px auto;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.search-input {
+    flex: 1;
+    height: 45px; /* Cao hơn */
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 8px 0 0 8px;
+}
+
+.search-button {
+    width: 45px;
+    height: 45px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+}
+
+.search-button i {
+    font-size: 18px;
+}
+
+
+
 
 /* Page Body Layout */
 .search-page-body {
     display: flex;
     gap: 30px;
+    margin-top: 20px;
 }
 
 /* Filter Sidebar */
@@ -335,6 +377,14 @@ header.navbar {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     height: fit-content;
+}
+.filter-apply-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .filter-sidebar h3 {
@@ -459,7 +509,6 @@ header.navbar {
     color: #777;
     line-height: 1.5;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -583,6 +632,15 @@ header.navbar {
     margin-left: 130px;
     color: #666;
     margin-bottom: 10px;
+}
+
+.detail-button {
+    background-color: #007bff;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
 }
 
 /* Responsive */

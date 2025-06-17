@@ -1,5 +1,6 @@
 <?php
 session_start();
+include("../login/connect.php");
 ?>
 <!DOCTYPE html>
 <html lang="vi">
