@@ -684,5 +684,5 @@ header.navbar {
     }
 }
 .alert.success {
-    display: none; /* Ẩn thông báo thành công */
+    display: none; 
 }

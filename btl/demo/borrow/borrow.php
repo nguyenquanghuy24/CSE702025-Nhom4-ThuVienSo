@@ -2,7 +2,6 @@
 session_start();
 include("../login/connect.php");
 
-// Xử lý mượn sách
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     if (!isset($_SESSION['user_id'])) {
         $_SESSION['login_error'] = "Bạn cần đăng nhập để mượn sách.";
@@ -13,7 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     $user_id = $_SESSION['user_id'];
     $book_id = intval($_POST['book_id']);
 
-    // === BẮT ĐẦU: KIỂM TRA GIỚI HẠN SỐ SÁCH MƯỢN TỔNG CỘNG ===
     $stmt_count_total = $conn->prepare("SELECT COUNT(*) AS total_borrowed FROM borrow_tbl WHERE user_id = ? AND tinhTrang = 'Đang mượn'");
     $stmt_count_total->bind_param("i", $user_id);
     $stmt_count_total->execute();
@@ -26,9 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
         header("Location: borrow.php");
         exit();
     }
-    // === KẾT THÚC: KIỂM TRA GIỚI HẠN SỐ SÁCH MƯỢN TỔNG CỘNG ===
 
-    // === BẮT ĐẦU: KIỂM TRA GIỚI HẠN 1 CUỐN/ĐẦU SÁCH ===
     $stmt_count_specific = $conn->prepare("SELECT COUNT(*) AS specific_book_borrowed FROM borrow_tbl WHERE user_id = ? AND book_id = ? AND tinhTrang = 'Đang mượn'");
     $stmt_count_specific->bind_param("ii", $user_id, $book_id);
     $stmt_count_specific->execute();
@@ -41,9 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
         header("Location: borrow.php");
         exit();
     }
-    // === KẾT THÚC: KIỂM TRA GIỚI HẠN 1 CUỐN/ĐẦU SÁCH ===
 
-    // Kiểm tra trạng thái sách (logic còn lại giữ nguyên)
     $stmt = $conn->prepare("SELECT soLuong, trangThai FROM book_tbl WHERE id = ?");
     $stmt->bind_param("i", $book_id);
     $stmt->execute();
@@ -55,19 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
         if ($book['trangThai'] == 'Đang bảo trì') {
             $_SESSION['borrow_error'] = "Sách đang bảo trì, không thể mượn.";
         } elseif ($book['soLuong'] > 0) {
-            // Giảm số lượng sách
             $stmt = $conn->prepare("UPDATE book_tbl SET soLuong = soLuong - 1 WHERE id = ?");
             $stmt->bind_param("i", $book_id);
             $stmt->execute();
 
-            // Cập nhật trạng thái nếu hết sách
             if ($book['soLuong'] - 1 <= 0) {
                 $stmt = $conn->prepare("UPDATE book_tbl SET trangThai = 'Đã mượn hết' WHERE id = ?");
                 $stmt->bind_param("i", $book_id);
                 $stmt->execute();
             }
 
-            // Thêm vào bảng mượn sách
             $stmt = $conn->prepare("INSERT INTO borrow_tbl (user_id, book_id, ngayMuon, ngayHetHan, tinhTrang) 
                                   VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY), 'Đang mượn')");
             $stmt->bind_param("ii", $user_id, $book_id);
@@ -103,19 +94,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     <?php if (isset($_SESSION['borrow_error'])): ?>
         <div class="alert error"><?php echo $_SESSION['borrow_error']; unset($_SESSION['borrow_error']); ?></div>
         <script>
-            // Hiển thị alert JavaScript cho lỗi mượn sách, đặc biệt là lỗi "đã mượn cuốn này rồi"
             alert("Lỗi mượn sách: <?php echo htmlspecialchars($_SESSION['borrow_error']); ?>");
         </script>
     <?php endif; ?>
 
-    <?php // Hiển thị thông báo trả sách ?>
+    <?php ?>
     <?php if (isset($_SESSION['return_success'])): ?>
         <div class="alert success"><?php echo $_SESSION['return_success']; unset($_SESSION['return_success']); ?></div>
     <?php endif; ?>
     <?php if (isset($_SESSION['return_error'])): ?>
         <div class="alert error"><?php echo $_SESSION['return_error']; unset($_SESSION['return_error']); ?></div>
         <script>
-            // Hiển thị alert JavaScript cho lỗi trả sách
             alert("Lỗi trả sách: <?php echo htmlspecialchars($_SESSION['return_error']); ?>");
         </script>
     <?php endif; ?>
@@ -226,7 +215,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                     if (isset($_SESSION['user_id'])):
                         $user_id = $_SESSION['user_id'];
                         
-                        // TRUY VẤN CHỈ LẤY CÁC SÁCH CÓ tinhTrang = 'Đang mượn'
                         $stmt = $conn->prepare("
                             SELECT b.id as book_id, b.tieuDe, b.tacGia, b.anhBia, b.theLoai,
                                    br.borrow_id, br.ngayMuon, br.ngayHetHan, br.tinhTrang
@@ -241,8 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
 
                         if ($result->num_rows > 0):
                             while ($book = $result->fetch_assoc()):
-                                // === LOGIC XỬ LÝ ĐƯỜNG DẪN ẢNH ĐƯỢC CẢI THIỆN ===
-                                $imagePath = "https://placehold.co/300x200?text=Không+có+ảnh"; // Mặc định
+                                $imagePath = "https://placehold.co/300x200?text=Không+có+ảnh"; 
                                 if (!empty($book['anhBia'])) {
                                     $dbImagePath = $book['anhBia']; 
                                     

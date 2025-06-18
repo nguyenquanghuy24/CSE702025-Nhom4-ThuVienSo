@@ -2,7 +2,6 @@
 session_start();
 include 'connect.php';
 
-// Xử lý khi người dùng submit form
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $user = $_POST['user'];
   $pass = $_POST['pass'];
@@ -17,7 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
   }
 
-  // Kiểm tra tên đăng nhập trùng
   $stmt = $conn->prepare("SELECT * FROM tbl_user WHERE user = ?");
   $stmt->bind_param("s", $user);
   $stmt->execute();
@@ -29,7 +27,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
   }
 
-  // Thêm người dùng mới
   $stmt = $conn->prepare("INSERT INTO tbl_user (user, pass, email, hoTen, maSV) VALUES (?, ?, ?, ?, ?)");
   $stmt->bind_param("sssss", $user, $pass, $email, $hoTen, $maSV);
 
@@ -46,8 +43,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $stmt->close();
 }
 ?>
-
-<!-- HTML giao diện đăng ký -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -91,8 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
 </header>
 
-
-  <!-- Phần đăng ký -->
 <div class="register-container">
     <h2>Đăng ký</h2>
     <?php if (isset($_SESSION['register_error'])): ?>

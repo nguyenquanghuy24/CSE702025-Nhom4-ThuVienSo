@@ -13,10 +13,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
 
     if ($result->num_rows == 1) {
-        $row = $result->fetch_assoc(); // ✅ Lấy dòng dữ liệu người dùng
+        $row = $result->fetch_assoc(); 
 
         $_SESSION['user'] = $user;
-        $_SESSION['user_id'] = $row['id']; // ✅ Gán id vào session
+        $_SESSION['user_id'] = $row['id']; 
 
         header("Location: " . $redirect);
         exit();

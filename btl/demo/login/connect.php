@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
-$username = "root";       // tài khoản mặc định của XAMPP
-$password = "";           // mật khẩu thường để trống
-$dbname = "lib_sys";    // tên database bạn đã tạo
+$username = "root";       
+$password = "";           
+$dbname = "lib_sys";    
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
