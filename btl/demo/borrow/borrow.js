@@ -37,6 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalDescription = document.getElementById('modal-book-description');
         const modalBorrowBookIdInput = document.getElementById('modal-borrow-book-id');
 
+        // ĐÃ THÊM: Lấy các phần tử cho Năm xuất bản, Ngôn ngữ, Thể loại
+        const modalYearPopup = document.getElementById('modal-book-year-popup');
+        const modalLanguagePopup = document.getElementById('modal-book-language-popup');
+        const modalCategoryPopup = document.getElementById('modal-book-category-popup');
+
+
         // Gắn sự kiện click cho từng sách đề xuất
         recommendedBooks.forEach(book => {
             book.addEventListener('click', () => {
@@ -46,19 +52,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const author = book.dataset.author;
                 const description = book.dataset.description;
                 const imgSrc = book.dataset.imgSrc;
-                // Thêm các data- thuộc tính vào HTML book-card-simple nếu muốn hiển thị thêm thông tin trong popup
-                // const year = book.dataset.year;
-                // const category = book.dataset.category;
-                // const language = book.dataset.language;
+                // ĐÃ THÊM: Lấy data-year, data-category, data-language
+                const year = book.dataset.year;
+                const category = book.dataset.category;
+                const language = book.dataset.language;
 
 
                 modalTitle.textContent = title;
                 modalAuthor.textContent = author;
                 modalDescription.textContent = description;
                 modalImage.src = imgSrc;
-                // if (document.getElementById('modal-book-year-popup')) document.getElementById('modal-book-year-popup').textContent = year;
-                // if (document.getElementById('modal-book-category-popup')) document.getElementById('modal-book-category-popup').textContent = category;
-                // if (document.getElementById('modal-book-language-popup')) document.getElementById('modal-book-language-popup').textContent = language;
+                
+                // ĐÃ THÊM: Điền dữ liệu vào các phần tử popup
+                if (modalYearPopup) modalYearPopup.textContent = year;
+                if (modalLanguagePopup) modalLanguagePopup.textContent = language;
+                if (modalCategoryPopup) modalCategoryPopup.textContent = category;
                 
                 // Cập nhật book_id cho form mượn trong modal
                 if (modalBorrowBookIdInput) {

@@ -7,31 +7,56 @@ $query = $_GET['query'] ?? ''; // Sử dụng null coalescing operator (PHP 7+)
 $category_filter = $_GET['category'] ?? [];
 $year_filter = $_GET['year'] ?? [];
 $lang_filter = $_GET['lang'] ?? [];
-$books = []; // Khởi tạo mảng sách rỗng để tránh lỗi nếu không có kết quả
+$books = []; // Khởi tạo mảng sách rỗng
 
 // Xử lý mượn sách (POST request)
-// Logic PHP này CHỈ CHẠY nếu người dùng ĐÃ ĐĂNG NHẬP.
-// Việc hiển thị modal đăng nhập khi chưa đăng nhập sẽ do JavaScript xử lý.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_id']) && isset($_SESSION['user_id'])) {
     $user_id = $_SESSION['user_id'];
     $book_id = intval($_POST['book_id']);
 
+    // === KIỂM TRA GIỚI HẠN SỐ SÁCH MƯỢN TỔNG CỘNG ===
+    $stmt_count_total = $conn->prepare("SELECT COUNT(*) AS total_borrowed FROM borrow_tbl WHERE user_id = ? AND tinhTrang = 'Đang mượn'");
+    $stmt_count_total->bind_param("i", $user_id);
+    $stmt_count_total->execute();
+    $result_count_total = $stmt_count_total->get_result();
+    $borrow_count_total = $result_count_total->fetch_assoc()['total_borrowed'];
+    $stmt_count_total->close();
+
+    if ($borrow_count_total >= 5) {
+        $_SESSION['borrow_error'] = "Bạn đã mượn tối đa 5 cuốn sách. Vui lòng trả sách để mượn thêm.";
+        header("Location: ../borrow/borrow.php");
+        exit();
+    }
+
+    // === KIỂM TRA GIỚI HẠN 1 CUỐN/ĐẦU SÁCH ===
+    $stmt_count_specific = $conn->prepare("SELECT COUNT(*) AS specific_book_borrowed FROM borrow_tbl WHERE user_id = ? AND book_id = ? AND tinhTrang = 'Đang mượn'");
+    $stmt_count_specific->bind_param("ii", $user_id, $book_id);
+    $stmt_count_specific->execute();
+    $result_count_specific = $stmt_count_specific->get_result();
+    $specific_book_borrowed = $result_count_specific->fetch_assoc()['specific_book_borrowed'];
+    $stmt_count_specific->close();
+
+    if ($specific_book_borrowed > 0) {
+        $_SESSION['borrow_error'] = "Bạn đã mượn cuốn sách này rồi. Vui lòng trả sách để mượn lại hoặc chọn sách khác.";
+        header("Location: ../borrow/borrow.php");
+        exit();
+    }
+
     $conn->begin_transaction();
 
     try {
-        // 1. Kiểm tra và giảm số lượng
+        // Kiểm tra và giảm số lượng
         $stmt = $conn->prepare("UPDATE book_tbl SET soLuong = soLuong - 1 WHERE id = ? AND soLuong > 0");
         $stmt->bind_param("i", $book_id);
         $stmt->execute();
 
         if ($stmt->affected_rows === 0) {
-            // Kiểm tra thêm lý do không giảm được số lượng (sách đang bảo trì/hết)
             $check_book_stmt = $conn->prepare("SELECT trangThai, soLuong FROM book_tbl WHERE id = ?");
             $check_book_stmt->bind_param("i", $book_id);
             $check_book_stmt->execute();
             $check_book_result = $check_book_stmt->get_result();
             $book_status = $check_book_result->fetch_assoc();
-            $check_book_stmt->close(); // Đóng statement này
+            $check_book_stmt->close();
 
             if ($book_status && $book_status['trangThai'] == 'Đang bảo trì') {
                 throw new Exception("Sách đang bảo trì, không thể mượn.");
@@ -42,19 +67,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_id']) && isset($
             }
         }
 
-        // 2. Nếu hết sách sau khi mượn, cập nhật trạng thái
-        // Sử dụng prepared statement để an toàn hơn
+        // Cập nhật trạng thái nếu hết sách
         $update_status_stmt = $conn->prepare("UPDATE book_tbl SET trangThai = 'Đã mượn hết' WHERE id = ? AND soLuong <= 0");
         $update_status_stmt->bind_param("i", $book_id);
         $update_status_stmt->execute();
-        $update_status_stmt->close(); // Đóng statement này
+        $update_status_stmt->close();
 
-        // 3. Ghi mượn vào bảng borrow
+        // Ghi mượn vào bảng borrow
         $stmt = $conn->prepare("INSERT INTO borrow_tbl (user_id, book_id, ngayMuon, ngayHetHan, tinhTrang)
-                                 VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), 'Đang mượn')");
+                                 VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY), 'Đang mượn')");
         $stmt->bind_param("ii", $user_id, $book_id);
         $stmt->execute();
-        $stmt->close(); // Đóng statement này
+        $stmt->close();
 
         $conn->commit();
         $_SESSION['borrow_success'] = "Mượn sách thành công! Sách sẽ xuất hiện trong mục 'Sách đang mượn'.";
@@ -63,82 +87,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_id']) && isset($
         $_SESSION['borrow_error'] = $e->getMessage();
     }
 
-    // Chuyển hướng về trang borrow.php để hiển thị thông báo và danh sách sách mượn
     header("Location: ../borrow/borrow.php");
     exit();
 }
 
-// Xử lý tìm kiếm và lọc (GET request)
-// Xây dựng câu truy vấn SQL
-$sql = "SELECT * FROM book_tbl WHERE 1=1"; // Bắt đầu với điều kiện luôn đúng
+// BẮT ĐẦU: Logic tìm kiếm và lọc chỉ thực thi khi có query hoặc filter
+if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty($lang_filter)) {
+    // Xây dựng câu truy vấn SQL
+    $sql = "SELECT * FROM book_tbl WHERE 1=1";
 
-$params = [];
-$types = "";
+    $params = [];
+    $types = "";
 
-if (!empty($query)) {
-    $sql .= " AND (tieuDe LIKE ? OR tacGia LIKE ?)";
-    $params[] = '%' . $query . '%';
-    $params[] = '%' . $query . '%';
-    $types .= "ss";
-}
-
-if (!empty($category_filter)) {
-    $cleaned_category_filter = array_map('trim', $category_filter);
-    $category_placeholders = implode(',', array_fill(0, count($cleaned_category_filter), '?'));
-    $sql .= " AND theLoai IN ($category_placeholders)";
-    foreach ($cleaned_category_filter as $cat) {
-        $params[] = $cat;
-        $types .= "s";
+    if (!empty($query)) {
+        $sql .= " AND (tieuDe LIKE ? OR tacGia LIKE ?)";
+        $params[] = '%' . $query . '%';
+        $params[] = '%' . $query . '%';
+        $types .= "ss";
     }
-}
 
-if (!empty($year_filter)) {
-    $year_conditions = [];
-    foreach ($year_filter as $year_range) {
-        switch ($year_range) {
-            case '>2020':
-                $year_conditions[] = "namXuatBan > 2020";
-                break;
-            case '2015-2020':
-                $year_conditions[] = "(namXuatBan >= 2015 AND namXuatBan <= 2020)";
-                break;
-            case '<2015':
-                $year_conditions[] = "namXuatBan < 2015";
-                break;
+    if (!empty($category_filter)) {
+        $cleaned_category_filter = array_map('trim', $category_filter);
+        $category_placeholders = implode(',', array_fill(0, count($cleaned_category_filter), '?'));
+        $sql .= " AND theLoai IN ($category_placeholders)";
+        foreach ($cleaned_category_filter as $cat) {
+            $params[] = $cat;
+            $types .= "s";
         }
     }
-    if (!empty($year_conditions)) {
-        $sql .= " AND (" . implode(' OR ', $year_conditions) . ")";
+
+    if (!empty($year_filter)) {
+        $year_conditions = [];
+        foreach ($year_filter as $year_range) {
+            switch ($year_range) {
+                case '>2020':
+                    $year_conditions[] = "namXuatBan > 2020";
+                    break;
+                case '2015-2020':
+                    $year_conditions[] = "(namXuatBan >= 2015 AND namXuatBan <= 2020)";
+                    break;
+                case '<2015':
+                    $year_conditions[] = "namXuatBan < 2015";
+                    break;
+            }
+        }
+        if (!empty($year_conditions)) {
+            $sql .= " AND (" . implode(' OR ', $year_conditions) . ")";
+        }
     }
-}
 
-if (!empty($lang_filter)) {
-    $cleaned_lang_filter = array_map('trim', $lang_filter);
-    $lang_placeholders = implode(',', array_fill(0, count($cleaned_lang_filter), '?'));
-    $sql .= " AND ngonNgu IN ($lang_placeholders)";
-    foreach ($cleaned_lang_filter as $lang) {
-        $params[] = $lang;
-        $types .= "s";
+    if (!empty($lang_filter)) {
+        $cleaned_lang_filter = array_map('trim', $lang_filter);
+        $lang_placeholders = implode(',', array_fill(0, count($cleaned_lang_filter), '?'));
+        $sql .= " AND ngonNgu IN ($lang_placeholders)";
+        foreach ($cleaned_lang_filter as $lang) {
+            $params[] = $lang;
+            $types .= "s";
+        }
     }
-}
 
-$stmt = $conn->prepare($sql);
+    $stmt = $conn->prepare($sql);
 
-if (!empty($params)) {
-    $bind_names = array_merge([$types], $params);
-    $refs = [];
-    foreach ($bind_names as $key => $value) {
-        $refs[$key] = &$bind_names[$key];
+    if (!empty($params)) {
+        $bind_names = array_merge([$types], $params);
+        $refs = [];
+        foreach ($bind_names as $key => $value) {
+            $refs[$key] = &$bind_names[$key];
+        }
+        call_user_func_array([$stmt, 'bind_param'], $refs);
     }
-    call_user_func_array([$stmt, 'bind_param'], $refs);
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $books = $result->fetch_all(MYSQLI_ASSOC);
+
+    $stmt->close();
+    $conn->close();
+} else {
+    // Nếu không có query hay filter, set $books rỗng để không hiển thị gì
+    $books = [];
+    // Và đóng kết nối CSDL ở đây luôn vì không cần truy vấn
+    $conn->close();
 }
-
-$stmt->execute();
-$result = $stmt->get_result();
-$books = $result->fetch_all(MYSQLI_ASSOC);
-
-$stmt->close();
-$conn->close();
+// KẾT THÚC: Logic tìm kiếm và lọc chỉ thực thi khi có query hoặc filter
 
 ?>
 <!DOCTYPE html>
@@ -211,8 +242,7 @@ $conn->close();
                         <strong>Thể loại</strong><br>
                         <input type="checkbox" name="category[]" value="Công nghệ thông tin" <?php if (in_array("Công nghệ thông tin", $category_filter)) echo "checked"; ?>> Khoa học máy tính<br>
                         <input type="checkbox" name="category[]" value="Trí tuệ nhân tạo" <?php if (in_array("Trí tuệ nhân tạo", $category_filter)) echo "checked"; ?>> Trí tuệ nhân tạo<br>
-                        <input type="checkbox" name="category[]" value="Toán học" <?php if (in_array("Toán học", $category_filter)) echo "checked"; ?>> Toán học<br>
-                        <input type="checkbox" name="category[]" value="Khác" <?php if (in_array("Khác", $category_filter)) echo "checked"; ?>> Khác
+                        <input type="checkbox" name="category[]" value="Toán học" <?php if (in_array("Toán học", $category_filter)) echo "checked"; ?>> Toán học
                     </div>
                     
                     <div class="filter-group">
@@ -233,7 +263,7 @@ $conn->close();
             </aside>
 
             <section class="search-results">
-                <?php if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty($lang_filter) || !empty($books)): ?>
+                <?php if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty($lang_filter)): /* ĐIỀU KIỆN MỚI */ ?>
                     <?php if (!empty($query)): ?>
                         <h2>Kết quả tìm kiếm cho "<?php echo htmlspecialchars($query); ?>"</h2>
                     <?php else: ?>
@@ -265,23 +295,15 @@ $conn->close();
                                 // === LOGIC XỬ LÝ ĐƯỜNG DẪN ẢNH ĐƯỢC CẢI THIỆN ===
                                 $imagePath = "https://placehold.co/100x140?text=Không+có+ảnh"; // Mặc định
                                 if (!empty($book['anhBia'])) {
-                                    $dbImagePath = $book['anhBia']; // Ví dụ: 'assets/giaitich1.jpg' hoặc 'image/1.jpg'
+                                    $dbImagePath = $book['anhBia']; 
                                     
-                                    // Xác định thư mục gốc của project (btl/demo)
-                                    // search.php nằm trong your_project_root/btl/demo/search/
-                                    // dirname(__DIR__) = your_project_root/btl/demo/
-                                    // Project root (btl/demo) là dirname(__DIR__)
                                     $projectRootForImages = dirname(__DIR__); 
 
                                     $physicalFilePath = $projectRootForImages . '/' . $dbImagePath; 
 
                                     if (file_exists($physicalFilePath)) {
-                                        // Đường dẫn cho HTML cần tương đối từ search.php
-                                        // search.php nằm trong your_project_root/btl/demo/search/
-                                        // Ảnh nằm trong your_project_root/btl/demo/assets/ hoặc /image/
                                         $imagePath = '../' . $dbImagePath; 
                                     } else {
-                                        // Log lỗi nếu ảnh không tìm thấy trên server
                                         error_log("Search.php: Image file not found for " . $dbImagePath . " at " . $physicalFilePath);
                                     }
                                 }
@@ -327,7 +349,7 @@ $conn->close();
                             </div>
                         <?php endif; ?>
                     </div>
-                <?php else: ?>
+                <?php else: /* ĐIỀU KIỆN MỚI: HIỂN THỊ HƯỚNG DẪN KHI CHƯA CÓ SEARCH/FILTER */ ?>
                     <div class="search-instruction">
                         <i class="fas fa-search"></i>
                         <h2>Hãy nhập từ khóa hoặc chọn bộ lọc để tìm kiếm sách</h2>

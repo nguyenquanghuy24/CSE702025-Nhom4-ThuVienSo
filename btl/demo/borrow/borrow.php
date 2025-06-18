@@ -6,14 +6,44 @@ include("../login/connect.php");
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     if (!isset($_SESSION['user_id'])) {
         $_SESSION['login_error'] = "Bạn cần đăng nhập để mượn sách.";
-        header("Location: ../login/login.php"); // Sửa đường dẫn nếu cần
+        header("Location: ../login/login.php"); 
         exit();
     }
 
     $user_id = $_SESSION['user_id'];
     $book_id = intval($_POST['book_id']);
 
-    // Kiểm tra trạng thái sách
+    // === BẮT ĐẦU: KIỂM TRA GIỚI HẠN SỐ SÁCH MƯỢN TỔNG CỘNG ===
+    $stmt_count_total = $conn->prepare("SELECT COUNT(*) AS total_borrowed FROM borrow_tbl WHERE user_id = ? AND tinhTrang = 'Đang mượn'");
+    $stmt_count_total->bind_param("i", $user_id);
+    $stmt_count_total->execute();
+    $result_count_total = $stmt_count_total->get_result();
+    $borrow_count_total = $result_count_total->fetch_assoc()['total_borrowed'];
+    $stmt_count_total->close();
+
+    if ($borrow_count_total >= 5) {
+        $_SESSION['borrow_error'] = "Bạn đã mượn tối đa 5 cuốn sách. Vui lòng trả sách để mượn thêm.";
+        header("Location: borrow.php");
+        exit();
+    }
+    // === KẾT THÚC: KIỂM TRA GIỚI HẠN SỐ SÁCH MƯỢN TỔNG CỘNG ===
+
+    // === BẮT ĐẦU: KIỂM TRA GIỚI HẠN 1 CUỐN/ĐẦU SÁCH ===
+    $stmt_count_specific = $conn->prepare("SELECT COUNT(*) AS specific_book_borrowed FROM borrow_tbl WHERE user_id = ? AND book_id = ? AND tinhTrang = 'Đang mượn'");
+    $stmt_count_specific->bind_param("ii", $user_id, $book_id);
+    $stmt_count_specific->execute();
+    $result_count_specific = $stmt_count_specific->get_result();
+    $specific_book_borrowed = $result_count_specific->fetch_assoc()['specific_book_borrowed'];
+    $stmt_count_specific->close();
+
+    if ($specific_book_borrowed > 0) {
+        $_SESSION['borrow_error'] = "Bạn đã mượn cuốn sách này rồi. Vui lòng trả sách để mượn lại hoặc chọn sách khác.";
+        header("Location: borrow.php");
+        exit();
+    }
+    // === KẾT THÚC: KIỂM TRA GIỚI HẠN 1 CUỐN/ĐẦU SÁCH ===
+
+    // Kiểm tra trạng thái sách (logic còn lại giữ nguyên)
     $stmt = $conn->prepare("SELECT soLuong, trangThai FROM book_tbl WHERE id = ?");
     $stmt->bind_param("i", $book_id);
     $stmt->execute();
@@ -38,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
             }
 
             // Thêm vào bảng mượn sách
-            // ĐÃ THAY ĐỔI INTERVAL TỪ 14 DAY SANG 30 DAY
             $stmt = $conn->prepare("INSERT INTO borrow_tbl (user_id, book_id, ngayMuon, ngayHetHan, tinhTrang) 
                                   VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY), 'Đang mượn')");
             $stmt->bind_param("ii", $user_id, $book_id);
@@ -73,6 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     <?php endif; ?>
     <?php if (isset($_SESSION['borrow_error'])): ?>
         <div class="alert error"><?php echo $_SESSION['borrow_error']; unset($_SESSION['borrow_error']); ?></div>
+        <script>
+            // Hiển thị alert JavaScript cho lỗi mượn sách, đặc biệt là lỗi "đã mượn cuốn này rồi"
+            alert("Lỗi mượn sách: <?php echo htmlspecialchars($_SESSION['borrow_error']); ?>");
+        </script>
     <?php endif; ?>
 
     <?php // Hiển thị thông báo trả sách ?>
@@ -81,6 +114,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     <?php endif; ?>
     <?php if (isset($_SESSION['return_error'])): ?>
         <div class="alert error"><?php echo $_SESSION['return_error']; unset($_SESSION['return_error']); ?></div>
+        <script>
+            // Hiển thị alert JavaScript cho lỗi trả sách
+            alert("Lỗi trả sách: <?php echo htmlspecialchars($_SESSION['return_error']); ?>");
+        </script>
     <?php endif; ?>
 
     <?php if (isset($_SESSION['login_error'])): ?>
@@ -148,7 +185,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                          data-title="Giải Tích I" 
                          data-author="Ngô Văn Ban" 
                          data-description="Cuốn sách Giải Tích I cung cấp các kiến thức cơ bản và nền tảng nhất của giải tích, bao gồm giới hạn, đạo hàm, và tích phân." 
-                         data-img-src="../assets/giaitich1.jpg">
+                         data-img-src="../assets/giaitich1.jpg"
+                         data-year="2021"
+                         data-category="Toán học"
+                         data-language="Tiếng Việt">
                         <img src="../assets/giaitich1.jpg" alt="Bìa sách Giải Tích I">
                         <p class="book-title">Giải Tích I</p>
                     </div>
@@ -157,7 +197,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                          data-title="Giải Tích II" 
                          data-author="Trần Thị Kim Oanh, Phan Xuân Thành, Lê Chí Ngọc, Nguyễn Thị Thu Hương" 
                          data-description="Tiếp nối Giải Tích I, cuốn sách này đi sâu vào các chủ đề nâng cao như giải tích hàm nhiều biến, tích phân bội, và phương trình vi phân." 
-                         data-img-src="../assets/giaitich2.jpg">
+                         data-img-src="../assets/giaitich2.jpg"
+                         data-year="2022"
+                         data-category="Toán học"
+                         data-language="Tiếng Việt">
                         <img src="../assets/giaitich2.jpg" alt="Bìa sách Giải Tích II">
                         <p class="book-title">Giải Tích II</p>
                     </div>
@@ -166,7 +209,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                          data-title="Giải Tích III" 
                          data-author="Nguyễn Thiệu Huy, Bùi Xuân Diệu, Đào Tuấn Anh" 
                          data-description="Cuốn sách cuối cùng trong bộ ba, tập trung vào các khái niệm về chuỗi số, chuỗi hàm, và các phép biến đổi quan trọng như Fourier và Laplace." 
-                         data-img-src="../assets/giaitich3.jpg">
+                         data-img-src="../assets/giaitich3.jpg"
+                         data-year="2023"
+                         data-category="Toán học"
+                         data-language="Tiếng Việt">
                         <img src="../assets/giaitich3.jpg" alt="Bìa sách Giải Tích III">
                         <p class="book-title">Giải Tích III</p>
                     </div>
@@ -198,19 +244,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                                 // === LOGIC XỬ LÝ ĐƯỜNG DẪN ẢNH ĐƯỢC CẢI THIỆN ===
                                 $imagePath = "https://placehold.co/300x200?text=Không+có+ảnh"; // Mặc định
                                 if (!empty($book['anhBia'])) {
-                                    $dbImagePath = $book['anhBia']; // Ví dụ: 'assets/giaitich1.jpg' hoặc 'image/1.jpg'
+                                    $dbImagePath = $book['anhBia']; 
                                     
-                                    // Giả định thư mục gốc của project là một cấp trên thư mục 'borrow'
-                                    $projectRoot = dirname(__DIR__); // your_project_root/btl/demo
+                                    $projectRoot = dirname(__DIR__); 
+
                                     $physicalFilePath = $projectRoot . '/' . $dbImagePath; 
 
                                     if (file_exists($physicalFilePath)) {
-                                        // Đường dẫn cho HTML cần tương đối từ borrow.php
-                                        // borrow.php nằm trong your_project_root/btl/demo/borrow/
-                                        // Ảnh nằm trong your_project_root/btl/demo/assets/ hoặc /image/
                                         $imagePath = '../' . $dbImagePath; 
                                     } else {
-                                        // Log lỗi nếu ảnh không tìm thấy trên server
                                         error_log("Borrow.php: Image file not found for " . $dbImagePath . " at " . $physicalFilePath);
                                     }
                                 }
@@ -345,18 +387,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
         </div>
     </div>
 <script>
-    // Định nghĩa biến isLoggedIn (cần cho borrow.js)
     const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
 
     function checkLoginBeforeBorrow() {
         if (!isLoggedIn) {
-            openLoginModal(); // gọi modal đăng nhập
-            return false;     // chặn gửi form
+            openLoginModal(); 
+            return false;     
         }
-        return true; // cho phép gửi nếu đã đăng nhập
+        return true; 
     }
-
-    // Hàm openLoginModal và closeModal (được gọi từ onclick trong HTML)
     function openLoginModal() {
         const modal = document.getElementById('loginModal');
         if (modal) {
@@ -373,13 +412,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
             modal.style.display = 'none';
         }
     }
-
-    // Nếu có lỗi đăng nhập từ session, tự động mở modal khi trang tải
-    document.addEventListener('DOMContentLoaded', function() {
-        if (typeof loginErrorExists !== 'undefined' && loginErrorExists) {
-            openLoginModal();
-        }
-    });
 
 </script>
     <script src="borrow.js"></script>
