@@ -2,13 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === XỬ LÝ MODAL ĐĂNG NHẬP ===
     const loginModal = document.getElementById('loginModal');
     if (loginModal) {
-        // Gán hàm vào window để PHP có thể gọi từ onclick
-        window.openLoginModal = function() {
-            loginModal.style.display = 'block';
-        }
-        window.closeModal = function() {
-            loginModal.style.display = 'none';
-        }
+        // openLoginModal và closeModal đã được định nghĩa global trong <script> của borrow.php
         
         // Tìm nút đăng nhập trên header
         const loginLink = Array.from(document.querySelectorAll('.auth-link')).find(a => a.textContent.includes('Đăng nhập'));
@@ -23,9 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (closeBtn) {
             closeBtn.addEventListener('click', closeModal);
         }
+
+        // Tự động mở modal nếu có loginErrorExists từ PHP
+        if (typeof loginErrorExists !== 'undefined' && loginErrorExists) {
+            openLoginModal();
+        }
     }
 
-    // === XỬ LÝ POPUP CHI TIẾT SÁCH ===
+    // === XỬ LÝ POPUP CHI TIẾT SÁCH (CHO SÁCH ĐỀ XUẤT TRÊN TRANG BORROW) ===
     const bookDetailModal = document.getElementById('bookDetailModal');
     if (bookDetailModal) {
         const detailCloseBtn = document.getElementById('close-popup-btn');
@@ -36,60 +35,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalTitle = document.getElementById('modal-book-title');
         const modalAuthor = document.getElementById('modal-book-author');
         const modalDescription = document.getElementById('modal-book-description');
-        const modalBorrowButton = document.getElementById('modal-borrow-button');
+        const modalBorrowBookIdInput = document.getElementById('modal-borrow-book-id');
 
         // Gắn sự kiện click cho từng sách đề xuất
         recommendedBooks.forEach(book => {
             book.addEventListener('click', () => {
-                // Lấy dữ liệu từ data-* attributes của sách được click
+                // Lấy dữ liệu từ data- thuộc tính trên book-card-simple
+                const bookId = book.dataset.bookId;
                 const title = book.dataset.title;
                 const author = book.dataset.author;
                 const description = book.dataset.description;
                 const imgSrc = book.dataset.imgSrc;
-                const bookId = book.dataset.bookId;
+                // Thêm các data- thuộc tính vào HTML book-card-simple nếu muốn hiển thị thêm thông tin trong popup
+                // const year = book.dataset.year;
+                // const category = book.dataset.category;
+                // const language = book.dataset.language;
 
-                // Điền dữ liệu vào popup
+
                 modalTitle.textContent = title;
                 modalAuthor.textContent = author;
                 modalDescription.textContent = description;
                 modalImage.src = imgSrc;
+                // if (document.getElementById('modal-book-year-popup')) document.getElementById('modal-book-year-popup').textContent = year;
+                // if (document.getElementById('modal-book-category-popup')) document.getElementById('modal-book-category-popup').textContent = category;
+                // if (document.getElementById('modal-book-language-popup')) document.getElementById('modal-book-language-popup').textContent = language;
                 
-                // Lưu book_id vào nút mượn sách để xử lý sau
-                modalBorrowButton.dataset.bookId = bookId;
-
-                // Hiển thị popup
-                bookDetailModal.style.display = 'block';
-            });
-        });
-
-        // Gắn sự kiện cho nút "Mượn sách" trong popup
-        modalBorrowButton.addEventListener('click', function() {
-            const bookId = this.dataset.bookId;
-            if (!bookId) return;
-
-            const formData = new FormData();
-            formData.append('book_id', bookId);
-
-            fetch('borrow.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(text => {
-                if (text === 'login_required') {
-                    alert('Bạn cần đăng nhập để thực hiện chức năng này.');
-                    bookDetailModal.style.display = 'none';
-                    openLoginModal();
-                } else {
-                    alert(text);
-                    if (text.includes("thành công")) {
-                        location.reload();
-                    }
+                // Cập nhật book_id cho form mượn trong modal
+                if (modalBorrowBookIdInput) {
+                    modalBorrowBookIdInput.value = bookId;
                 }
-            })
-            .catch(error => {
-                console.error('Lỗi khi gửi yêu cầu mượn sách:', error);
-                alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+
+                bookDetailModal.style.display = 'block';
             });
         });
         
@@ -105,10 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (event) => {
         const loginModal = document.getElementById('loginModal');
         const bookDetailModal = document.getElementById('bookDetailModal');
-        if (loginModal && event.target == loginModal) {
+        
+        if (loginModal && loginModal.style.display === 'block' && event.target === loginModal) {
             loginModal.style.display = 'none';
         }
-        if (bookDetailModal && event.target == bookDetailModal) {
+        else if (bookDetailModal && bookDetailModal.style.display === 'block' && event.target === bookDetailModal) {
             bookDetailModal.style.display = 'none';
         }
     });

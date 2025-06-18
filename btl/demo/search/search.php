@@ -1,74 +1,145 @@
 <?php
 session_start();
-include("../login/connect.php");
+require_once '../login/connect.php'; // Đảm bảo đường dẫn đúng tới file kết nối CSDL
 
-// Lấy dữ liệu từ GET
-$query = isset($_GET['query']) ? trim($_GET['query']) : '';
-$category_filter = isset($_GET['category']) ? $_GET['category'] : [];
-$year_filter = isset($_GET['year']) ? $_GET['year'] : [];
-$lang_filter = isset($_GET['lang']) ? $_GET['lang'] : [];
+// Khởi tạo các biến với giá trị mặc định để tránh lỗi undefined
+$query = $_GET['query'] ?? ''; // Sử dụng null coalescing operator (PHP 7+)
+$category_filter = $_GET['category'] ?? [];
+$year_filter = $_GET['year'] ?? [];
+$lang_filter = $_GET['lang'] ?? [];
+$books = []; // Khởi tạo mảng sách rỗng để tránh lỗi nếu không có kết quả
 
-$books = [];
+// Xử lý mượn sách (POST request)
+// Logic PHP này CHỈ CHẠY nếu người dùng ĐÃ ĐĂNG NHẬP.
+// Việc hiển thị modal đăng nhập khi chưa đăng nhập sẽ do JavaScript xử lý.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_id']) && isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+    $book_id = intval($_POST['book_id']);
 
-// Chỉ thực hiện truy vấn nếu có từ khóa hoặc có chọn lọc
-if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty($lang_filter)) {
-    $sql = "SELECT * FROM book_tbl WHERE 1=1"; // 1=1 để dễ nối AND
-    $types = "";
-    $params = [];
+    $conn->begin_transaction();
 
-    // Lọc theo từ khóa
-    if (!empty($query)) {
-        $sql .= " AND (tieuDe LIKE ? OR tacGia LIKE ?)";
-        $types .= "ss";
-        $params[] = "%$query%";
-        $params[] = "%$query%";
-    }
+    try {
+        // 1. Kiểm tra và giảm số lượng
+        $stmt = $conn->prepare("UPDATE book_tbl SET soLuong = soLuong - 1 WHERE id = ? AND soLuong > 0");
+        $stmt->bind_param("i", $book_id);
+        $stmt->execute();
 
-    // Lọc thể loại
-    if (!empty($category_filter)) {
-        $placeholders = implode(',', array_fill(0, count($category_filter), '?'));
-        $sql .= " AND theLoai IN ($placeholders)";
-        $types .= str_repeat("s", count($category_filter));
-        $params = array_merge($params, $category_filter);
-    }
+        if ($stmt->affected_rows === 0) {
+            // Kiểm tra thêm lý do không giảm được số lượng (sách đang bảo trì/hết)
+            $check_book_stmt = $conn->prepare("SELECT trangThai, soLuong FROM book_tbl WHERE id = ?");
+            $check_book_stmt->bind_param("i", $book_id);
+            $check_book_stmt->execute();
+            $check_book_result = $check_book_stmt->get_result();
+            $book_status = $check_book_result->fetch_assoc();
+            $check_book_stmt->close(); // Đóng statement này
 
-    // Lọc năm xuất bản
-    if (!empty($year_filter)) {
-        $year_conditions = [];
-        foreach ($year_filter as $filter) {
-            if ($filter == '>2020') {
-                $year_conditions[] = "namXuatBan > 2020";
-            } elseif ($filter == '2015-2020') {
-                $year_conditions[] = "(namXuatBan >= 2015 AND namXuatBan <= 2020)";
-            } elseif ($filter == '<2015') {
-                $year_conditions[] = "namXuatBan < 2015";
+            if ($book_status && $book_status['trangThai'] == 'Đang bảo trì') {
+                throw new Exception("Sách đang bảo trì, không thể mượn.");
+            } elseif ($book_status && $book_status['soLuong'] <= 0) {
+                throw new Exception("Sách đã hết.");
+            } else {
+                throw new Exception("Không thể mượn sách này. Vui lòng thử lại.");
             }
         }
-        if (!empty($year_conditions)) {
-            $sql .= " AND (" . implode(" OR ", $year_conditions) . ")";
-        }
+
+        // 2. Nếu hết sách sau khi mượn, cập nhật trạng thái
+        // Sử dụng prepared statement để an toàn hơn
+        $update_status_stmt = $conn->prepare("UPDATE book_tbl SET trangThai = 'Đã mượn hết' WHERE id = ? AND soLuong <= 0");
+        $update_status_stmt->bind_param("i", $book_id);
+        $update_status_stmt->execute();
+        $update_status_stmt->close(); // Đóng statement này
+
+        // 3. Ghi mượn vào bảng borrow
+        $stmt = $conn->prepare("INSERT INTO borrow_tbl (user_id, book_id, ngayMuon, ngayHetHan, tinhTrang)
+                                 VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 14 DAY), 'Đang mượn')");
+        $stmt->bind_param("ii", $user_id, $book_id);
+        $stmt->execute();
+        $stmt->close(); // Đóng statement này
+
+        $conn->commit();
+        $_SESSION['borrow_success'] = "Mượn sách thành công! Sách sẽ xuất hiện trong mục 'Sách đang mượn'.";
+    } catch (Exception $e) {
+        $conn->rollback();
+        $_SESSION['borrow_error'] = $e->getMessage();
     }
 
-    // Lọc ngôn ngữ
-    if (!empty($lang_filter)) {
-        $placeholders = implode(',', array_fill(0, count($lang_filter), '?'));
-        $sql .= " AND ngonNgu IN ($placeholders)";
-        $types .= str_repeat("s", count($lang_filter));
-        $params = array_merge($params, $lang_filter);
-    }
+    // Chuyển hướng về trang borrow.php để hiển thị thông báo và danh sách sách mượn
+    header("Location: ../borrow/borrow.php");
+    exit();
+}
 
-    // Thực hiện truy vấn
-    $stmt = $conn->prepare($sql);
-    if ($types && !empty($params)) {
-        $stmt->bind_param($types, ...$params);
-    }
-    $stmt->execute();
-    $result = $stmt->get_result();
+// Xử lý tìm kiếm và lọc (GET request)
+// Xây dựng câu truy vấn SQL
+$sql = "SELECT * FROM book_tbl WHERE 1=1"; // Bắt đầu với điều kiện luôn đúng
 
-    while ($row = $result->fetch_assoc()) {
-        $books[] = $row;
+$params = [];
+$types = "";
+
+if (!empty($query)) {
+    $sql .= " AND (tieuDe LIKE ? OR tacGia LIKE ?)";
+    $params[] = '%' . $query . '%';
+    $params[] = '%' . $query . '%';
+    $types .= "ss";
+}
+
+if (!empty($category_filter)) {
+    $cleaned_category_filter = array_map('trim', $category_filter);
+    $category_placeholders = implode(',', array_fill(0, count($cleaned_category_filter), '?'));
+    $sql .= " AND theLoai IN ($category_placeholders)";
+    foreach ($cleaned_category_filter as $cat) {
+        $params[] = $cat;
+        $types .= "s";
     }
 }
+
+if (!empty($year_filter)) {
+    $year_conditions = [];
+    foreach ($year_filter as $year_range) {
+        switch ($year_range) {
+            case '>2020':
+                $year_conditions[] = "namXuatBan > 2020";
+                break;
+            case '2015-2020':
+                $year_conditions[] = "(namXuatBan >= 2015 AND namXuatBan <= 2020)";
+                break;
+            case '<2015':
+                $year_conditions[] = "namXuatBan < 2015";
+                break;
+        }
+    }
+    if (!empty($year_conditions)) {
+        $sql .= " AND (" . implode(' OR ', $year_conditions) . ")";
+    }
+}
+
+if (!empty($lang_filter)) {
+    $cleaned_lang_filter = array_map('trim', $lang_filter);
+    $lang_placeholders = implode(',', array_fill(0, count($cleaned_lang_filter), '?'));
+    $sql .= " AND ngonNgu IN ($lang_placeholders)";
+    foreach ($cleaned_lang_filter as $lang) {
+        $params[] = $lang;
+        $types .= "s";
+    }
+}
+
+$stmt = $conn->prepare($sql);
+
+if (!empty($params)) {
+    $bind_names = array_merge([$types], $params);
+    $refs = [];
+    foreach ($bind_names as $key => $value) {
+        $refs[$key] = &$bind_names[$key];
+    }
+    call_user_func_array([$stmt, 'bind_param'], $refs);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+$books = $result->fetch_all(MYSQLI_ASSOC);
+
+$stmt->close();
+$conn->close();
+
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -80,19 +151,6 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
     <link rel="stylesheet" href="search.css">
 </head>
 <body>
-    <?php if (isset($_SESSION['borrow_success'])): ?>
-        <script>alert("✅ Mượn sách thành công!");</script>
-        <?php unset($_SESSION['borrow_success']); ?>
-    <?php elseif (isset($_SESSION['borrow_error'])): ?>
-        <script>alert("❌ <?php echo $_SESSION['borrow_error']; ?>");</script>
-        <?php unset($_SESSION['borrow_error']); ?>
-    <?php elseif (isset($_SESSION['login_required'])): ?>
-        <script>
-            alert("🔒 Vui lòng đăng nhập để mượn sách!");
-            openLoginModal(); // gọi modal đăng nhập nếu bạn đã có hàm này
-        </script>
-        <?php unset($_SESSION['login_required']); ?>
-    <?php endif; ?>
     <header class="navbar">
         <div class="logo">
             <a href="../index.php">
@@ -136,16 +194,14 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
 
 <main class="search-main-content">
     <div class="search-container">
-        <!-- Thanh tìm kiếm -->
         <div class="search-bar-wrapper">
             <form action="search.php" method="get" class="search-form">
                 <input type="text" class="search-input" name="query" placeholder="Nhập tên sách, tác giả để tìm kiếm..." value="<?php echo htmlspecialchars($query); ?>">
-                <button class="search-button"><i class="fa fa-search"></i></button>
+                <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
             </form>
         </div>
 
         <div class="search-page-body">
-            <!-- BỘ LỌC -->
             <aside class="filter-sidebar">
                 <h3>Lọc kết quả</h3>
                 <form method="get" action="search.php">
@@ -153,9 +209,10 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
                     
                     <div class="filter-group">
                         <strong>Thể loại</strong><br>
-                            <input type="checkbox" name="category[]" value="Công nghệ thông tin" <?php if (in_array("Công nghệ thông tin", $category_filter)) echo "checked"; ?>> Khoa học máy tính<br>
-                            <input type="checkbox" name="category[]" value="Trí tuệ nhân tạo" <?php if (in_array("Trí tuệ nhân tạo", $category_filter)) echo "checked"; ?>> Trí tuệ nhân tạo<br>
-                            <input type="checkbox" name="category[]" value="Toán học" <?php if (in_array("Toán học", $category_filter)) echo "checked"; ?>> Toán học
+                        <input type="checkbox" name="category[]" value="Công nghệ thông tin" <?php if (in_array("Công nghệ thông tin", $category_filter)) echo "checked"; ?>> Khoa học máy tính<br>
+                        <input type="checkbox" name="category[]" value="Trí tuệ nhân tạo" <?php if (in_array("Trí tuệ nhân tạo", $category_filter)) echo "checked"; ?>> Trí tuệ nhân tạo<br>
+                        <input type="checkbox" name="category[]" value="Toán học" <?php if (in_array("Toán học", $category_filter)) echo "checked"; ?>> Toán học<br>
+                        <input type="checkbox" name="category[]" value="Khác" <?php if (in_array("Khác", $category_filter)) echo "checked"; ?>> Khác
                     </div>
                     
                     <div class="filter-group">
@@ -165,63 +222,126 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
                         <input type="checkbox" name="year[]" value="<2015" <?php if (in_array("<2015", $year_filter)) echo "checked"; ?>> Trước 2015
                     </div>
 
-
                     <div class="filter-group">
                         <strong>Ngôn ngữ</strong><br>
                         <input type="checkbox" name="lang[]" value="Tiếng Việt" <?php if (in_array("Tiếng Việt", $lang_filter)) echo "checked"; ?>> Tiếng Việt<br>
                         <input type="checkbox" name="lang[]" value="Tiếng Anh" <?php if (in_array("Tiếng Anh", $lang_filter)) echo "checked"; ?>> Tiếng Anh
                     </div>
                                 
-
                     <button type="submit" class="filter-apply-button">Áp dụng</button>
                 </form>
             </aside>
 
-            <!-- KẾT QUẢ -->
             <section class="search-results">
-                <?php if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty($lang_filter)): ?>
+                <?php if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty($lang_filter) || !empty($books)): ?>
                     <?php if (!empty($query)): ?>
-                        <h2>"<?php echo htmlspecialchars($query); ?>"</h2>
+                        <h2>Kết quả tìm kiếm cho "<?php echo htmlspecialchars($query); ?>"</h2>
                     <?php else: ?>
                         <h2>Kết quả lọc</h2>
                     <?php endif; ?>
-                        
-                    <p class="results-count">Tìm thấy <?php echo count($books); ?> kết quả</p>  
+                            
+                    <p class="results-count">Tìm thấy <?php echo count($books); ?> kết quả</p>    
 
                     <div class="results-list">
                         <?php if (count($books) > 0): ?>
                             <?php foreach ($books as $book): ?>
-                                <div class="book-list-item">
                                 <?php
-                                $imagePath = !empty($book['anhBia']) ? '../' . $book['anhBia'] : 'https://placehold.co/100x140?text=Bìa+Sách';
+                                $statusClass = '';
+                                switch($book['trangThai']) {
+                                    case 'Có sẵn': 
+                                        $statusClass = 'status-available'; 
+                                        break;
+                                    case 'Đã mượn hết': 
+                                        $statusClass = 'status-unavailable'; 
+                                        break;
+                                    case 'Đang bảo trì': 
+                                        $statusClass = 'status-maintenance'; 
+                                        break;
+                                    default: 
+                                        $statusClass = 'status-unknown';
+                                        break;
+                                }
+                                
+                                // === LOGIC XỬ LÝ ĐƯỜNG DẪN ẢNH ĐƯỢC CẢI THIỆN ===
+                                $imagePath = "https://placehold.co/100x140?text=Không+có+ảnh"; // Mặc định
+                                if (!empty($book['anhBia'])) {
+                                    $dbImagePath = $book['anhBia']; // Ví dụ: 'assets/giaitich1.jpg' hoặc 'image/1.jpg'
+                                    
+                                    // Xác định thư mục gốc của project (btl/demo)
+                                    // search.php nằm trong your_project_root/btl/demo/search/
+                                    // dirname(__DIR__) = your_project_root/btl/demo/
+                                    // Project root (btl/demo) là dirname(__DIR__)
+                                    $projectRootForImages = dirname(__DIR__); 
+
+                                    $physicalFilePath = $projectRootForImages . '/' . $dbImagePath; 
+
+                                    if (file_exists($physicalFilePath)) {
+                                        // Đường dẫn cho HTML cần tương đối từ search.php
+                                        // search.php nằm trong your_project_root/btl/demo/search/
+                                        // Ảnh nằm trong your_project_root/btl/demo/assets/ hoặc /image/
+                                        $imagePath = '../' . $dbImagePath; 
+                                    } else {
+                                        // Log lỗi nếu ảnh không tìm thấy trên server
+                                        error_log("Search.php: Image file not found for " . $dbImagePath . " at " . $physicalFilePath);
+                                    }
+                                }
                                 ?>
-                                <img src="<?php echo htmlspecialchars($imagePath); ?>" alt="Bìa sách" class="book-item-image">
+                                
+                                <div class="book-list-item" 
+                                     data-book-id="<?php echo htmlspecialchars($book['id']); ?>"
+                                     data-title="<?php echo htmlspecialchars($book['tieuDe']); ?>"
+                                     data-author="<?php echo htmlspecialchars($book['tacGia']); ?>"
+                                     data-year="<?php echo htmlspecialchars($book['namXuatBan']); ?>"
+                                     data-description="<?php echo htmlspecialchars($book['moTa']); ?>"
+                                     data-img-src="<?php echo htmlspecialchars($imagePath); ?>"
+                                     data-status="<?php echo htmlspecialchars($book['trangThai']); ?>"
+                                     data-category="<?php echo htmlspecialchars($book['theLoai']); ?>"
+                                     data-language="<?php echo htmlspecialchars($book['ngonNgu']); ?>">
+                                    <img src="<?php echo htmlspecialchars($imagePath); ?>" alt="Bìa sách" class="book-item-image">
                                     <div class="book-item-info">
                                         <h4 class="book-title"><?php echo htmlspecialchars($book['tieuDe']); ?></h4>
                                         <p class="book-author">Tác giả: <?php echo htmlspecialchars($book['tacGia']); ?></p>
-                                        <p class="book-description"><?php echo htmlspecialchars($book['moTa']); ?></p>
-                                        <p class="book-year">Năm: <?php echo htmlspecialchars($book['namXuatBan']); ?></p>
+                                        
+                                        <div class="book-status <?php echo $statusClass; ?>">
+                                            <i class="status-icon"></i>
+                                            <span><?php echo htmlspecialchars($book['trangThai']); ?></span>
+                                        </div>
+                                        
+                                        <p class="book-meta">
+                                            <span class="book-year">Năm: <?php echo htmlspecialchars($book['namXuatBan']); ?></span><br>
+                                            <span class="book-quantity">Số lượng: <?php echo htmlspecialchars($book['soLuong']); ?></span><br>
+                                            <span class="book-category-display">Thể loại: <?php echo htmlspecialchars($book['theLoai']); ?></span><br>
+                                            <span class="book-language-display">Ngôn ngữ: <?php echo htmlspecialchars($book['ngonNgu']); ?></span>
+                                        </p>
+                                        
+                                        <div class="book-description">
+                                            <p><?php echo htmlspecialchars($book['moTa']); ?></p>
+                                        </div>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p style="margin-top: 1rem; color: #555;">❌ Không tìm thấy sách phù hợp với từ khóa "<strong><?php echo htmlspecialchars($query); ?></strong>".</p>
+                            <div class="no-results">
+                                <i class="fas fa-book-open"></i>
+                                <p>Không tìm thấy sách phù hợp với từ khóa "<strong><?php echo htmlspecialchars($query); ?></strong>" hoặc bộ lọc đã chọn.</p>
+                            </div>
                         <?php endif; ?>
                     </div>
-                    <?php else: ?>
-                        <h2>🔎 Hãy nhập từ khóa hoặc chọn bộ lọc để tìm kiếm sách</h2>
-                    <?php endif; ?>
+                <?php else: ?>
+                    <div class="search-instruction">
+                        <i class="fas fa-search"></i>
+                        <h2>Hãy nhập từ khóa hoặc chọn bộ lọc để tìm kiếm sách</h2>
+                    </div>
+                <?php endif; ?>
             </section>
         </div>
-    </div>
-</main>
-
+    </main>
 
     <footer class="footer">
         <div class="footer-bottom">
             <div class="footer-column">
                 <h3>About</h3>
-                <p>Đây là thư viện số.</p>
+                <p>Đây là thư viện số.</p> 
                 <button class="read-more-btn">Read More</button>
             </div>
             <div class="footer-column">
@@ -247,7 +367,7 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
     </footer>
 
     <?php if (!isset($_SESSION['user'])): ?>
-            <div id="loginModal" class="modal" style="<?php if (isset($_SESSION['login_error'])) echo 'display:block;'; ?>">
+            <div id="loginModal" class="modal">
                 <div class="modal-content">
                     <span class="close-btn" onclick="closeModal()">&times;</span>
                     <h2>Đăng nhập</h2>
@@ -265,7 +385,7 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
                 </form>
             </div>
         </div>
-    <?php endif; ?>             
+    <?php endif; ?>        
 
     <div id="bookDetailModal" class="modal">
         <div class="modal-content-large">
@@ -278,12 +398,12 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
                     <h2 id="modal-book-title"></h2>
                     <div class="modal-action-buttons">
                         <button class="btn-action btn-view-online"><i class="fas fa-book-open"></i> Xem online</button>
-                        <form method="post" action="../borrow/borrow.php" style="display: inline;">
-                            <input type="hidden" name="book_id" value="<?php echo $book['id']; ?>">
-                            <button type="submit" class="btn-action btn-borrow-book">
+                        <form method="post" action="search.php" style="display: inline;">
+                            <input type="hidden" name="book_id" id="modal-borrow-book-id">
+                            <button type="submit" class="btn-action btn-borrow-book" id="modal-borrow-btn">
                                 <i class="fas fa-hand-holding-heart"></i> Mượn sách
                             </button>
-                        </form>                    
+                        </form>         
                     </div>
                     <h3>Details</h3>
                     <dl class="details-list">
@@ -294,15 +414,18 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
                         <dt>Mô tả</dt>
                         <dd id="modal-book-description"></dd>
                         <dt>Ngôn ngữ</dt>
-                        <dd>Tiếng Việt</dd>
+                        <dd id="modal-book-language"></dd>
                         <dt>Chủ đề</dt>
-                        <dd>Toán học, Giáo trình</dd>
+                        <dd id="modal-book-category"></dd>
                     </dl>
                 </div>
             </div>
         </div>
     </div>
 
+    <script>
+        const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
+    </script>
     <script src="search.js"></script>
 </body>
 </html>

@@ -1,42 +1,89 @@
 <?php
 session_start();
-include("../login/connect.php");
+require '../login/connect.php'; // Đảm bảo đường dẫn đúng
 
-if (!isset($_SESSION['user_id'])) {
-    die("Bạn cần đăng nhập để trả sách.");
+// Kiểm tra kết nối CSDL ngay sau khi require
+if ($conn->connect_error) {
+    $_SESSION['return_error'] = "Lỗi kết nối CSDL: " . $conn->connect_error;
+    header("Location: ../borrow/borrow.php");
+    exit();
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['borrow_id'])) {
+if (isset($_SESSION['user_id']) && isset($_POST['borrow_id'])) {
+    $user_id = $_SESSION['user_id'];
     $borrow_id = intval($_POST['borrow_id']);
 
-    // Lấy book_id từ lượt mượn
-    $sql = "SELECT book_id FROM borrow_tbl WHERE borrow_id = $borrow_id AND user_id = {$_SESSION['user_id']}";
-    $result = mysqli_query($conn, $sql);
+    // Ghi log để kiểm tra giá trị nhận được (sẽ hiển thị trong file log của PHP server)
+    error_log("Return request received: user_id=" . $user_id . ", borrow_id=" . $borrow_id);
 
-    if ($row = mysqli_fetch_assoc($result)) {
-        $book_id = $row['book_id'];
+    $conn->begin_transaction(); // Bắt đầu giao dịch
 
-        // Xoá lượt mượn
-        $delete_sql = "DELETE FROM borrow_tbl WHERE borrow_id = $borrow_id";
-        if (mysqli_query($conn, $delete_sql)) {
-            // Tăng số lượng sách
-            $update_sql = "UPDATE book_tbl SET soLuong = soLuong + 1 WHERE id = $book_id";
-            mysqli_query($conn, $update_sql);
-
-            // Hiện thông báo và chuyển trang
-            echo "<script>
-                alert('Trả sách thành công!');
-                setTimeout(function() {
-                    window.location.href = 'borrow.php';
-                }, 200); 
-            </script>";
-        } else {
-            echo "Lỗi khi trả sách.";
+    try {
+        // 1. Lấy thông tin book_id từ borrow_id và kiểm tra trạng thái 'Đang mượn'
+        // KHÔNG LẤY ngayTraThucTe NỮA
+        $stmt = $conn->prepare("SELECT book_id FROM borrow_tbl WHERE borrow_id = ? AND user_id = ? AND tinhTrang = 'Đang mượn'");
+        if (!$stmt) {
+            throw new Exception("Lỗi prepare SELECT: " . $conn->error);
         }
-    } else {
-        echo "Không tìm thấy lượt mượn hợp lệ.";
+        $stmt->bind_param("ii", $borrow_id, $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $borrow_record = $result->fetch_assoc();
+        $stmt->close(); // Đóng statement sau khi dùng
+
+        if (!$borrow_record) {
+            error_log("Return Error: Borrow record not found, not 'Đang mượn', or already processed. borrow_id=" . $borrow_id . ", user_id=" . $user_id);
+            throw new Exception("Không tìm thấy lượt mượn hợp lệ, sách không ở trạng thái 'Đang mượn' hoặc đã được xử lý.");
+        }
+
+        $book_id = $borrow_record['book_id'];
+        error_log("Book found for return: book_id=" . $book_id);
+
+        // 2. CẬP NHẬT TRẠNG THÁI của lượt mượn trong borrow_tbl thành 'Đã trả'
+        // Đã loại bỏ ngayTraThucTe = NOW()
+        $stmt = $conn->prepare("UPDATE borrow_tbl SET tinhTrang = 'Đã trả' WHERE borrow_id = ?");
+        if (!$stmt) {
+            throw new Exception("Lỗi prepare UPDATE borrow_tbl: " . $conn->error);
+        }
+        $stmt->bind_param("i", $borrow_id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows === 0) {
+            error_log("Return Error: UPDATE borrow_tbl affected_rows is 0. borrow_id=" . $borrow_id . ", SQL error: " . $stmt->error);
+            throw new Exception("Không thể cập nhật trạng thái trả sách. Có thể không có thay đổi nào được thực hiện.");
+        }
+        error_log("borrow_tbl updated for borrow_id: " . $borrow_id);
+
+        // 3. Tăng số lượng sách trong book_tbl và cập nhật trạng thái sách (nếu cần)
+        $stmt = $conn->prepare("UPDATE book_tbl SET soLuong = soLuong + 1, trangThai = 'Có sẵn' WHERE id = ?");
+        if (!$stmt) {
+            throw new Exception("Lỗi prepare UPDATE book_tbl: " . $conn->error);
+        }
+        $stmt->bind_param("i", $book_id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows === 0) {
+            error_log("Return Error: UPDATE book_tbl affected_rows is 0. book_id=" . $book_id . ", SQL error: " . $stmt->error);
+            throw new Exception("Không thể cập nhật số lượng sách trong kho.");
+        }
+        error_log("book_tbl updated for book_id: " . $book_id);
+
+        $conn->commit(); // Hoàn tất giao dịch
+        $_SESSION['return_success'] = "Sách đã được trả thành công!";
+        error_log("Transaction committed. Success message set.");
+
+    } catch (Exception $e) {
+        $conn->rollback(); // Hoàn tác giao dịch nếu có lỗi
+        $_SESSION['return_error'] = "Lỗi trả sách: " . $e->getMessage();
+        error_log("Transaction rolled back. Error: " . $e->getMessage());
     }
+
+    header("Location: ../borrow/borrow.php"); // Chuyển hướng về trang mượn/trả
+    exit();
+
 } else {
-    echo "Yêu cầu không hợp lệ.";
+    $_SESSION['return_error'] = "Yêu cầu không hợp lệ. Vui lòng đăng nhập hoặc chọn sách hợp lệ để trả.";
+    header("Location: ../borrow/borrow.php");
+    exit();
 }
 ?>

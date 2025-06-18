@@ -2,38 +2,49 @@
 session_start();
 include("../login/connect.php");
 
-// Kiểm tra nếu người dùng đã đăng nhập
-if (!isset($_SESSION['user_id'])) {
-    // Nếu chưa đăng nhập, chuyển hướng lại search.php và hiện modal
-    $_SESSION['login_required'] = true;
-    header("Location: ../search/search.php");
-    exit();
-}
-
-// Nếu nhận được yêu cầu mượn
+// Xử lý mượn sách
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
+    if (!isset($_SESSION['user_id'])) {
+        $_SESSION['login_error'] = "Bạn cần đăng nhập để mượn sách.";
+        header("Location: ../login/login.php"); // Sửa đường dẫn nếu cần
+        exit();
+    }
+
     $user_id = $_SESSION['user_id'];
     $book_id = intval($_POST['book_id']);
 
-    // Kiểm tra sách có tồn tại và còn số lượng
-    $stmt = $conn->prepare("SELECT soLuong FROM book_tbl WHERE id = ?");
+    // Kiểm tra trạng thái sách
+    $stmt = $conn->prepare("SELECT soLuong, trangThai FROM book_tbl WHERE id = ?");
     $stmt->bind_param("i", $book_id);
     $stmt->execute();
     $result = $stmt->get_result();
+    
     if ($result->num_rows === 1) {
         $book = $result->fetch_assoc();
-        if ($book['soLuong'] > 0) {
-            // Giảm số lượng
+        
+        if ($book['trangThai'] == 'Đang bảo trì') {
+            $_SESSION['borrow_error'] = "Sách đang bảo trì, không thể mượn.";
+        } elseif ($book['soLuong'] > 0) {
+            // Giảm số lượng sách
             $stmt = $conn->prepare("UPDATE book_tbl SET soLuong = soLuong - 1 WHERE id = ?");
             $stmt->bind_param("i", $book_id);
             $stmt->execute();
 
-            // Ghi vào bảng borrow_tbl
-            $stmt = $conn->prepare("INSERT INTO borrow_tbl (user_id, book_id, ngayMuon) VALUES (?, ?, NOW())");
+            // Cập nhật trạng thái nếu hết sách
+            if ($book['soLuong'] - 1 <= 0) {
+                $stmt = $conn->prepare("UPDATE book_tbl SET trangThai = 'Đã mượn hết' WHERE id = ?");
+                $stmt->bind_param("i", $book_id);
+                $stmt->execute();
+            }
+
+            // Thêm vào bảng mượn sách
+            // ĐÃ THAY ĐỔI INTERVAL TỪ 14 DAY SANG 30 DAY
+            $stmt = $conn->prepare("INSERT INTO borrow_tbl (user_id, book_id, ngayMuon, ngayHetHan, tinhTrang) 
+                                  VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY), 'Đang mượn')");
             $stmt->bind_param("ii", $user_id, $book_id);
             $stmt->execute();
 
-            $_SESSION['borrow_success'] = true;
+            $_SESSION['borrow_success'] = "Mượn sách thành công! Hạn trả: " . date('d/m/Y', strtotime('+30 days'));
         } else {
             $_SESSION['borrow_error'] = "Sách đã hết.";
         }
@@ -41,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
         $_SESSION['borrow_error'] = "Sách không tồn tại.";
     }
 
-    header("Location: ../borrow/borrow.php");
+    header("Location: borrow.php");
     exit();
 }
 ?>
@@ -56,19 +67,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
 </head>
 <body>
 
+    <?php // Hiển thị thông báo mượn sách ?>
     <?php if (isset($_SESSION['borrow_success'])): ?>
         <div class="alert success"><?php echo $_SESSION['borrow_success']; unset($_SESSION['borrow_success']); ?></div>
     <?php endif; ?>
-
     <?php if (isset($_SESSION['borrow_error'])): ?>
         <div class="alert error"><?php echo $_SESSION['borrow_error']; unset($_SESSION['borrow_error']); ?></div>
     <?php endif; ?>
 
+    <?php // Hiển thị thông báo trả sách ?>
+    <?php if (isset($_SESSION['return_success'])): ?>
+        <div class="alert success"><?php echo $_SESSION['return_success']; unset($_SESSION['return_success']); ?></div>
+    <?php endif; ?>
+    <?php if (isset($_SESSION['return_error'])): ?>
+        <div class="alert error"><?php echo $_SESSION['return_error']; unset($_SESSION['return_error']); ?></div>
+    <?php endif; ?>
+
     <?php if (isset($_SESSION['login_error'])): ?>
         <script>
-            window.onload = function() {
-                openLoginModal(); // Gọi modal đăng nhập nếu có
-            };
+            const loginErrorExists = true; 
         </script>
         <?php unset($_SESSION['login_error']); ?>
     <?php endif; ?>
@@ -90,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
             <div class="dropdown">
                 <span class="dropdown-toggle">Dịch vụ</span>
                 <div class="dropdown-menu">
-                    <a href="#">Mượn, Trả sách</a>
+                    <a href="borrow.php">Mượn, Trả sách</a>
                 </div>
             </div>
             <div class="dropdown">
@@ -127,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                 <h2>Sách đề xuất</h2>
                 <div class="recommend-grid">
                     <div class="book-card-simple" 
-                         data-book-id="1" 
+                         data-book-id="11" 
                          data-title="Giải Tích I" 
                          data-author="Ngô Văn Ban" 
                          data-description="Cuốn sách Giải Tích I cung cấp các kiến thức cơ bản và nền tảng nhất của giải tích, bao gồm giới hạn, đạo hàm, và tích phân." 
@@ -136,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                         <p class="book-title">Giải Tích I</p>
                     </div>
                     <div class="book-card-simple" 
-                         data-book-id="2" 
+                         data-book-id="12" 
                          data-title="Giải Tích II" 
                          data-author="Trần Thị Kim Oanh, Phan Xuân Thành, Lê Chí Ngọc, Nguyễn Thị Thu Hương" 
                          data-description="Tiếp nối Giải Tích I, cuốn sách này đi sâu vào các chủ đề nâng cao như giải tích hàm nhiều biến, tích phân bội, và phương trình vi phân." 
@@ -145,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                         <p class="book-title">Giải Tích II</p>
                     </div>
                     <div class="book-card-simple" 
-                         data-book-id="3" 
+                         data-book-id="13" 
                          data-title="Giải Tích III" 
                          data-author="Nguyễn Thiệu Huy, Bùi Xuân Diệu, Đào Tuấn Anh" 
                          data-description="Cuốn sách cuối cùng trong bộ ba, tập trung vào các khái niệm về chuỗi số, chuỗi hàm, và các phép biến đổi quan trọng như Fourier và Laplace." 
@@ -155,71 +172,99 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                     </div>
                 </div>
             </section>
-
+            
             <section class="book-section">
                 <h2>Sách đang mượn</h2>
                 <div class="borrowed-list">
-                <?php
-                if (isset($_SESSION['user_id'])):
-                    $user_id = $_SESSION['user_id']; 
+                    <?php
+                    if (isset($_SESSION['user_id'])):
+                        $user_id = $_SESSION['user_id'];
+                        
+                        // TRUY VẤN CHỈ LẤY CÁC SÁCH CÓ tinhTrang = 'Đang mượn'
+                        $stmt = $conn->prepare("
+                            SELECT b.id as book_id, b.tieuDe, b.tacGia, b.anhBia, b.theLoai,
+                                   br.borrow_id, br.ngayMuon, br.ngayHetHan, br.tinhTrang
+                            FROM borrow_tbl br
+                            INNER JOIN book_tbl b ON br.book_id = b.id
+                            WHERE br.user_id = ? AND br.tinhTrang = 'Đang mượn'
+                            ORDER BY br.ngayHetHan ASC
+                        ");
+                        $stmt->bind_param("i", $_SESSION['user_id']);
+                        $stmt->execute();
+                        $result = $stmt->get_result();
 
-                    $stmt = $conn->prepare("
-                        SELECT b.tieuDe, b.anhBia, br.ngayMuon, br.ngayHetHan, br.borrow_id 
-                        FROM borrow_tbl br
-                        JOIN book_tbl b ON br.book_id = b.id
-                        WHERE br.user_id = ? AND br.tinhTrang = 'Đang mượn'
-                    ");
-                    $stmt->bind_param("i", $user_id);
-                    $stmt->execute();
-                    $borrowedBooks = $stmt->get_result();
+                        if ($result->num_rows > 0):
+                            while ($book = $result->fetch_assoc()):
+                                // === LOGIC XỬ LÝ ĐƯỜNG DẪN ẢNH ĐƯỢC CẢI THIỆN ===
+                                $imagePath = "https://placehold.co/300x200?text=Không+có+ảnh"; // Mặc định
+                                if (!empty($book['anhBia'])) {
+                                    $dbImagePath = $book['anhBia']; // Ví dụ: 'assets/giaitich1.jpg' hoặc 'image/1.jpg'
+                                    
+                                    // Giả định thư mục gốc của project là một cấp trên thư mục 'borrow'
+                                    $projectRoot = dirname(__DIR__); // your_project_root/btl/demo
+                                    $physicalFilePath = $projectRoot . '/' . $dbImagePath; 
 
-                    if ($borrowedBooks->num_rows > 0) {
-                        while ($row = $borrowedBooks->fetch_assoc()) {
-                            $anhBia = htmlspecialchars($row['anhBia']);
-                            $tieuDe = htmlspecialchars($row['tieuDe']);
-
-                            $relativePath = "../" . $anhBia;  // thêm ../ vì ảnh nằm ở cấp trên
-
-                            $filePath = __DIR__ . "/" . $relativePath;
-
-                            if (file_exists($filePath)) {
-                                $imgPath = $relativePath;
-                            } else {
-                                $imgPath = "https://placehold.co/100x140/333/FFF?text=Bìa";
-                            }
-                            echo '<div class="borrowed-item">
-                                <div class="borrowed-item-cover">
-                                    <img src="' . $imgPath . '" alt="Bìa sách">
-                                    <p class="book-title-small">' . $tieuDe . '</p>
+                                    if (file_exists($physicalFilePath)) {
+                                        // Đường dẫn cho HTML cần tương đối từ borrow.php
+                                        // borrow.php nằm trong your_project_root/btl/demo/borrow/
+                                        // Ảnh nằm trong your_project_root/btl/demo/assets/ hoặc /image/
+                                        $imagePath = '../' . $dbImagePath; 
+                                    } else {
+                                        // Log lỗi nếu ảnh không tìm thấy trên server
+                                        error_log("Borrow.php: Image file not found for " . $dbImagePath . " at " . $physicalFilePath);
+                                    }
+                                }
+                                ?>
+                                <div class="borrowed-item">
+                                    <div class="book-cover">
+                                        <img src="<?php echo htmlspecialchars($imagePath); ?>" 
+                                            alt="Bìa sách <?php echo htmlspecialchars($book['tieuDe']); ?>">
+                                    </div>
+                                    <div class="book-info">
+                                        <h3><?php echo htmlspecialchars($book['tieuDe']); ?></h3>
+                                        <p class="author"><?php echo htmlspecialchars($book['tacGia']); ?></p>
+                                        <p class="category">Thể loại: <?php echo htmlspecialchars($book['theLoai']); ?></p>
+                                        
+                                        <div class="borrow-details">
+                                            <p><i class="fas fa-calendar-day"></i> Ngày mượn: 
+                                            <?php echo date('d/m/Y', strtotime($book['ngayMuon'])); ?></p>
+                                            <p><i class="fas fa-clock"></i> Hạn trả: 
+                                            <?php echo date('d/m/Y', strtotime($book['ngayHetHan'])); ?></p>
+                                        </div>
+                                        
+                                        <form method="POST" action="return.php" class="return-form">
+                                            <input type="hidden" name="borrow_id" value="<?php echo $book['borrow_id']; ?>">
+                                            <button type="submit" class="btn-return">
+                                                <i class="fas fa-book-return"></i> Trả sách
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                                <div class="borrowed-item-info">
-                                    <p><strong>Thông tin sách</strong></p>
-                                    <p>Ngày mượn: ' . $row['ngayMuon'] . '</p>
-                                    <p>Ngày hết hạn: ' . $row['ngayHetHan'] . '</p>
-                                </div>
-                                <form method="POST" action="return.php">
-                                    <input type="hidden" name="borrow_id" value="' . $row['borrow_id'] . '">
-                                    <button type="submit" class="btn-return">Trả sách</button>
-                                </form>
-                            </div>';
-                        }
-                    } else {
-                        echo "<p>Chưa mượn sách nào.</p>";
-                    }
-                    $stmt->close();
-                else:
-                    echo "<p>Vui lòng <a href='#' onclick='openLoginModal()'>đăng nhập</a> để xem sách đã mượn.</p>";
-                endif;
-                ?>
+                            <?php endwhile;
+                        else: ?>
+                            <div class="no-books">
+                                <i class="fas fa-book-open"></i>
+                                <p>Bạn chưa mượn sách nào.</p>
+                                <a href="../search/search.php" class="btn-browse">Tìm sách để mượn</a>
+                            </div>
+                        <?php endif;
+                        $stmt->close();
+                        else: ?>
+                            <div class="login-required">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <p>Vui lòng đăng nhập để xem sách đang mượn.</p>
+                            </div>
+                        <?php endif; ?>
                 </div>
             </section>
+        </div>
     </main>
 
     <footer class="footer">
         <div class="footer-bottom">
             <div class="footer-column">
                 <h3>About</h3>
-                <p>Đây là thư viện số. Bạn muốn viết thêm gì thì có viết thêm vào đây.</p> 
+                <p>Đây là thư viện số.</p> 
                 <button class="read-more-btn">Read More</button>
             </div>
             <div class="footer-column">
@@ -245,7 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     </footer>
 
     <?php if (!isset($_SESSION['user'])): ?>
-            <div id="loginModal" class="modal" style="<?php if (isset($_SESSION['login_error'])) echo 'display:block;'; ?>">
+            <div id="loginModal" class="modal">
                 <div class="modal-content">
                     <span class="close-btn" onclick="closeModal()">&times;</span>
                     <h2>Đăng nhập</h2>
@@ -276,12 +321,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                 <div class="popup-right-column">
                     <div class="popup-actions">
                         <button class="popup-btn btn-view"><i class="fas fa-book-open"></i> Xem online</button>
-                        <form method="POST" action="borrow.php">
-                            <input type="hidden" name="borrow_book_id" value="<?php echo $book['id']; ?>">
+                        <form method="POST" action="borrow.php" onsubmit="return checkLoginBeforeBorrow();">
+                            <input type="hidden" name="book_id" id="modal-borrow-book-id">
                             <button type="submit" class="btn-action btn-borrow-book">
                                 <i class="fas fa-hand-holding-heart"></i> Mượn sách
                             </button>
-                        </form>                                        
+                        </form>                                       
                     </div>
                     <h4 class="popup-details-header">Details</h4>
                     <dl class="popup-details-list">
@@ -290,13 +335,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                         <dt>Mô tả</dt>
                         <dd id="modal-book-description"></dd>
                         <dt>Năm xuất bản</dt>
-                        <dd>2021</dd> <dt>Ngôn ngữ</dt>
-                        <dd>Tiếng Việt</dd> </dl>
+                        <dd id="modal-book-year-popup">N/A</dd> <dt>Ngôn ngữ</dt>
+                        <dd id="modal-book-language-popup">N/A</dd>
+                        <dt>Thể loại</dt>
+                        <dd id="modal-book-category-popup">N/A</dd>
+                    </dl>
                 </div>
             </div>
         </div>
     </div>
+<script>
+    // Định nghĩa biến isLoggedIn (cần cho borrow.js)
+    const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
 
+    function checkLoginBeforeBorrow() {
+        if (!isLoggedIn) {
+            openLoginModal(); // gọi modal đăng nhập
+            return false;     // chặn gửi form
+        }
+        return true; // cho phép gửi nếu đã đăng nhập
+    }
+
+    // Hàm openLoginModal và closeModal (được gọi từ onclick trong HTML)
+    function openLoginModal() {
+        const modal = document.getElementById('loginModal');
+        if (modal) {
+            modal.style.display = 'block';
+            const redirectInput = modal.querySelector('input[name="redirect"]');
+            if (redirectInput) {
+                redirectInput.value = window.location.href; 
+            }
+        }
+    }
+    function closeModal() {
+        const modal = document.getElementById('loginModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    // Nếu có lỗi đăng nhập từ session, tự động mở modal khi trang tải
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof loginErrorExists !== 'undefined' && loginErrorExists) {
+            openLoginModal();
+        }
+    });
+
+</script>
     <script src="borrow.js"></script>
 </body>
 </html>

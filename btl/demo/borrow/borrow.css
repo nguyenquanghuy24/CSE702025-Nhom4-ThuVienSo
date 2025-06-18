@@ -334,51 +334,58 @@ header.navbar {
     font-weight: bold;
     font-size: 1rem;
 }
-
-/* Danh sách sách đã mượn */
-.borrowed-list {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
+/* Container của mỗi sách đang mượn */
 .borrowed-item {
-    display: flex;
-    align-items: center;
+    display: flex; /* Dùng flexbox để ảnh và thông tin nằm cạnh nhau */
+    align-items: center; /* Căn chỉnh các mục theo chiều dọc */
     gap: 25px;
     padding: 20px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     transition: box-shadow 0.2s ease;
+    background-color: #fff; /* Đảm bảo nền trắng */
+    margin-bottom: 20px; /* Thêm khoảng cách giữa các item */
 }
 
 .borrowed-item:hover {
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
-.borrowed-item-cover {
-    flex-shrink: 0;
-    text-align: center;
-}
-
-.borrowed-item-cover img {
-    width: 100px;
-    height: 140px;
-    object-fit: cover;
+/* KHUNG ẢNH CỦA SÁCH ĐANG MƯỢN */
+.borrowed-item .book-cover { 
+    flex-shrink: 0; /* Ngăn không cho khung ảnh bị co lại */
+    width: 120px; /* Chiều rộng cố định cho khung ảnh */
+    height: 160px; /* Chiều cao cố định cho khung ảnh (tỷ lệ 3:4 tương đối chuẩn cho bìa sách) */
+    border: 1px solid #eee;
     border-radius: 4px;
-    margin-bottom: 5px;
+    overflow: hidden; /* Cắt bỏ phần ảnh tràn ra ngoài khung */
+    display: flex; /* Dùng flex để căn giữa ảnh */
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0; /* Màu nền nếu ảnh không tải được hoặc đang loading */
 }
 
-.book-title-small {
-    font-size: 0.9rem;
-    font-weight: bold;
-    max-width: 100px;
+/* ẢNH BÌa SÁCH BÊN TRONG KHUNG */
+.borrowed-item .book-cover img {
+    max-width: 100%; /* Đảm bảo ảnh không vượt quá chiều rộng của khung */
+    max-height: 100%; /* Đảm bảo ảnh không vượt quá chiều cao của khung */
+    height: auto; /* Giữ tỷ lệ khung hình của ảnh */
+    width: auto; /* Giữ tỷ lệ khung hình của ảnh */
+    display: block; /* Loại bỏ khoảng trắng dưới ảnh */
+    object-fit: contain; /* Đảm bảo toàn bộ ảnh hiển thị vừa trong khung mà không bị cắt xén hoặc biến dạng */
 }
 
-.borrowed-item-info {
-    flex-grow: 1;
+/* Phần thông tin sách trong borrowed-item */
+.borrowed-item .book-info {
+    flex-grow: 1; /* Cho phép phần thông tin chiếm hết không gian còn lại */
     font-size: 1rem;
     line-height: 1.7;
+}
+
+/* Các icon trong borrow-details */
+.borrow-details p i {
+    margin-right: 5px;
+    color: #007bff; /* Màu xanh dương cho icon */
 }
 
 .btn-return {
@@ -391,27 +398,102 @@ header.navbar {
     font-weight: bold;
     transition: background-color 0.2s;
     flex-shrink: 0;
+    margin-top: 10px; /* Khoảng cách trên nút */
 }
 
 .btn-return:hover {
     background-color: #c9302c;
 }
 
-/* === TOÀN BỘ CSS CHO POPUP CHI TIẾT SÁCH === */
+/* === MODAL STYLES (Chung cho tất cả modal) === */
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
+  display: none; /* Mặc định ẩn */
+  position: fixed; /* Giữ vị trí khi cuộn */
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0,0,0,0.6); /* Nền mờ */
   animation: fadeIn 0.3s;
+  z-index: 100; /* Z-index cơ bản cho các modal */
 }
 
-.popup-content {
+/* Modal đăng nhập sẽ có z-index cao hơn modal chi tiết sách */
+#loginModal {
+  z-index: 101; /* Đảm bảo modal đăng nhập hiển thị trên các modal khác */
+}
+
+/* Modal content (nội dung popup nhỏ, ví dụ đăng nhập) */
+#loginModal .modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+}
+
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #004c99;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #555;
+}
+
+.close-btn:hover {
+    color: #000;
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.signup-link a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* Popup content (nội dung bookDetailModal, tên class cũ là popup-content) */
+#bookDetailModal .popup-content { 
     background-color: #fff;
     margin: 8% auto;
     padding: 25px 35px;
@@ -475,43 +557,51 @@ header.navbar {
     margin-bottom: 25px;
 }
 
-.popup-btn {
-    flex-grow: 1;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 0.95rem;
+/* ĐÃ CHỈNH SỬA: LÀM CHO CÁC NÚT BẰNG NHAU */
+.popup-actions .popup-btn,
+.popup-actions .btn-action { /* Áp dụng cho cả popup-btn và btn-action */
+    flex-grow: 1; /* Chia đều không gian cho các nút */
+    padding: 12px 20px; /* Đảm bảo padding đủ lớn để có kích thước dễ bấm */
+    border-radius: 5px; 
+    border: none; /* Bỏ border mặc định nếu đã có */
+    font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    transition: all 0.3s ease;
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; /* Căn giữa ngang nội dung nút */
+    gap: 8px; /* Khoảng cách giữa icon và chữ */
 }
 
-.popup-btn .fas {
-    font-size: 1em;
-}
-
-.btn-view {
+/* Các styles riêng cho từng nút */
+.btn-view { /* Đổi từ popup-btn.btn-view sang chỉ .btn-view nếu dùng chung .popup-btn */
     background-color: #007bff;
     color: white;
-    border-color: #007bff;
 }
 
 .btn-view:hover {
     background-color: #0069d9;
 }
 
-.btn-borrow {
+.btn-borrow { /* Đổi từ popup-btn.btn-borrow sang chỉ .btn-borrow */
     background-color: #f8f9fa;
     color: #333;
+    border: 1px solid #ccc; /* Thêm border cho nút borrow để phân biệt */
 }
 
 .btn-borrow:hover {
     background-color: #e2e6ea;
 }
+
+.btn-borrow.disabled { /* Nút mượn sách bị disabled */
+    background-color: #e0e0e0;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.8;
+    border: 1px solid #ccc; /* Giữ border cho nút disabled */
+}
+
 
 .popup-details-header {
     font-size: 1.1rem;
@@ -567,6 +657,16 @@ header.navbar {
         text-align: left;
     }
     
+    .borrowed-item .book-cover { /* Đảm bảo kích thước ảnh trên mobile */
+        width: 100px; /* Giảm kích thước ảnh trên mobile */
+        height: 130px;
+        margin-bottom: 10px; /* Thêm khoảng cách dưới ảnh khi xếp cột */
+    }
+
+    .borrowed-item .book-info {
+        width: 100%; /* Đảm bảo thông tin chiếm hết chiều rộng */
+    }
+
     .btn-return {
         align-self: flex-end;
     }
@@ -574,4 +674,15 @@ header.navbar {
     .popup-body {
         flex-direction: column;
     }
+
+    /* Kích thước modal trên mobile */
+    #loginModal .modal-content,
+    #bookDetailModal .popup-content { /* Sử dụng .popup-content cho modal chi tiết sách */
+        margin: 5% auto;
+        padding: 20px;
+        width: 95%;
+    }
+}
+.alert.success {
+    display: none; /* Ẩn thông báo thành công */
 }
