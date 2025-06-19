@@ -15,34 +15,27 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
 <header class="navbar">
     <div class="logo">
-      <a href="index.php">
-        <img src="assets/logo.jpg" alt="Logo Thư viện số">
+      <a href="../index.php"> <img src="../assets/logo.jpg" alt="Logo Thư viện số">
       </a>
 </div>
       <div class="nav-links">
         <div class="dropdown">
-          <a href="../add.php" class="dropdown-toggle">Thêm sách</a>
-          </div>
+          <a href="add.php" class="dropdown-toggle">Thêm sách</a> </div>
         <div class="dropdown">
-          <a href="../manage.php" class="dropdown-toggle">Quản lý</a>
-          </div>
+          <a href="../manage/manage.php" class="dropdown-toggle">Quản lý</a> </div>
         <div class="dropdown">
-            <a href="../reply.php" class="dropdown-toggle">Hòm thư</a>
-            </div>
+            <a href="../reply/reply.php" class="dropdown-toggle">Hòm thư</a> </div>
         <div class="dropdown">
-            <a href="#" class="dropdown-toggle">Contact</a>
-        </div>
+            <a href="#" class="dropdown-toggle">Contact</a> </div>
       </div>
     <div class="auth">
         <?php if (isset($_SESSION['user'])): ?>
             <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
-            <a href="login/logout.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Đăng xuất</a>
-        <?php else: ?>
+            <a href="../login/logout.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Đăng xuất</a> <?php else: ?>
             <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
         <?php endif; ?>
     </div>
 </header>
-
 <main class="admin-content">
     <h1>Thêm Sách Mới</h1>
     <form action="process_add_book.php" method="POST" enctype="multipart/form-data" class="add-book-form">
