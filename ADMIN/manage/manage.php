@@ -72,7 +72,7 @@ $books = [
 <body>
 <header class="navbar">
     <div class="logo">
-      <a href="../logadmin.php"> <img src="../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
+      <a href="../logadmin.php"> <img src="../../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
       </a>
     </div>
            <div class="nav-links">

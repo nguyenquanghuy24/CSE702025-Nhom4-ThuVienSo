@@ -4,25 +4,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = document.querySelector('#loginModal');
   const closeBtn = document.querySelector('.close-btn');
 
-  if (loginLink && modal && closeBtn) { // Kiểm tra sự tồn tại của các phần tử
-      loginLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        modal.style.display = 'block';
-      });
+  loginLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    modal.style.display = 'block';
+  });
 
-      closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-      });
+  closeBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
 
-      window.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          modal.style.display = 'none';
-        }
-      });
-  }
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
 
-
-  // Card animation on load (Nếu vẫn dùng trên index.php)
+  // Card animation on load
   const cards = document.querySelectorAll('.card');
   cards.forEach((card, index) => {
     card.style.opacity = '0';
@@ -35,18 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Mở modal đăng nhập (Hàm global để gọi từ onclick trong HTML)
+// Mở modal đăng nhập
 function openLoginModal() {
-  const modal = document.getElementById('loginModal');
-  if (modal) {
-      modal.style.display = 'block';
-  }
+  document.getElementById('loginModal').style.display = 'block';
 }
 
-// Đóng modal (Hàm global để gọi từ onclick trong HTML)
+// Đóng modal
 function closeModal() {
-  const modal = document.getElementById('loginModal');
-  if (modal) {
-      modal.style.display = 'none';
-  }
+  document.getElementById('loginModal').style.display = 'none';
 }

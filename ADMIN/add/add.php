@@ -2,6 +2,11 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+    $_SESSION['login_error'] = "Bạn cần đăng nhập quyền quản trị.";
+    header("Location: ../logadmin.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -34,6 +39,12 @@ if (session_status() === PHP_SESSION_NONE) {
     </div>
 </header>
 <main class="admin-content">
+    <?php if (isset($_SESSION['success'])): ?>
+        <p style="color: green;"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></p>
+    <?php endif; ?>
+    <?php if (isset($_SESSION['upload_error'])): ?>
+        <p style="color: red;"><?php echo $_SESSION['upload_error']; unset($_SESSION['upload_error']); ?></p>
+    <?php endif; ?>
     <h1>Thêm Sách Mới</h1>
     <form action="process_add_book.php" method="POST" enctype="multipart/form-data" class="add-book-form">
         <div class="form-group">
@@ -45,15 +56,34 @@ if (session_status() === PHP_SESSION_NONE) {
             <label for="author">Tác giả:</label>
             <input type="text" id="author" name="author" required>
         </div>
-
-        <div class="form-group">
-            <label for="publisher">Nhà xuất bản:</label>
-            <input type="text" id="publisher" name="publisher">
-        </div>
-
+        
         <div class="form-group">
             <label for="publication_year">Năm xuất bản:</label>
             <input type="number" id="publication_year" name="publication_year" min="1000" max="<?php echo date("Y"); ?>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="language">Ngôn ngữ:</label>
+            <select id="language" name="language" required>
+                <option value="">Chọn ngôn ngữ</option>
+                <option value="Tiếng Việt">Tiếng Việt</option>
+                <option value="Tiếng Anh">Tiếng Anh</option>
+                <option value="Tiếng Việt, Tiếng Anh">Tiếng Việt & Tiếng Anh</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="quantity">Số lượng:</label>
+            <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+        </div>
+
+        <div class="form-group">
+            <label for="status">Trạng thái:</label>
+            <select id="status" name="status">
+                <option value="Có sẵn">Có sẵn</option>
+                <option value="Đã mượn">Đã mượn</option>
+                <option value="Hết sách">Hết sách</option>
+            </select>
         </div>
 
         <div class="form-group">
@@ -123,7 +153,6 @@ if (session_status() === PHP_SESSION_NONE) {
         <label for="pass">Mật khẩu:</label>
         <input type="password" id="pass" name="pass" required>
         <button type="submit">Đăng nhập</button>
-        <p class="signup-link">Chưa có tài khoản? <a href="login/register.php">Đăng ký</a></p>
     </form>
   </div>
 </div>
