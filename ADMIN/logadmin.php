@@ -15,16 +15,16 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
 <header class="navbar">
     <div class="logo">
-      <a href="logadmin.php"> <img src="../../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
+      <a href="logadmin.php"> <img src="../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
       </a>
     </div>
       <div class="nav-links">
         <div class="nav-item">
-            <a href="../add/add.php" class="nav-link">Thêm sách</a> </div>
+            <a href="add/add.php" class="nav-link">Thêm sách</a> </div>
         <div class="nav-item">
-            <a href="../manage/manage.php" class="nav-link">Quản lý</a> </div>
+            <a href="manage/manage.php" class="nav-link">Quản lý</a> </div>
         <div class="nav-item">
-            <a href="../reply/reply.php" class="nav-link">Hòm thư</a> </div>
+            <a href="reply/reply.php" class="nav-link">Hòm thư</a> </div>
       </div>
     <div class="auth">
         <?php if (isset($_SESSION['user'])): ?>
@@ -49,7 +49,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <h2 class="title">TÀI LIỆU MỚI</h2>
         <div class="card-container">
             <div class="card">
-                <img src="../assets/giaitich1.jpg" alt="1" class="image">
+                <img src="../user/demo/assets/giaitich1.jpg" alt="1" class="image">
                 <div class="card-content">
                     <span class="category">Your Worst Nightmare</span>
                     <h3 class="title">Giải tích I</h3>
@@ -57,7 +57,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 </div>
             </div>
             <div class="card">
-                <img src="../assets/giaitich2.jpg" alt="2" class="image">
+                <img src="../user/demo/assets/giaitich2.jpg" alt="2" class="image">
                 <div class="card-content">
                     <span class="category">Your Worst Nightmare 2</span>
                     <h3 class="title">Giải tích II</h3>
@@ -65,7 +65,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 </div>
             </div>
             <div class="card">
-                <img src="../assets/giaitich3.jpg" alt="3" class="image">
+                <img src="../user/demo/assets/giaitich3.jpg" alt="3" class="image">
                 <div class="card-content">
                     <span class="category">Your Worst Nightmare 3</span>
                     <h3 class="title">Giải tích III</h3>

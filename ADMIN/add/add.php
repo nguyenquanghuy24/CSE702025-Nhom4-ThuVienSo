@@ -25,9 +25,6 @@ if (session_status() === PHP_SESSION_NONE) {
           <a href="../manage/manage.php" class="dropdown-toggle">Quản lý</a> </div>
         <div class="dropdown">
             <a href="../reply/reply.php" class="dropdown-toggle">Hòm thư</a> </div>
-        <div class="dropdown">
-            <a href="#" class="dropdown-toggle">Contact</a> </div>
-      </div>
     <div class="auth">
         <?php if (isset($_SESSION['user'])): ?>
             <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>

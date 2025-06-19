@@ -58,12 +58,12 @@ $feedbacks = [
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
   <title>Quản lý Phản hồi - Admin</title>
-  <link rel="stylesheet" href="admin2.css" />
+  <link rel="stylesheet" href="reply.css" />
 </head>
 <body>
 <header class="navbar">
     <div class="logo">
-      <a href="../logadmin.php"> <img src="../../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
+      <a href="../logadmin.php"> <img src="../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
       </a>
       <div class="nav-links">
         <div class="dropdown">

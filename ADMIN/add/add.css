@@ -21,7 +21,7 @@ a {
 
 header.navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Đảm bảo logo (trái), nav-links (giữa) và auth (phải) được phân bổ không gian hợp lý */
   align-items: center;
   background: #ffffff;
   padding: 10px 20px;
@@ -49,13 +49,20 @@ header.navbar {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 50px;
+  flex-grow: 1; /* Rất quan trọng: Cho phép nav-links chiếm hết không gian còn lại */
+  justify-content: center; /* Căn giữa các mục bên trong nav-links */
+  gap: 50px; /* Khoảng cách giữa các mục nav */
 }
 
 .nav-links a, .auth a {
   font-size: 0.95rem;
 }
 
+
+.auth { /* Thêm hoặc đảm bảo khối .auth có các thuộc tính này */
+    display: flex; /* Để các phần tử bên trong nó cũng có thể được sắp xếp */
+    align-items: center;
+}
 
 .auth a {
   font-size: 1rem;
@@ -67,7 +74,7 @@ header.navbar {
   text-decoration: none;
   display: inline-block;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-left: 10px;
+  margin-left: 10px; /* Giữ khoảng cách với các mục nav-links */
 }
 
 .auth a:hover {
@@ -313,6 +320,7 @@ header.navbar {
 
 .card-with-bg:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
 .overlay {
