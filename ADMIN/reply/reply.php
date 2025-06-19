@@ -63,7 +63,7 @@ $feedbacks = [
 <body>
 <header class="navbar">
     <div class="logo">
-      <a href="../index.php"> <img src="../assets/logo.jpg" alt="Logo Thư viện số">
+      <a href="../login2/logadmin.php"> <img src="../../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
       </a>
       <div class="nav-links">
         <div class="dropdown">
