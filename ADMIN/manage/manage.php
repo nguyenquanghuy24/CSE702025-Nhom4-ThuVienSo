@@ -2,63 +2,54 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$books = [
-    [
-        'id' => 1,
-        'title' => 'Giải tích I',
-        'author' => 'Nguyễn Đình Trí',
-        'isbn' => '978-604-56-1234-5',
-        'quantity' => 10,
-        'available' => 7,
-        'image' => 'assets/giaitich1.jpg',
-        'description' => 'Cuốn sách này bao gồm các kiến thức cơ bản về giải tích một biến, giới hạn, đạo hàm, tích phân.',
-        'borrowers' => [
-            ['user_id' => 101, 'name' => 'Trần Văn A', 'borrow_date' => '2025-06-01', 'due_date' => '2025-06-15'],
-            ['user_id' => 102, 'name' => 'Lê Thị B', 'borrow_date' => '2025-06-05', 'due_date' => '2025-06-19'],
-            ['user_id' => 103, 'name' => 'Phạm Văn C', 'borrow_date' => '2025-06-10', 'due_date' => '2025-06-24'],
-        ]
-    ],
-    [
-        'id' => 2,
-        'title' => 'Giải tích II',
-        'author' => 'Nguyễn Đình Trí',
-        'isbn' => '978-604-56-6789-0',
-        'quantity' => 8,
-        'available' => 5,
-        'image' => 'assets/giaitich2.jpg',
-        'description' => 'Tiếp nối Giải tích I, cuốn sách này tập trung vào giải tích nhiều biến, chuỗi và phương trình vi phân.',
-        'borrowers' => [
-            ['user_id' => 104, 'name' => 'Đinh Công D', 'borrow_date' => '2025-05-20', 'due_date' => '2025-06-03'],
-            ['user_id' => 105, 'name' => 'Võ Thị E', 'borrow_date' => '2025-06-02', 'due_date' => '2025-06-16'],
-            ['user_id' => 106, 'name' => 'Nguyễn Hữu F', 'borrow_date' => '2025-06-12', 'due_date' => '2025-06-26'],
-        ]
-    ],
-    [
-        'id' => 3,
-        'title' => 'Giải tích III',
-        'author' => 'Nguyễn Đình Trí',
-        'isbn' => '978-604-56-0101-0',
-        'quantity' => 12,
-        'available' => 12,
-        'image' => 'assets/giaitich3.jpg',
-        'description' => 'Giải tích III bao gồm các chủ đề nâng cao về giải tích hàm, phép biến đổi Laplace và Fourier.',
-        'borrowers' => []
-    ],
-    [
-        'id' => 4,
-        'title' => 'Nhập môn Trí tuệ nhân tạo',
-        'author' => 'Stuart Russell, Peter Norvig',
-        'isbn' => '978-0136042594',
-        'quantity' => 5,
-        'available' => 3,
-        'image' => 'assets/ai_book.jpg',
-        'description' => 'Cuốn sách kinh điển về trí tuệ nhân tạo, bao gồm các thuật toán tìm kiếm, logic, học máy, v.v.',
-        'borrowers' => [
-            ['user_id' => 107, 'name' => 'Trần Quang G', 'borrow_date' => '2025-06-03', 'due_date' => '2025-06-17'],
-            ['user_id' => 108, 'name' => 'Lý Hữu H', 'borrow_date' => '2025-06-08', 'due_date' => '2025-06-22'],
-        ]
-    ],
-];
+include("../login/connect2.php"); // kết nối CSDL
+
+$books = [];
+
+// Lấy danh sách tất cả sách
+$query = "SELECT * FROM book_tbl";
+$result = mysqli_query($conn, $query);
+
+if ($result && mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $book_id = $row['id'];
+
+        // Truy vấn người đang mượn cuốn sách này
+        $borrowers = [];
+        $borrow_query = "
+            SELECT u.id AS user_id, u.hoTen AS name, b.ngayMuon, b.ngayHetHan AS hanTra 
+            FROM borrow_tbl b 
+            JOIN tbl_user u ON b.user_id = u.id 
+            WHERE b.book_id = $book_id AND b.tinhTrang = 'Đang mượn'
+        ";        
+        $borrow_result = mysqli_query($conn, $borrow_query);
+        if ($borrow_result && mysqli_num_rows($borrow_result) > 0) {
+            while ($br = mysqli_fetch_assoc($borrow_result)) {
+                $borrowers[] = [
+                    'user_id' => $br['user_id'],
+                    'name' => $br['name'],
+                    'borrow_date' => $br['ngayMuon'],
+                    'due_date' => $br['hanTra']
+                ];
+            }
+        }
+
+        // Đường dẫn ảnh
+        $imagePath = !empty($row['anhBia']) ? '../../user/demo/' . $row['anhBia'] : 'assets/default_book.jpg';
+
+        $books[] = [
+            'id' => $row['id'],
+            'title' => $row['tieuDe'],
+            'author' => $row['tacGia'] ?? 'Không rõ',
+            'isbn' => $row['maSach'],
+            'quantity' => $row['soLuong'],
+            'available' => $row['soLuong'] - count($borrowers),
+            'image' => $imagePath,
+            'description' => $row['moTa'] ?? '',
+            'borrowers' => $borrowers
+        ];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -82,13 +73,7 @@ $books = [
           <a href="manage.php" class="dropdown-toggle">Quản lý</a> </div>
         <div class="dropdown">
             <a href="../reply/reply.php" class="dropdown-toggle">Hòm thư</a> </div>
-        <div class="dropdown">
-            <a href="#" class="dropdown-toggle">Contact</a> </div>
-      </div>
-        <div class="dropdown">
-            <span class="dropdown-toggle">Contact</span>
-        </div>
-      </div>
+
     <div class="auth">
         <?php if (isset($_SESSION['user'])): ?>
             <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
@@ -212,6 +197,6 @@ $books = [
 </div>
 <?php endif; ?>
 
-<script src="admin3.js"></script>
+<script src="manage.js"></script>
 </body>
 </html>
