@@ -15,7 +15,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
 <header class="navbar">
     <div class="logo">
-      <a href="../login2/logadmin"> <img src="../../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
+      <a href="../logadmin.php"> <img src="../../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
       </a>
 </div>
       <div class="nav-links">
