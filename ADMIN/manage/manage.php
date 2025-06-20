@@ -83,7 +83,8 @@ if ($result && mysqli_num_rows($result) > 0) {
     <div class="auth">
         <?php if (isset($_SESSION['user'])): ?>
             <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
-            <a href="../user/demo/login/logout.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Đăng xuất</a> <?php else: ?>
+            <a href="../../user/demo/login/logout.php?redirect=/project/CSE702025-Nhom4-ThuVienSo/user/demo/index.php">Đăng xuất</a>
+        <?php else: ?>
             <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
         <?php endif; ?>
     </div>
