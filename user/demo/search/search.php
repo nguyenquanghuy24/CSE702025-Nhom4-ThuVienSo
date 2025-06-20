@@ -210,7 +210,7 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
                 </div>
             </div>
             <div class="dropdown">
-                <span class="dropdown-toggle">Contact</span>
+                <span class="dropdown-toggle" id="contact-scroll-btn">Contact</span>
             </div>
         </div>
         <div class="auth">
@@ -359,7 +359,7 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
         </div>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" id="footer-section">
         <div class="footer-bottom">
             <div class="footer-column">
                 <h3>About</h3>

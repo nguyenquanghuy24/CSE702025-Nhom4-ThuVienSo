@@ -41,7 +41,7 @@ if (session_status() === PHP_SESSION_NONE) {
              </div>
         </div>
         <div class="dropdown">
-            <span class="dropdown-toggle">Contact</span>
+            <span class="dropdown-toggle" id="contact-scroll-btn">Contact</span>
         </div>
       </div>
     <div class="auth">
@@ -69,25 +69,25 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="card">
                 <img src="assets/giaitich1.jpg" alt="1" class="image">
                 <div class="card-content">
-                    <span class="category">Your Worst Nightmare</span>
+                    <span class="category">Toán học</span>
                     <h3 class="title">Giải tích I</h3>
-                    <p class="description">Nó là giải tích 1</p>
+                    <p class="description">Đại cương giải tích</p>
                 </div>
             </div>
             <div class="card">
                 <img src="assets/giaitich2.jpg" alt="2" class="image">
                 <div class="card-content">
-                    <span class="category">Your Worst Nightmare 2</span>
+                    <span class="category">Toán học</span>
                     <h3 class="title">Giải tích II</h3>
-                    <p class="description">Vẫn là giải tích</p>
+                    <p class="description">Giải tích nâng cao</p>
                 </div>
             </div>
             <div class="card">
                 <img src="assets/giaitich3.jpg" alt="3" class="image">
                 <div class="card-content">
-                    <span class="category">Your Worst Nightmare 3</span>
+                    <span class="category">Toán học</span>
                     <h3 class="title">Giải tích III</h3>
-                    <p class="description">.....</p>
+                    <p class="description">Đi sâu vào giải tích</p>
                 </div>
             </div>
         </div>
@@ -100,19 +100,19 @@ if (session_status() === PHP_SESSION_NONE) {
         <h2 class="title">SỰ KIỆN</h2>
         <div class="card-container">
             <div class="card">
-                <div class="image"></div>
+                <img src="assets/sukien1.jpg" alt="Sự kiện A" class="image"> 
                 <div class="card-content">
-                    <span class="category">Category</span>
-                    <h3 class="title">Sự kiện A</h3>
-                    <p class="description">Mô tả ngắn gọn về sự kiện.</p>
+                    <span class="category">Hot</span>
+                    <h3 class="title"></h3>
+                    <p class="description">Chuyển từ trường đại học phenikaa thành đại học phenikaa</p>
                 </div>
             </div>
             <div class="card">
-                <div class="image"></div>
+                <img src="assets/sukien2.jpg" alt="Sự kiện B" class="image">
                 <div class="card-content">
-                    <span class="category">Category</span>
-                    <h3 class="title">Sự kiện B</h3>
-                    <p class="description">Mô tả ngắn gọn về sự kiện.</p>
+                    <span class="category"></span>
+                    <h3 class="title">Hot</h3>
+                    <p class="description">Đại học Phenikaa tri ân báo chí nhân kỷ niệm 100 năm Ngày Báo chí Cách mạng Việt Nam</p>
                 </div>
             </div>
         </div>
@@ -122,34 +122,34 @@ if (session_status() === PHP_SESSION_NONE) {
 </section>
 
 <section class="news-section">
-        <h3 class="subtitle">TIN TỨC</h3>
-        <h2 class="title">Cập nhật tin tức, thông báo</h2>
-        <div class="news-container">
-            <div class="card-with-bg" style="background-image: url('');">
-                <div class="overlay">
-                    <span class="news-topic">Văn hóa đọc</span>
-                    <h3 class="news-title">Lễ trao giải các cuộc thi Ngày Sách và Văn hóa đọc</h3>
-                </div>
-            </div>
-            <div class="card-with-bg" style="background-image: url('');">
-                <div class="overlay">
-                    <span class="news-topic">Topic2</span>
-                    <h3 class="news-title">Ứng dụng AI hỗ trợ học tập và nghiên cứu khoa học</h3>
-                </div>
-            </div>
-            <div class="card-with-bg" style="background-image: url('');">
-                <div class="overlay">
-                    <span class="news-topic">Triển lãm</span>
-                    <h3 class="news-title">Đọc sách thông minh – Bảo vệ bản quyền</h3>
-                </div>
+    <h3 class="subtitle">TIN TỨC</h3>
+    <h2 class="title">Cập nhật tin tức, thông báo</h2>
+    <div class="news-container">
+        <div class="card-with-bg" style="background-image: url('assets/robot-tu-hanh-amr-i150-khi-cong-nghe-make-in-phenikaa-vuon-tam-quoc-te.png');">
+            <div class="overlay">
+                <span class="news-topic">Robot tự hành AMR</span>
+                <h3 class="news-title">Robot tự hành AMR I150: Khi công nghệ “Make in Phenikaa” vươn tầm quốc tế</h3>
             </div>
         </div>
-        <div class="btn-wrapper">
-            <button class="btn-xemthem"><a href="#">XEM THÊM</a></button>
+        <div class="card-with-bg" style="background-image: url('assets/khangdinhjpg.jpg');">
+            <div class="overlay">
+                <span class="news-topic">Khẳng định dấu ấn</span>
+                <h3 class="news-title">Đại học Phenikaa duy trì đà tăng điểm, ghi dấu ấn tại nhiều mục tiêu phát triển bền vững</h3>
+            </div>
         </div>
- </section>
+        <div class="card-with-bg" style="background-image: url('assets/khonggian.jpg');">
+            <div class="overlay">
+                <span class="news-topic">Tầm vóc</span>
+                <h3 class="news-title">Không gian học tập hiện đại, xanh và truyền cảm hứng tại Đại học Phenikaa</h3>
+            </div>
+        </div>
+    </div>
+    <div class="btn-wrapper">
+        <button class="btn-xemthem"><a href="#">XEM THÊM</a></button>
+    </div>
+</section>
 
- <footer class="footer">
+ <footer class="footer" id="footer-section">
         <div class="footer-top">
             <div class="footer-column">
                 <span>📍</span>

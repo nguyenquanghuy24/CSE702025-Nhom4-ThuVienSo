@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
         </script>
     <?php endif; ?>
 
-    <?php ?>
+    <?php // Hiển thị thông báo trả sách ?>
     <?php if (isset($_SESSION['return_success'])): ?>
         <div class="alert success"><?php echo $_SESSION['return_success']; unset($_SESSION['return_success']); ?></div>
     <?php endif; ?>
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                 </div>
             </div>
             <div class="dropdown">
-                <span class="dropdown-toggle">Contact</span>
+                <span class="dropdown-toggle" id="contact-scroll-btn">Contact</span>
             </div>
         </div>
         <div class="auth">
@@ -289,7 +289,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
         </div>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" id="footer-section">
         <div class="footer-bottom">
             <div class="footer-column">
                 <h3>About</h3>

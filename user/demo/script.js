@@ -4,22 +4,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = document.querySelector('#loginModal');
   const closeBtn = document.querySelector('.close-btn');
 
-  loginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    modal.style.display = 'block';
-  });
+  // Check if all elements exist before adding listeners
+  if (loginLink && modal && closeBtn) {
+    loginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      modal.style.display = 'block';
+    });
 
-  closeBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-  });
-
-  window.addEventListener('click', (e) => {
-    if (e.target === modal) {
+    closeBtn.addEventListener('click', () => {
       modal.style.display = 'none';
-    }
-  });
+    });
 
-  // Card animation on load
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+  }
+
+  // Card animation on load (from original script.js)
   const cards = document.querySelectorAll('.card');
   cards.forEach((card, index) => {
     card.style.opacity = '0';
@@ -30,14 +33,31 @@ document.addEventListener('DOMContentLoaded', () => {
       card.style.transform = 'translateY(0)';
     }, index * 100);
   });
+
+  // Scroll to footer when Contact is clicked (new addition)
+  const contactScrollBtn = document.getElementById('contact-scroll-btn');
+  if (contactScrollBtn) {
+    contactScrollBtn.addEventListener('click', () => {
+      const footer = document.getElementById('footer-section');
+      if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
 });
 
-// Mở modal đăng nhập
+// Mở modal đăng nhập (from original script.js)
 function openLoginModal() {
-  document.getElementById('loginModal').style.display = 'block';
+  const modal = document.getElementById('loginModal');
+  if (modal) {
+    modal.style.display = 'block';
+  }
 }
 
-// Đóng modal
+// Đóng modal (from original script.js)
 function closeModal() {
-  document.getElementById('loginModal').style.display = 'none';
+  const modal = document.getElementById('loginModal');
+  if (modal) {
+    modal.style.display = 'none';
+  }
 }

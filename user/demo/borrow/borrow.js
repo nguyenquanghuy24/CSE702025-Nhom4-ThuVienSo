@@ -87,4 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
             bookDetailModal.style.display = 'none';
         }
     });
+
+    // Scroll to footer when Contact is clicked
+    const contactScrollBtn = document.getElementById('contact-scroll-btn');
+    if (contactScrollBtn) {
+        contactScrollBtn.addEventListener('click', () => {
+            const footer = document.getElementById('footer-section');
+            if (footer) {
+                footer.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
 });

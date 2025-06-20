@@ -31,104 +31,136 @@ function checkLoginBeforeBorrow(event) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // KHÔNG CÓ FORM MƯỢN SÁCH TRỰC TIẾP TRÊN LIST KẾT QUẢ TÌM KIẾM NỮA
+    // === Logic cho Modal Đăng nhập (đã có) ===
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+        const loginLink = Array.from(document.querySelectorAll('.auth-link')).find(a => a.textContent.includes('Đăng nhập'));
+        const closeBtn = loginModal.querySelector('.close-btn');
 
-    // Gắn sự kiện cho nút 'Mượn sách' trong modal chi tiết sách
-    const modalBorrowForm = document.querySelector('#bookDetailModal form');
-    const modalBorrowBtn = document.getElementById('modal-borrow-btn');
-    if (modalBorrowForm && modalBorrowBtn) {
-        // Luôn gỡ bỏ listener cũ trước khi gắn lại để tránh gắn nhiều lần
-        modalBorrowForm.removeEventListener('submit', checkLoginBeforeBorrow);
-
-        if (!modalBorrowBtn.disabled) {
-            modalBorrowForm.addEventListener('submit', checkLoginBeforeBorrow);
-        } else {
-            modalBorrowBtn.addEventListener('click', function(e) {
+        if (loginLink) {
+            loginLink.addEventListener('click', (e) => {
                 e.preventDefault();
+                openLoginModal();
+            });
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeModal);
+        }
+
+        if (typeof loginErrorExists !== 'undefined' && loginErrorExists) {
+            openLoginModal();
+        }
+    }
+
+    // === Logic cho Modal Chi tiết sách (đã có) ===
+    const bookDetailModal = document.getElementById('bookDetailModal');
+    if (bookDetailModal) {
+        const detailCloseBtn = document.getElementById('close-popup-btn'); // Sử dụng ID này
+        const recommendedBooks = document.querySelectorAll('.recommend-grid .book-card-simple'); // Nếu có trên trang này
+        const bookItems = document.querySelectorAll('.book-list-item'); // Các item kết quả tìm kiếm
+        
+        const modalImage = document.getElementById('modal-book-image');
+        const modalTitle = document.getElementById('modal-book-title');
+        const modalAuthor = document.getElementById('modal-book-author');
+        const modalDescription = document.getElementById('modal-book-description');
+        const modalBorrowBookIdInput = document.getElementById('modal-borrow-book-id');
+
+        const modalYearPopup = document.getElementById('modal-book-year'); // ID đã đổi trong search.php
+        const modalLanguagePopup = document.getElementById('modal-book-language'); // ID đã đổi trong search.php
+        const modalCategoryPopup = document.getElementById('modal-book-category'); // ID đã đổi trong search.php
+
+        // Gắn sự kiện cho các item trong danh sách tìm kiếm
+        bookItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                const title = item.dataset.title;
+                const author = item.dataset.author;
+                const year = item.dataset.year;
+                const description = item.dataset.description;
+                const imageSrc = item.dataset.imgSrc;
+                const bookId = item.dataset.bookId;
+                const bookStatusText = item.dataset.status;
+                const bookCategoryText = item.dataset.category;
+                const bookLanguageText = item.dataset.language;
+
+                modalTitle.textContent = title;
+                modalAuthor.textContent = author;
+                modalDescription.textContent = description;
+                modalImage.src = imageSrc;
+                
+                if (modalYearPopup) modalYearPopup.textContent = year;
+                if (modalLanguagePopup) modalLanguagePopup.textContent = language;
+                if (modalCategoryPopup) modalCategoryPopup.textContent = category;
+                
+                if (modalBorrowBookIdInput) {
+                    modalBorrowBookIdInput.value = bookId;
+                }
+
+                // Cập nhật trạng thái nút mượn trong modal
+                const modalBorrowBtnInModal = document.getElementById('modal-borrow-btn');
+                const modalBorrowForm = document.querySelector('#bookDetailModal form'); // Lấy form lại
+                if (modalBorrowBtnInModal) {
+                    modalBorrowBtnInModal.classList.remove('disabled'); // Xóa class disabled cũ
+                    // Gỡ bỏ listener cũ nếu có, để tránh gắn trùng lặp
+                    if (modalBorrowForm) {
+                        modalBorrowForm.removeEventListener('submit', checkLoginBeforeBorrow); 
+                    }
+
+                    if (bookStatusText === 'Có sẵn') {
+                        modalBorrowBtnInModal.disabled = false;
+                        modalBorrowBtnInModal.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Mượn sách';
+                        if (modalBorrowForm) {
+                            modalBorrowForm.addEventListener('submit', checkLoginBeforeBorrow); // Gắn lại nếu có sẵn
+                        }
+                    } else if (bookStatusText === 'Đã mượn hết') {
+                        modalBorrowBtnInModal.disabled = true;
+                        modalBorrowBtnInModal.innerHTML = '<i class="fas fa-times"></i> Đã mượn hết';
+                        modalBorrowBtnInModal.classList.add('disabled');
+                    } else if (bookStatusText === 'Đang bảo trì') {
+                        modalBorrowBtnInModal.disabled = true;
+                        modalBorrowBtnInModal.innerHTML = '<i class="fas fa-hammer"></i> Đang bảo trì';
+                        modalBorrowBtnInModal.classList.add('disabled');
+                    } else {
+                        modalBorrowBtnInModal.disabled = true;
+                        modalBorrowBtnInModal.innerHTML = '<i class="fas fa-info-circle"></i> Trạng thái không xác định';
+                        modalBorrowBtnInModal.classList.add('disabled');
+                    }
+                }
+
+                bookDetailModal.style.display = 'block';
+            });
+        });
+        
+        // Nút đóng popup chi tiết sách
+        const closePopupBtnLarge = document.querySelector('#bookDetailModal .close-btn-large'); // Lấy lại nút đóng
+        if (closePopupBtnLarge) {
+            closePopupBtnLarge.addEventListener('click', () => {
+                bookDetailModal.style.display = 'none';
             });
         }
     }
 
-    // Xử lý đóng modal khi click ra ngoài
-    window.onclick = function(event) {
+    // Xử lý đóng modal khi click ra ngoài (đã có)
+    window.addEventListener('click', (event) => {
         const loginModal = document.getElementById('loginModal');
         const bookDetailModal = document.getElementById('bookDetailModal');
-
+        
         if (loginModal && loginModal.style.display === 'block' && event.target === loginModal) {
             closeModal();
-        } else if (bookDetailModal && bookDetailModal.style.display === 'block' && event.target === bookDetailModal) {
+        }
+        else if (bookDetailModal && bookDetailModal.style.display === 'block' && event.target === bookDetailModal) {
             bookDetailModal.style.display = 'none';
         }
-    };
-
-    // Xử lý đóng modal chi tiết sách bằng nút X
-    const closePopupBtn = document.querySelector('#bookDetailModal .close-btn-large');
-    if (closePopupBtn) {
-        closePopupBtn.onclick = function() {
-            document.getElementById('bookDetailModal').style.display = 'none';
-        };
-    }
-
-    // Cập nhật thông tin modal chi tiết sách khi click vào book-list-item
-    const bookItems = document.querySelectorAll('.book-list-item');
-    bookItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            // Ngăn sự kiện click lan truyền nếu click vào nút/form mượn sách trong modal
-            // (Không còn nút mượn trực tiếp trên list nữa)
-            // if (e.target.closest('form.borrow-form') || e.target.closest('.btn-borrow')) {
-            //     return;
-            // }
-
-            // Lấy dữ liệu từ data- thuộc tính trên div.book-list-item
-            const title = item.dataset.title;
-            const author = item.dataset.author;
-            const year = item.dataset.year;
-            const description = item.dataset.description;
-            const imageSrc = item.dataset.imgSrc;
-            const bookId = item.dataset.bookId;
-            const bookStatusText = item.dataset.status;
-            const bookCategoryText = item.dataset.category;
-            const bookLanguageText = item.dataset.language;
-
-            document.getElementById('modal-book-title').textContent = title;
-            document.getElementById('modal-book-author').textContent = author;
-            document.getElementById('modal-book-year').textContent = year;
-            document.getElementById('modal-book-description').textContent = description;
-            document.getElementById('modal-book-image').src = imageSrc;
-            document.getElementById('modal-borrow-book-id').value = bookId; // Cập nhật ID sách cho form mượn trong modal
-            document.getElementById('modal-book-category').textContent = bookCategoryText;
-            document.getElementById('modal-book-language').textContent = bookLanguageText;
-
-            // Cập nhật trạng thái nút mượn trong modal
-            const modalBorrowBtnInModal = document.getElementById('modal-borrow-btn');
-            if (modalBorrowBtnInModal) {
-                modalBorrowBtnInModal.classList.remove('disabled'); // Xóa class disabled cũ
-                if (modalBorrowForm) {
-                    modalBorrowForm.removeEventListener('submit', checkLoginBeforeBorrow); // Gỡ bỏ listener cũ
-                }
-
-                if (bookStatusText === 'Có sẵn') {
-                    modalBorrowBtnInModal.disabled = false;
-                    modalBorrowBtnInModal.innerHTML = '<i class="fas fa-hand-holding-heart"></i> Mượn sách';
-                    if (modalBorrowForm) {
-                        modalBorrowForm.addEventListener('submit', checkLoginBeforeBorrow); // Gắn lại nếu có sẵn
-                    }
-                } else if (bookStatusText === 'Đã mượn hết') {
-                    modalBorrowBtnInModal.disabled = true;
-                    modalBorrowBtnInModal.innerHTML = '<i class="fas fa-times"></i> Đã mượn hết';
-                    modalBorrowBtnInModal.classList.add('disabled');
-                } else if (bookStatusText === 'Đang bảo trì') {
-                    modalBorrowBtnInModal.disabled = true;
-                    modalBorrowBtnInModal.innerHTML = '<i class="fas fa-hammer"></i> Đang bảo trì';
-                    modalBorrowBtnInModal.classList.add('disabled');
-                } else {
-                    modalBorrowBtnInModal.disabled = true;
-                    modalBorrowBtnInModal.innerHTML = '<i class="fas fa-info-circle"></i> Trạng thái không xác định';
-                    modalBorrowBtnInModal.classList.add('disabled');
-                }
-            }
-
-            document.getElementById('bookDetailModal').style.display = 'block';
-        });
     });
+
+    // === Logic CUỘN XUỐNG CUỐI TRANG cho nút Contact ===
+    const contactScrollBtn = document.getElementById('contact-scroll-btn');
+    if (contactScrollBtn) {
+        contactScrollBtn.addEventListener('click', (e) => {
+            e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ <a> (nếu có)
+            const footer = document.getElementById('footer-section');
+            if (footer) {
+                footer.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
 });
