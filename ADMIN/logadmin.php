@@ -27,7 +27,7 @@ session_start();
     <div class="auth">
         <?php if (isset($_SESSION['user'])): ?>
             <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
-            <a href="../user/demo/login/logout.php?redirect=../user/demo/index.php">Đăng xuất</a>
+            <a href="../user/demo/login/logout.php?redirect=/project/CSE702025-Nhom4-ThuVienSo/user/demo/index.php">Đăng xuất</a>
         <?php else: ?>
             <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
         <?php endif; ?>

@@ -2,7 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-include("../user/demo/login/connect.php"); // kết nối CSDL
+include("../../user/demo/login/connect.php");
+
 if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     $_SESSION['login_error'] = "Bạn cần đăng nhập bằng tài khoản quản trị để truy cập.";
     header("Location: ../logadmin.php");
