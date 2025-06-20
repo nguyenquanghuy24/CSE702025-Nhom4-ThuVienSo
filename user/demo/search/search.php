@@ -292,8 +292,7 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
                                         break;
                                 }
                                 
-                                // === LOGIC XỬ LÝ ĐƯỜNG DẪN ẢNH ĐƯỢC CẢI THIỆN ===
-                                $imagePath = "https://placehold.co/100x140?text=Không+có+ảnh"; // Mặc định
+                                $imagePath = "https://placehold.co/100x140?text=Không+có+ảnh"; 
                                 if (!empty($book['anhBia'])) {
                                     $dbImagePath = $book['anhBia']; 
                                     
@@ -349,7 +348,7 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
                             </div>
                         <?php endif; ?>
                     </div>
-                <?php else: /* ĐIỀU KIỆN MỚI: HIỂN THỊ HƯỚNG DẪN KHI CHƯA CÓ SEARCH/FILTER */ ?>
+                <?php else:  ?>
                     <div class="search-instruction">
                         <i class="fas fa-search"></i>
                         <h2>Hãy nhập từ khóa hoặc chọn bộ lọc để tìm kiếm sách</h2>
@@ -396,7 +395,7 @@ if (!empty($query) || !empty($category_filter) || !empty($year_filter) || !empty
                 <?php if (isset($_SESSION['login_error'])): ?>
                     <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
                 <?php endif; ?>
-                <form method="POST" action="../login/login.php">
+                <form method="POST" action="../login/handle_login.php">
                     <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
                     <label for="user">Tên đăng nhập:</label>
                     <input type="text" id="user" name="user" required>

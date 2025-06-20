@@ -78,7 +78,7 @@ $feedbacks = [
     <div class="auth">
         <?php if (isset($_SESSION['user'])): ?>
             <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
-            <a href="../login/logout.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Đăng xuất</a> <?php else: ?>
+            <a href="../user/demo/login/logout.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Đăng xuất</a> <?php else: ?>
             <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
         <?php endif; ?>
     </div>

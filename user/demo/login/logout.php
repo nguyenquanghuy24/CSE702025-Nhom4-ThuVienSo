@@ -11,7 +11,14 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-$redirect = isset($_GET['redirect']) ? $_GET['redirect'] : '../index.php';
+// Ưu tiên redirect về trang được chỉ định (nếu có)
+if (isset($_GET['redirect']) && !empty($_GET['redirect'])) {
+    $redirect = $_GET['redirect'];
+} else {
+    // Nếu không có thì xét theo vai trò
+    $redirect = '../user/demo/index.php'; // luôn quay về giao diện người dùng
+}
+
 header("Location: $redirect");
 exit();
 ?>

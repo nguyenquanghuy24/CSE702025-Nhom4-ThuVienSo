@@ -139,10 +139,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php if (isset($_SESSION['login_error'])): ?>
                     <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
                 <?php endif; ?>
-                <form method="POST" action="../login/login.php">
-                    <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
-                    <label for="user">Tên đăng nhập:</label>
-                    <input type="text" id="user" name="user" required>
+                <form method="POST" action="../login/handle_login.php">
+                    <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">                    <label for="user">Tên đăng nhập:</label>
+                    <input type="text" id="user" name="user" required>          
                     <label for="pass">Mật khẩu:</label>
                     <input type="password" id="pass" name="pass" required>
                     <button type="submit">Đăng nhập</button>

@@ -326,7 +326,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                 <?php if (isset($_SESSION['login_error'])): ?>
                     <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
                 <?php endif; ?>
-                <form method="POST" action="../login/login.php">
+                <form method="POST" action="../login/handle_login.php">
                     <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
                     <label for="user">Tên đăng nhập:</label>
                     <input type="text" id="user" name="user" required>

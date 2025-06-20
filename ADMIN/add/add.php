@@ -33,7 +33,7 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     <div class="auth">
         <?php if (isset($_SESSION['user'])): ?>
             <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
-            <a href="../login/logout.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Đăng xuất</a> <?php else: ?>
+            <a href="../user/demo/login/logout.php?redirect=<?php echo urlencode($_SERVER['REQUEST_URI']); ?>">Đăng xuất</a> <?php else: ?>
             <a href="#" onclick="openLoginModal()" class="auth-link">Đăng nhập</a>
         <?php endif; ?>
     </div>
@@ -146,7 +146,7 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     <?php if (isset($_SESSION['login_error'])): ?>
       <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
     <?php endif; ?>
-    <form method="POST" action="login/login.php">
+    <form method="POST" action="../../user/demo/login/handle_login.php">
         <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
         <label for="user">Tên đăng nhập:</label>
         <input type="text" id="user" name="user" required>
