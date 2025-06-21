@@ -2,54 +2,31 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-//viết csdl đây nhé tùng
-$feedbacks = [
-    [
-        'id' => 1,
-        'sender' => 'Nguyễn Quang Huy',
-        'email' => 'huy.nguyen@example.com',
-        'subject' => 'Về sách Giải tích I bị hỏng',
-        'message' => 'Kính gửi thư viện, tôi muốn báo cáo rằng cuốn sách Giải tích I tôi vừa mượn có một số trang bị rách và không đọc được. Mong thư viện có thể hỗ trợ đổi sách hoặc có biện pháp xử lý. Cảm ơn.',
-        'date' => '2025-06-15 10:30:00',
-        'status' => 'Chưa trả lời'
-    ],
-    [
-        'id' => 2,
-        'sender' => 'Hoàng Lê Đức Huy',
-        'email' => 'duc.huy@example.com',
-        'subject' => 'Đề xuất thêm sách mới',
-        'message' => 'Chào thư viện, tôi muốn đề xuất mua thêm các đầu sách về khoa học dữ liệu và trí tuệ nhân tạo. Hiện tại thư viện có vẻ chưa nhiều sách về mảng này. Trân trọng.',
-        'date' => '2025-06-14 14:00:00',
-        'status' => 'Đã trả lời'
-    ],
-    [
-        'id' => 3,
-        'sender' => 'Nguyễn Minh Tùng',
-        'email' => 'minh.tung@example.com',
-        'subject' => 'Góp ý về thời gian mở cửa',
-        'message' => 'Tôi thấy thời gian mở cửa thư viện vào cuối tuần hơi ngắn, rất khó cho sinh viên bận rộn như chúng tôi. Kính mong thư viện xem xét kéo dài thêm thời gian. Cảm ơn.',
-        'date' => '2025-06-12 09:15:00',
-        'status' => 'Chưa trả lời'
-    ],
-    [
-        'id' => 4,
-        'sender' => 'Nguyễn Văn Thiệu',
-        'email' => 'thieu.nguyen@example.com',
-        'subject' => 'Hỏi về tài liệu chuyên ngành',
-        'message' => 'Tôi đang làm nghiên cứu về trí tuệ nhân tạo và cần một số tài liệu chuyên sâu hơn về học sâu (deep learning). Thư viện có thể gợi ý hoặc cung cấp thêm không ạ?',
-        'date' => '2025-02-25 11:00:00',
-        'status' => 'Chưa trả lời'
-    ],
-    [
-        'id' => 5,
-        'sender' => 'Nguyễn Kim Khương',
-        'email' => 'khuong.nguyen@example.com',
-        'subject' => 'Báo cáo lỗi hệ thống',
-        'message' => 'Khi tôi cố gắng đăng nhập vào hệ thống thư viện số, tôi gặp lỗi "Access Denied". Vui lòng kiểm tra lại. Cảm ơn.',
-        'date' => '2024-10-18 16:45:00',
-        'status' => 'Đã trả lời'
-    ],
-];
+include("../../user/demo/login/connect.php");
+
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+    $_SESSION['login_error'] = "Bạn cần đăng nhập bằng tài khoản quản trị để truy cập.";
+    header("Location: ../logadmin.php");
+    exit();
+}
+
+$feedbacks = [];
+$sql = "SELECT * FROM ticket_tbl ORDER BY ticket_id DESC";
+$result = mysqli_query($conn, $sql);
+
+if ($result && mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $feedbacks[] = $row;
+    }
+}
+
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    echo "<script>alert('Đã gửi phản hồi thành công!');</script>";
+}
+if (isset($_GET['error'])) {
+    echo "<script>alert('Lỗi: " . htmlspecialchars($_GET['error']) . "');</script>";
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -57,7 +34,7 @@ $feedbacks = [
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-  <title>Quản lý Phản hồi - Admin</title>
+  <title> Phản hồi - Admin</title>
   <link rel="stylesheet" href="reply.css" />
 </head>
 <body>
@@ -100,31 +77,31 @@ $feedbacks = [
             <input type="text" placeholder="Search Inbox...">
             <i class="ri-search-line"></i>
         </div>
-        <ul class="feedback-inbox-list">
+            <ul class="feedback-inbox-list">
             <?php if (!empty($feedbacks)): ?>
                 <?php foreach ($feedbacks as $feedback): ?>
-                    <li class="inbox-item <?php echo ($feedback['id'] == 1) ? 'active' : ''; ?>"
-                        data-id="<?php echo $feedback['id']; ?>"
-                        data-sender="<?php echo htmlspecialchars($feedback['sender']); ?>"
+                    <li class="inbox-item"
+                        data-id="<?php echo $feedback['ticket_id']; ?>"
+                        data-sender="<?php echo htmlspecialchars($feedback['hoTen']); ?>"
                         data-email="<?php echo htmlspecialchars($feedback['email']); ?>"
                         data-subject="<?php echo htmlspecialchars($feedback['subject']); ?>"
                         data-message="<?php echo htmlspecialchars($feedback['message']); ?>"
-                        data-date="<?php echo htmlspecialchars($feedback['date']); ?>">
+                        data-date="<?php echo htmlspecialchars($feedback['created_at'] ?? ''); ?>"> <!-- Nếu bạn có trường thời gian -->
                         <div class="item-checkbox"><input type="checkbox"></div>
                         <div class="item-content">
-                            <div class="item-sender"><?php echo htmlspecialchars($feedback['sender']); ?></div>
+                            <div class="item-sender"><?php echo htmlspecialchars($feedback['hoTen']); ?></div>
                             <div class="item-subject"><?php echo htmlspecialchars($feedback['subject']); ?></div>
                             <div class="item-excerpt"><?php echo substr(htmlspecialchars($feedback['message']), 0, 50); ?>...</div>
                         </div>
                         <div class="item-meta">
-                            <span class="item-date"><?php echo date('M d, Y', strtotime($feedback['date'])); ?></span>
+                            <span class="item-date"><?php echo date('M d, Y'); ?></span>
                         </div>
                     </li>
                 <?php endforeach; ?>
             <?php else: ?>
                 <li>Không có phản hồi nào.</li>
             <?php endif; ?>
-        </ul>
+            </ul> 
     </aside>
 
     <section class="main-content-panel">
@@ -186,26 +163,6 @@ $feedbacks = [
         </div>
 </footer>
 
-<?php if (!isset($_SESSION['user'])): ?>
-<div id="loginModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
-    <h2>Đăng nhập</h2>
-    <?php if (isset($_SESSION['login_error'])): ?>
-      <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
-    <?php endif; ?>
-    <form method="POST" action="../../user/demo/login/handle_login.php">
-        <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
-        <label for="user">Tên đăng nhập:</label>
-        <input type="text" id="user" name="user" required>
-        <label for="pass">Mật khẩu:</label>
-        <input type="password" id="pass" name="pass" required>
-        <button type="submit">Đăng nhập</button>
-        <p class="signup-link">Chưa có tài khoản? <a href="login/register.php">Đăng ký</a></p>
-    </form>
-  </div>
-</div>
-<?php endif; ?>
 
 <div id="composeModal" class="compose-modal">
     <div class="compose-modal-content">
@@ -214,9 +171,10 @@ $feedbacks = [
             <span class="close-compose-modal close-button">&times;</span>
         </div>
         <form id="composeForm" method="POST" action="send_reply.php">
+            <input type="hidden" name="ticket_id" id="composeTicketId">
             <div class="form-group">
                 <label for="composeCourse">Course:</label>
-                <input type="text" id="composeCourse" name="compose_course" value="Kỹ thuật phần mềm-1-3-24(COUR01.LT2)" readonly>
+                <input type="text" id="composeCourse" name="compose_course" value="Kỹ thuật phần mềm" readonly>
             </div>
             <div class="form-group">
                 <label for="composeTo">To:</label>
@@ -234,8 +192,36 @@ $feedbacks = [
                 <button type="submit" class="send-compose-btn">Send</button>
             </div>
         </form>
+        <input type="hidden" name="ticket_id" id="composeTicketId">
     </div>
 </div>
+<script>
+document.querySelectorAll('.inbox-item').forEach(item => {
+    item.addEventListener('click', function () {
+        const ticketId = this.getAttribute('data-id');
+        const sender = this.getAttribute('data-sender');
+        const email = this.getAttribute('data-email');
+        const subject = this.getAttribute('data-subject');
+        const message = this.getAttribute('data-message');
+        const date = this.getAttribute('data-date');
+
+        // Gán giá trị vào modal
+        document.getElementById('detailSubject').innerText = subject;
+        document.getElementById('detailSenderName').innerText = sender;
+        document.getElementById('detailSenderEmail').innerText = email;
+        document.getElementById('detailMessage').innerText = message;
+        document.getElementById('detailDate').innerText = date;
+
+        // Gán dữ liệu vào form trả lời
+        document.getElementById('composeTo').value = sender;
+        document.getElementById('composeSubject').value = "Phản hồi: " + subject;
+        document.getElementById('composeTicketId').value = ticketId;
+
+        // Hiện phần chi tiết và modal
+        document.getElementById('conversationDetails').style.display = 'block';
+    });
+});
+</script>
 
 <script src="reply.js"></script>
 </body>

@@ -74,9 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['book_id']) && isset($
         $update_status_stmt->close();
 
         // Ghi mượn vào bảng borrow
-        $stmt = $conn->prepare("INSERT INTO borrow_tbl (user_id, book_id, ngayMuon, ngayHetHan, tinhTrang)
-                                 VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY), 'Đang mượn')");
-        $stmt->bind_param("ii", $user_id, $book_id);
+        $maMuon = 'M' . time(); 
+
+        $stmt = $conn->prepare("INSERT INTO borrow_tbl (user_id, book_id, maMuon, ngayMuon, ngayHetHan, tinhTrang)
+                                VALUES (?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY), 'Đang chờ phê duyệt')");
+        $stmt->bind_param("iis", $user_id, $book_id, $maMuon);
         $stmt->execute();
         $stmt->close();
 

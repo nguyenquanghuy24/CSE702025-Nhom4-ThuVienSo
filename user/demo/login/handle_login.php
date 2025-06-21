@@ -15,6 +15,7 @@ if ($admin_result && mysqli_num_rows($admin_result) === 1) {
     $admin = mysqli_fetch_assoc($admin_result);
     $_SESSION['user'] = $admin['username'];
     $_SESSION['is_admin'] = true;
+    $_SESSION['admin_id'] = $admin['admin_id'];
     header("Location: ../../../admin/logadmin.php");
     exit();
 }

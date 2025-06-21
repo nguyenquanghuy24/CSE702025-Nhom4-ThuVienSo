@@ -2,35 +2,13 @@
 session_start();
 require_once '../login/connect.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $hoTen = $_POST['hoTen'] ?? '';
-    $maSV = $_POST['maSV'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $subject = $_POST['subject'] ?? '';
-    $message = $_POST['message'] ?? '';
-
-    if (!empty($hoTen) && !empty($maSV) && !empty($email) && !empty($subject) && !empty($message)) {
-        $stmt = $conn->prepare("INSERT INTO ticket_tbl (hoTen, maSV, email, subject, message) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $hoTen, $maSV, $email, $subject, $message);
-
-        if ($stmt->execute()) {
-            echo "<script>alert('Gửi phản hồi thành công!'); window.location.href = 'ticket.php';</script>";
-        } else {
-            echo "<script>alert('Gửi thất bại: " . $stmt->error . "');</script>";
-        }
-
-        $stmt->close();
-    } else {
-        echo "<script>alert('Vui lòng điền đầy đủ thông tin.');</script>";
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Page</title>
+    <title>Ticket</title>
     <link rel="stylesheet" href="ticket.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>

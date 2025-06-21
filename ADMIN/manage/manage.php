@@ -10,6 +10,50 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     exit();
 }
 
+// Xử lý phê duyệt hoặc từ chối yêu cầu mượn
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['request_id'])) {
+    $request_id = intval($_POST['request_id']);
+    $action = $_POST['action'];
+
+    if ($action === 'approve') {
+        $stmt = $conn->prepare("UPDATE borrow_tbl SET tinhTrang = 'Đang mượn' WHERE borrow_id = ?");
+    } elseif ($action === 'decline') {
+        // Lấy book_id để tăng lại số lượng nếu từ chối
+        $getBookId = $conn->prepare("SELECT book_id FROM borrow_tbl WHERE borrow_id = ?");
+        $getBookId->bind_param("i", $request_id);
+        $getBookId->execute();
+        $bookRow = $getBookId->get_result()->fetch_assoc();
+        $book_id = $bookRow['book_id'];
+        $getBookId->close();
+
+        $updateBook = $conn->prepare("UPDATE book_tbl SET soLuong = soLuong + 1 WHERE id = ?");
+        $updateBook->bind_param("i", $book_id);
+        $updateBook->execute();
+        $updateBook->close();
+
+        $stmt = $conn->prepare("UPDATE borrow_tbl SET tinhTrang = 'Từ chối' WHERE borrow_id = ?");
+    }
+
+    $stmt->bind_param("i", $request_id);
+    $stmt->execute();
+    $stmt->close();
+
+    header("Location: manage.php");
+    exit();
+}
+
+// Lấy danh sách sách từ book_tbl
+$book_result = $conn->query("SELECT * FROM book_tbl ORDER BY id DESC");
+
+// Lấy danh sách yêu cầu mượn sách đang chờ phê duyệt
+$request_sql = "SELECT b.borrow_id, u.hoTen AS fullname, u.maSV, u.email, bk.tieuDe, b.maMuon, b.ngayMuon
+    FROM borrow_tbl b
+    JOIN tbl_user u ON b.user_id = u.id
+    JOIN book_tbl bk ON b.book_id = bk.id
+    WHERE b.tinhTrang = 'Đang chờ phê duyệt'
+    ORDER BY b.ngayMuon DESC";
+$request_result = $conn->query($request_sql);
+
 $books = [];
 
 // Lấy danh sách tất cả sách
@@ -152,6 +196,45 @@ if ($result && mysqli_num_rows($result) > 0) {
         </div>
     </section>
 </div>
+
+<section class="borrow-requests-section" style="margin: 40px;">
+    <h2>Yêu cầu mượn sách</h2>
+    <?php if ($request_result && $request_result->num_rows > 0): ?>
+    <table border="1" cellpadding="10" cellspacing="0" style="width:100%; border-collapse: collapse;">
+        <tr>
+            <th>Mã mượn</th>
+            <th>Họ tên</th>
+            <th>MSSV</th>
+            <th>Email</th>
+            <th>Tên sách</th>
+            <th>Ngày mượn</th>
+            <th>Thao tác</th>
+        </tr>
+        <?php while ($row = $request_result->fetch_assoc()): ?>
+        <tr>
+            <td><?php echo htmlspecialchars($row['maMuon']); ?></td>
+            <td><?php echo htmlspecialchars($row['fullname']); ?></td>
+            <td><?php echo htmlspecialchars($row['maSV']); ?></td>
+            <td><?php echo htmlspecialchars($row['email']); ?></td>
+            <td><?php echo htmlspecialchars($row['tieuDe']); ?></td>
+            <td><?php echo htmlspecialchars($row['ngayMuon']); ?></td>
+            <td>
+                <form method="post" style="display:inline;">
+                    <input type="hidden" name="request_id" value="<?php echo $row['borrow_id']; ?>">
+                    <button type="submit" name="action" value="approve">Phê duyệt</button>
+                </form>
+                <form method="post" style="display:inline;">
+                    <input type="hidden" name="request_id" value="<?php echo $row['borrow_id']; ?>">
+                    <button type="submit" name="action" value="decline" onclick="return confirm('Bạn có chắc chắn từ chối?');">Từ chối</button>
+                </form>
+            </td>
+        </tr>
+        <?php endwhile; ?>
+    </table>
+    <?php else: ?>
+        <p>Không có yêu cầu mượn sách nào đang chờ xử lý.</p>
+    <?php endif; ?>
+</section>
 
  <footer class="footer">
         <div class="footer-bottom">

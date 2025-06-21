@@ -129,3 +129,4 @@ document.addEventListener('DOMContentLoaded', () => {
       conversationDetails.style.display = 'none';
   }
 });
+

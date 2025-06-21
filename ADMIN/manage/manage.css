@@ -908,6 +908,26 @@ header.navbar {
     text-align: right;
 }
 
+.borrow-requests-section h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.borrow-requests-section table {
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+.borrow-requests-section th,
+.borrow-requests-section td {
+    text-align: left;
+    padding: 10px;
+}
+
+.borrow-requests-section th {
+    background-color: #f4f4f4;
+}
+
 @media (max-width: 992px) {
     .admin-books-container {
         flex-direction: column;
