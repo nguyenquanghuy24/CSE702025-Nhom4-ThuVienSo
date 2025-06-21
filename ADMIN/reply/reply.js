@@ -30,6 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const cancelComposeBtn = composeModal ? composeModal.querySelector('.cancel-compose-btn') : null;
   const replyButton = document.getElementById('replyButton'); // The reply button in the right panel
 
+  // Ensure compose modal is hidden initially
+  if (composeModal) {
+      composeModal.style.display = 'none';
+  }
+
   if (replyButton) {
       replyButton.addEventListener('click', () => {
           // Get data from the currently displayed conversation
@@ -98,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
           detailSenderEmail.textContent = `<${item.dataset.email}>`; // Format email with angle brackets
           detailMessage.textContent = item.dataset.message;
 
-          // Format date for display in the main panel: "lúc HH:MM DD tháng M, YYYY"
+          // Format date for display in the main panel: "lúc HH:MM DD tháng M,YYYY"
           const fullDate = new Date(item.dataset.date);
           const time = fullDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
           // Lấy ngày tháng năm theo định dạng dd/mm/yyyy
@@ -115,8 +120,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   });
 
+  // This block ensures a message is selected or "No Conversation" is shown on load.
+  // It should simulate a click on the first item if available, else show the no conversation message.
   if (inboxItems.length > 0) {
-      inboxItems[0].click(); // Simulate click on the first item
+      inboxItems[0].click(); // Simulate click on the first item to display its content
   } else {
       noConversationSelected.style.display = 'flex'; // Show no conversation message
       conversationDetails.style.display = 'none';

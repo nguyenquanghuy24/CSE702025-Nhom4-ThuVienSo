@@ -62,6 +62,7 @@ header.navbar {
 .auth { /* Thêm hoặc đảm bảo khối .auth có các thuộc tính này */
     display: flex; /* Để các phần tử bên trong nó cũng có thể được sắp xếp */
     align-items: center;
+    margin-left: auto; /* Đẩy khối auth ra ngoài cùng bên phải */
 }
 
 .auth a {
@@ -74,7 +75,7 @@ header.navbar {
   text-decoration: none;
   display: inline-block;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-left: 10px; /* Giữ khoảng cách với các mục nav-links */
+  margin-left: 10px; /* Giữ khoảng cách với các mục nav-links hoặc phần tử trước đó */
 }
 
 .auth a:hover {
@@ -631,8 +632,8 @@ header.navbar {
 }
 
 .add-book-form .submit-btn:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
+  background-color: #218838;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {

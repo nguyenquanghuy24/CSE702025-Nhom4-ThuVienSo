@@ -25,7 +25,7 @@ a {
 
 header.navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* Đảm bảo các phần tử được phân bổ */
   align-items: center;
   background: #ffffff;
   padding: 10px 20px;
@@ -53,6 +53,8 @@ header.navbar {
 .nav-links {
   display: flex;
   align-items: center;
+  flex-grow: 1; /* Cho phép nó mở rộng để chiếm không gian */
+  justify-content: center; /* Căn giữa nội dung */
   gap: 50px;
 }
 
@@ -60,6 +62,12 @@ header.navbar {
   font-size: 0.95rem;
 }
 
+
+.auth {
+    margin-left: auto; /* Đẩy auth (bao gồm nút đăng nhập) sang phải */
+    display: flex;
+    align-items: center;
+}
 
 .auth a {
   font-size: 1rem;

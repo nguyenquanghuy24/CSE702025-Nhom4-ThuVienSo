@@ -4,41 +4,33 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = document.querySelector('#loginModal');
   const closeBtn = document.querySelector('.close-btn');
 
-  loginLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    modal.style.display = 'block';
-  });
+  if (loginLink) {
+    loginLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (modal) modal.style.display = 'block';
+    });
+  }
 
-  closeBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
-  });
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      if (modal) modal.style.display = 'none';
+    });
+  }
 
   window.addEventListener('click', (e) => {
     if (e.target === modal) {
-      modal.style.display = 'none';
+      if (modal) modal.style.display = 'none';
     }
   });
 
-  // Card animation on load (giữ lại từ bản gốc nếu có thể dùng ở đâu đó)
-  const cards = document.querySelectorAll('.card');
-  cards.forEach((card, index) => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(20px)';
-    setTimeout(() => {
-      card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-      card.style.opacity = '1';
-      card.style.transform = 'translateY(0)';
-    }, index * 100);
-  });
-
   // Mở modal đăng nhập
-  function openLoginModal() {
-    document.getElementById('loginModal').style.display = 'block';
+  window.openLoginModal = function() {
+    if (modal) modal.style.display = 'block';
   }
 
   // Đóng modal
-  function closeModal() {
-    document.getElementById('loginModal').style.display = 'none';
+  window.closeModal = function() {
+    if (modal) modal.style.display = 'none';
   }
 
   // Các chức năng JavaScript cụ thể cho trang admin (validation form)
@@ -47,10 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
       addBookForm.addEventListener('submit', (e) => {
           const bookTitle = document.getElementById('book_title').value;
           const author = document.getElementById('author').value;
+          const isbn = document.getElementById('isbn').value; // Lấy giá trị ISBN
           const quantity = document.getElementById('quantity').value;
 
-          if (bookTitle.trim() === '' || author.trim() === '' || quantity.trim() === '') {
-              alert('Vui lòng điền đầy đủ các trường bắt buộc (Tên sách, Tác giả, Số lượng).');
+          // Thêm kiểm tra cho trường ISBN
+          if (bookTitle.trim() === '' || author.trim() === '' || isbn.trim() === '' || quantity.trim() === '') {
+              alert('Vui lòng điền đầy đủ các trường bắt buộc (Tên sách, Tác giả, ISBN, Số lượng).');
               e.preventDefault(); // Ngăn chặn gửi form
           }
           // Thêm các kiểm tra khác nếu cần

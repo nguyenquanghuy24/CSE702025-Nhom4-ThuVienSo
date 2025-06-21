@@ -65,15 +65,14 @@ $feedbacks = [
     <div class="logo">
       <a href="../logadmin.php"> <img src="../../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
       </a>
-      <div class="nav-links">
+    </div>
+    <div class="nav-links">
         <div class="dropdown">
           <a href="../add/add.php" class="dropdown-toggle">Thêm sách</a> </div>
         <div class="dropdown">
           <a href="../manage/manage.php" class="dropdown-toggle">Quản lý</a> </div>
         <div class="dropdown">
             <a href="reply.php" class="dropdown-toggle">Hòm thư</a> </div>
-        <div class="dropdown">
-            <a href="#" class="dropdown-toggle">Contact</a> </div>
       </div>
     <div class="auth">
         <?php if (isset($_SESSION['user'])): ?>
@@ -254,6 +253,6 @@ $feedbacks = [
     </div>
 </div>
 
-<script src="admin2.js"></script>
+<script src="reply.js"></script>
 </body>
 </html>

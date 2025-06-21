@@ -7,7 +7,7 @@ session_start();
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-  <title>Thư viện số</title>
+  <title>Thư viện số - Admin</title>
   <link rel="stylesheet" href="login.css" />
 </head>
 <body>
@@ -34,100 +34,33 @@ session_start();
     </div>
 </header>
 
+<main class="admin-dashboard-main">
+    <?php if (isset($_SESSION['user'])): ?>
+        <section class="admin-actions">
+            <h1>Chào mừng, <?php echo htmlspecialchars($_SESSION['user']); ?>!</h1>
+            <p>Chọn một tác vụ quản lý dưới đây:</p>
+            <div class="action-grid">
+                <a href="add/add.php" class="action-card">
+                    <i class="ri-book-open-line"></i>
+                    <span>Thêm Sách Mới</span>
+                </a>
+                <a href="manage/manage.php" class="action-card">
+                    <i class="ri-settings-4-line"></i>
+                    <span>Quản Lý Sách</span>
+                </a>
+                <a href="reply/reply.php" class="action-card">
+                    <i class="ri-mail-line"></i>
+                    <span>Hòm Thư Phản Hồi</span>
+                </a>
+            </div>
+        </section>
+    <?php else: ?>
+        <section class="auth-prompt">
+            <p>Vui lòng đăng nhập để truy cập trang quản trị.</p>
+        </section>
+    <?php endif; ?>
+</main>
 
-<section class="welcome-section">
-    <h1>Welcome to Thư viện số</h1>
-     <form action="search/search.php" method="GET" class="search-box">
-         <input type="text" name="query" placeholder="Tìm kiếm sách, tài liệu...">
-        <button type="submit">Search</button>
-    </form>
- </section>
-
-<section class="new-documents">
-        <h2 class="title">TÀI LIỆU MỚI</h2>
-        <div class="card-container">
-            <div class="card">
-                <img src="../user/demo/assets/giaitich1.jpg" alt="1" class="image">
-                <div class="card-content">
-                    <span class="category">Your Worst Nightmare</span>
-                    <h3 class="title">Giải tích I</h3>
-                    <p class="description">Nó là giải tích 1</p>
-                </div>
-            </div>
-            <div class="card">
-                <img src="../user/demo/assets/giaitich2.jpg" alt="2" class="image">
-                <div class="card-content">
-                    <span class="category">Your Worst Nightmare 2</span>
-                    <h3 class="title">Giải tích II</h3>
-                    <p class="description">Vẫn là giải tích</p>
-                </div>
-            </div>
-            <div class="card">
-                <img src="../user/demo/assets/giaitich3.jpg" alt="3" class="image">
-                <div class="card-content">
-                    <span class="category">Your Worst Nightmare 3</span>
-                    <h3 class="title">Giải tích III</h3>
-                    <p class="description">.....</p>
-                </div>
-            </div>
-        </div>
-        <div class="btn-wrapper">
-            <button class="btn-xemthem"><a href="#">XEM THÊM</a></button>
-        </div>
- </section>
-
-<section class="events">
-        <h2 class="title">SỰ KIỆN</h2>
-        <div class="card-container">
-            <div class="card">
-                <div class="image"></div>
-                <div class="card-content">
-                    <span class="category">Category</span>
-                    <h3 class="title">Sự kiện A</h3>
-                    <p class="description">Mô tả ngắn gọn về sự kiện.</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="image"></div>
-                <div class="card-content">
-                    <span class="category">Category</span>
-                    <h3 class="title">Sự kiện B</h3>
-                    <p class="description">Mô tả ngắn gọn về sự kiện.</p>
-                </div>
-            </div>
-        </div>
-        <div class="btn-wrapper">
-            <button class="btn-xemthem"><a href="#">XEM THÊM</a></button>
-        </div>
-</section>
-
-<section class="news-section">
-        <h3 class="subtitle">TIN TỨC</h3>
-        <h2 class="title">Cập nhật tin tức, thông báo</h2>
-        <div class="news-container">
-            <div class="card-with-bg" style="background-image: url('');">
-                <div class="overlay">
-                    <span class="news-topic">Văn hóa đọc</span>
-                    <h3 class="news-title">Lễ trao giải các cuộc thi Ngày Sách và Văn hóa đọc</h3>
-                </div>
-            </div>
-            <div class="card-with-bg" style="background-image: url('');">
-                <div class="overlay">
-                    <span class="news-topic">Topic2</span>
-                    <h3 class="news-title">Ứng dụng AI hỗ trợ học tập và nghiên cứu khoa học</h3>
-                </div>
-            </div>
-            <div class="card-with-bg" style="background-image: url('');">
-                <div class="overlay">
-                    <span class="news-topic">Triển lãm</span>
-                    <h3 class="news-title">Đọc sách thông minh – Bảo vệ bản quyền</h3>
-                </div>
-            </div>
-        </div>
-        <div class="btn-wrapper">
-            <button class="btn-xemthem"><a href="#">XEM THÊM</a></button>
-        </div>
- </section>
 
  <footer class="footer">
         <div class="footer-top">
@@ -175,10 +108,8 @@ session_start();
         </div>
 </footer>
 <?php if (!isset($_SESSION['user'])): ?>
-<div id="loginModal" class="modal" style="<?php if (isset($_SESSION['login_error'])) echo 'display:block;'; ?>">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeModal()">&times;</span>
-    <h2>Đăng nhập</h2>
+<div id="loginModal" class="modal" style="display:flex;"> <div class="modal-content">
+    <span class="close-btn" style="display: none;">&times;</span> <h2>Đăng nhập</h2>
     <?php if (isset($_SESSION['login_error'])): ?>
       <p style="color: red;"><?php echo $_SESSION['login_error']; unset($_SESSION['login_error']); ?></p>
     <?php endif; ?>
@@ -192,6 +123,15 @@ session_start();
         </form>
   </div>
 </div>
+<?php else: ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('loginModal');
+        if (modal) {
+            modal.style.display = 'none'; // Hide modal if already logged in
+        }
+    });
+</script>
 <?php endif; ?>
 <script src="login.js"></script>
 </body>

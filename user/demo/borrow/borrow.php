@@ -2,6 +2,7 @@
 session_start();
 include("../login/connect.php");
 
+// Xử lý yêu cầu mượn sách
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     if (!isset($_SESSION['user_id'])) {
         $_SESSION['login_error'] = "Bạn cần đăng nhập để mượn sách.";
@@ -12,7 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     $user_id = $_SESSION['user_id'];
     $book_id = intval($_POST['book_id']);
 
-    $stmt_count_total = $conn->prepare("SELECT COUNT(*) AS total_borrowed FROM borrow_tbl WHERE user_id = ? AND tinhTrang = 'Đang mượn'");
+    // Kiểm tra số lượng sách đang mượn và đang chờ duyệt
+    $stmt_count_total = $conn->prepare("SELECT COUNT(*) AS total_borrowed FROM borrow_tbl WHERE user_id = ? AND (tinhTrang = 'Đang mượn' OR tinhTrang = 'Đang chờ phê duyệt')");
     $stmt_count_total->bind_param("i", $user_id);
     $stmt_count_total->execute();
     $result_count_total = $stmt_count_total->get_result();
@@ -20,12 +22,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     $stmt_count_total->close();
 
     if ($borrow_count_total >= 5) {
-        $_SESSION['borrow_error'] = "Bạn đã mượn tối đa 5 cuốn sách. Vui lòng trả sách để mượn thêm.";
+        $_SESSION['borrow_error'] = "Bạn đã mượn hoặc đang chờ phê duyệt tối đa 5 cuốn sách. Vui lòng trả sách hoặc đợi duyệt để mượn thêm.";
         header("Location: borrow.php");
         exit();
     }
 
-    $stmt_count_specific = $conn->prepare("SELECT COUNT(*) AS specific_book_borrowed FROM borrow_tbl WHERE user_id = ? AND book_id = ? AND tinhTrang = 'Đang mượn'");
+    // Kiểm tra xem người dùng đã mượn hoặc đang chờ phê duyệt cuốn sách này chưa
+    $stmt_count_specific = $conn->prepare("SELECT COUNT(*) AS specific_book_borrowed FROM borrow_tbl WHERE user_id = ? AND book_id = ? AND (tinhTrang = 'Đang mượn' OR tinhTrang = 'Đang chờ phê duyệt')");
     $stmt_count_specific->bind_param("ii", $user_id, $book_id);
     $stmt_count_specific->execute();
     $result_count_specific = $stmt_count_specific->get_result();
@@ -33,44 +36,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     $stmt_count_specific->close();
 
     if ($specific_book_borrowed > 0) {
-        $_SESSION['borrow_error'] = "Bạn đã mượn cuốn sách này rồi. Vui lòng trả sách để mượn lại hoặc chọn sách khác.";
+        $_SESSION['borrow_error'] = "Bạn đã mượn hoặc đang chờ phê duyệt cuốn sách này rồi. Vui lòng trả sách để mượn lại hoặc chọn sách khác.";
         header("Location: borrow.php");
         exit();
     }
 
-    $stmt = $conn->prepare("SELECT soLuong, trangThai FROM book_tbl WHERE id = ?");
-    $stmt->bind_param("i", $book_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Kiểm tra trạng thái và số lượng sách trong kho
+    $stmt_book_info = $conn->prepare("SELECT soLuong, trangThai FROM book_tbl WHERE id = ?");
+    $stmt_book_info->bind_param("i", $book_id);
+    $stmt_book_info->execute();
+    $result_book_info = $stmt_book_info->get_result();
     
-    if ($result->num_rows === 1) {
-        $book = $result->fetch_assoc();
+    if ($result_book_info->num_rows === 1) {
+        $book = $result_book_info->fetch_assoc();
         
         if ($book['trangThai'] == 'Đang bảo trì') {
             $_SESSION['borrow_error'] = "Sách đang bảo trì, không thể mượn.";
         } elseif ($book['soLuong'] > 0) {
-            $stmt = $conn->prepare("UPDATE book_tbl SET soLuong = soLuong - 1 WHERE id = ?");
-            $stmt->bind_param("i", $book_id);
-            $stmt->execute();
+            // Sách có sẵn, tạo yêu cầu mượn với trạng thái "Đang chờ phê duyệt"
+            // Tạo mã mượn duy nhất (ví dụ: BRW-YYYYMMDD-UserID-Random)
+            $maMuon = 'BRW-' . date('Ymd') . '-' . $user_id . '-' . uniqid();
 
-            if ($book['soLuong'] - 1 <= 0) {
-                $stmt = $conn->prepare("UPDATE book_tbl SET trangThai = 'Đã mượn hết' WHERE id = ?");
-                $stmt->bind_param("i", $book_id);
-                $stmt->execute();
+            $stmt_insert_borrow = $conn->prepare("INSERT INTO borrow_tbl (user_id, book_id, ngayMuon, ngayHetHan, tinhTrang, maMuon) 
+                                                  VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY), 'Đang chờ phê duyệt', ?)");
+            $stmt_insert_borrow->bind_param("iis", $user_id, $book_id, $maMuon);
+            
+            if ($stmt_insert_borrow->execute()) {
+                $_SESSION['borrow_success'] = "Yêu cầu mượn sách của bạn đã được gửi và đang chờ phê duyệt. Mã mượn của bạn là: <strong>" . htmlspecialchars($maMuon) . "</strong>. Vui lòng đến thư viện với mã này để nhận sách.";
+                $_SESSION['maMuon_display'] = $maMuon; // Lưu mã mượn để hiển thị trong popup
+            } else {
+                $_SESSION['borrow_error'] = "Lỗi khi gửi yêu cầu mượn sách: " . $stmt_insert_borrow->error;
             }
+            $stmt_insert_borrow->close();
 
-            $stmt = $conn->prepare("INSERT INTO borrow_tbl (user_id, book_id, ngayMuon, ngayHetHan, tinhTrang) 
-                                  VALUES (?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 30 DAY), 'Đang mượn')");
-            $stmt->bind_param("ii", $user_id, $book_id);
-            $stmt->execute();
-
-            $_SESSION['borrow_success'] = "Mượn sách thành công! Hạn trả: " . date('d/m/Y', strtotime('+30 days'));
         } else {
-            $_SESSION['borrow_error'] = "Sách đã hết.";
+            $_SESSION['borrow_error'] = "Sách đã hết. Vui lòng thử lại sau.";
         }
     } else {
         $_SESSION['borrow_error'] = "Sách không tồn tại.";
     }
+    $stmt_book_info->close(); // Đóng statement này sau khi sử dụng
 
     header("Location: borrow.php");
     exit();
@@ -90,6 +95,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
     <?php // Hiển thị thông báo mượn sách ?>
     <?php if (isset($_SESSION['borrow_success'])): ?>
         <div class="alert success"><?php echo $_SESSION['borrow_success']; unset($_SESSION['borrow_success']); ?></div>
+        <?php if (isset($_SESSION['maMuon_display'])): ?>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    showBorrowCodePopup('<?php echo htmlspecialchars($_SESSION['maMuon_display']); ?>');
+                });
+            </script>
+            <?php unset($_SESSION['maMuon_display']); ?>
+        <?php endif; ?>
     <?php endif; ?>
     <?php if (isset($_SESSION['borrow_error'])): ?>
         <div class="alert error"><?php echo $_SESSION['borrow_error']; unset($_SESSION['borrow_error']); ?></div>
@@ -209,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
             </section>
             
             <section class="book-section">
-                <h2>Sách đang mượn</h2>
+                <h2>Sách của tôi</h2>
                 <div class="borrowed-list">
                     <?php
                     if (isset($_SESSION['user_id'])):
@@ -217,11 +230,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                         
                         $stmt = $conn->prepare("
                             SELECT b.id as book_id, b.tieuDe, b.tacGia, b.anhBia, b.theLoai,
-                                   br.borrow_id, br.ngayMuon, br.ngayHetHan, br.tinhTrang
+                                   br.borrow_id, br.ngayMuon, br.ngayHetHan, br.tinhTrang, br.maMuon
                             FROM borrow_tbl br
                             INNER JOIN book_tbl b ON br.book_id = b.id
-                            WHERE br.user_id = ? AND br.tinhTrang = 'Đang mượn'
-                            ORDER BY br.ngayHetHan ASC
+                            WHERE br.user_id = ? AND (br.tinhTrang = 'Đang mượn' OR br.tinhTrang = 'Đang chờ phê duyệt')
+                            ORDER BY br.ngayMuon DESC
                         ");
                         $stmt->bind_param("i", $_SESSION['user_id']);
                         $stmt->execute();
@@ -233,15 +246,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                                 if (!empty($book['anhBia'])) {
                                     $dbImagePath = $book['anhBia']; 
                                     
-                                    $projectRoot = dirname(__DIR__); 
-
-                                    $physicalFilePath = $projectRoot . '/' . $dbImagePath; 
-
-                                    if (file_exists($physicalFilePath)) {
-                                        $imagePath = '../' . $dbImagePath; 
-                                    } else {
-                                        error_log("Borrow.php: Image file not found for " . $dbImagePath . " at " . $physicalFilePath);
-                                    }
+                                    // Điều chỉnh đường dẫn tương đối từ vị trí hiện tại của borrow.php
+                                    $imagePath = '../' . $dbImagePath; 
+                                    
+                                    // Kiểm tra xem file có tồn tại vật lý không (cho debug)
+                                    // $projectRoot = dirname(__DIR__, 2); // Đi lên 2 cấp từ borrow/ đến project root
+                                    // $physicalFilePath = $projectRoot . '/' . $dbImagePath;
+                                    // if (!file_exists($physicalFilePath)) {
+                                    //     error_log("Borrow.php: Image file not found for " . $dbImagePath . " at " . $physicalFilePath);
+                                    // }
                                 }
                                 ?>
                                 <div class="borrowed-item">
@@ -255,25 +268,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                                         <p class="category">Thể loại: <?php echo htmlspecialchars($book['theLoai']); ?></p>
                                         
                                         <div class="borrow-details">
-                                            <p><i class="fas fa-calendar-day"></i> Ngày mượn: 
+                                            <p><i class="fas fa-calendar-day"></i> Ngày yêu cầu: 
                                             <?php echo date('d/m/Y', strtotime($book['ngayMuon'])); ?></p>
-                                            <p><i class="fas fa-clock"></i> Hạn trả: 
+                                            <p><i class="fas fa-clock"></i> Hạn trả (dự kiến): 
                                             <?php echo date('d/m/Y', strtotime($book['ngayHetHan'])); ?></p>
+                                            <?php if (!empty($book['maMuon'])): ?>
+                                                <p><i class="fas fa-barcode"></i> Mã mượn: <strong><?php echo htmlspecialchars($book['maMuon']); ?></strong></p>
+                                            <?php endif; ?>
+                                            <p class="status-badge status-<?php echo strtolower(str_replace(' ', '-', $book['tinhTrang'])); ?>">
+                                                <i class="fas fa-info-circle"></i> Trạng thái: <?php echo htmlspecialchars($book['tinhTrang']); ?>
+                                            </p>
                                         </div>
                                         
-                                        <form method="POST" action="return.php" class="return-form">
-                                            <input type="hidden" name="borrow_id" value="<?php echo $book['borrow_id']; ?>">
-                                            <button type="submit" class="btn-return">
-                                                <i class="fas fa-book-return"></i> Trả sách
+                                        <?php if ($book['tinhTrang'] == 'Đang mượn'): ?>
+                                            <form method="POST" action="return.php" class="return-form">
+                                                <input type="hidden" name="borrow_id" value="<?php echo $book['borrow_id']; ?>">
+                                                <button type="submit" class="btn-return">
+                                                    <i class="fas fa-book-return"></i> Trả sách
+                                                </button>
+                                            </form>
+                                        <?php elseif ($book['tinhTrang'] == 'Đang chờ phê duyệt'): ?>
+                                            <button type="button" class="btn-pending" disabled>
+                                                <i class="fas fa-hourglass-half"></i> Đang chờ phê duyệt
                                             </button>
-                                        </form>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             <?php endwhile;
                         else: ?>
                             <div class="no-books">
                                 <i class="fas fa-book-open"></i>
-                                <p>Bạn chưa mượn sách nào.</p>
+                                <p>Bạn chưa mượn hoặc yêu cầu mượn sách nào.</p>
                                 <a href="../search/search.php" class="btn-browse">Tìm sách để mượn</a>
                             </div>
                         <?php endif;
@@ -281,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
                         else: ?>
                             <div class="login-required">
                                 <i class="fas fa-exclamation-triangle"></i>
-                                <p>Vui lòng đăng nhập để xem sách đang mượn.</p>
+                                <p>Vui lòng đăng nhập để xem sách của bạn.</p>
                             </div>
                         <?php endif; ?>
                 </div>
@@ -373,6 +398,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
             </div>
         </div>
     </div>
+
+    <div id="borrowCodePopup" class="modal">
+        <div class="modal-content small-modal">
+            <h2>Yêu cầu đã được gửi!</h2>
+            <p>Mã mượn của bạn là:</p>
+            <h3 id="borrowCodeDisplay" class="borrow-code-text"></h3>
+            <p>Vui lòng ghi nhớ mã này và đến thư viện để nhận sách.</p>
+            <button class="btn-primary" onclick="closeBorrowCodePopup()">Đóng</button>
+        </div>
+    </div>
+
 <script>
     const isLoggedIn = <?php echo isset($_SESSION['user_id']) ? 'true' : 'false'; ?>;
 
@@ -397,6 +433,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['book_id'])) {
         const modal = document.getElementById('loginModal');
         if (modal) {
             modal.style.display = 'none';
+        }
+    }
+
+    // Function to show the borrow code popup
+    function showBorrowCodePopup(code) {
+        const popup = document.getElementById('borrowCodePopup');
+        const codeDisplay = document.getElementById('borrowCodeDisplay');
+        if (popup && codeDisplay) {
+            codeDisplay.textContent = code;
+            popup.style.display = 'flex'; // Use flex to center
+        }
+    }
+
+    // Function to close the borrow code popup
+    function closeBorrowCodePopup() {
+        const popup = document.getElementById('borrowCodePopup');
+        if (popup) {
+            popup.style.display = 'none';
         }
     }
 

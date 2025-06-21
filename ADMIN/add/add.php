@@ -22,14 +22,18 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     <div class="logo">
       <a href="../logadmin.php"> <img src="../../user/demo/assets/logo.jpg" alt="Logo Thư viện số">
       </a>
-</div>
-      <div class="nav-links">
+    </div>
+    <div class="nav-links">
         <div class="dropdown">
-          <a href="add.php" class="dropdown-toggle">Thêm sách</a> </div>
+          <a href="add.php" class="dropdown-toggle">Thêm sách</a>
+        </div>
         <div class="dropdown">
-          <a href="../manage/manage.php" class="dropdown-toggle">Quản lý</a> </div>
+          <a href="../manage/manage.php" class="dropdown-toggle">Quản lý</a>
+        </div>
         <div class="dropdown">
-            <a href="../reply/reply.php" class="dropdown-toggle">Hòm thư</a> </div>
+            <a href="../reply/reply.php" class="dropdown-toggle">Hòm thư</a>
+        </div>
+    </div>
     <div class="auth">
         <?php if (isset($_SESSION['user'])): ?>
             <span><?php echo htmlspecialchars($_SESSION['user']); ?></span>
@@ -56,6 +60,11 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
         <div class="form-group">
             <label for="author">Tác giả:</label>
             <input type="text" id="author" name="author" required>
+        </div>
+
+        <div class="form-group">
+            <label for="isbn">Mã ISBN:</label>
+            <input type="text" id="isbn" name="isbn" required>
         </div>
         
         <div class="form-group">
