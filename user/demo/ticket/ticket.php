@@ -2,6 +2,29 @@
 session_start();
 require_once '../login/connect.php';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $hoTen = $_POST['hoTen'] ?? '';
+    $maSV = $_POST['maSV'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $subject = $_POST['subject'] ?? '';
+    $message = $_POST['message'] ?? '';
+
+    if (!empty($hoTen) && !empty($maSV) && !empty($email) && !empty($subject) && !empty($message)) {
+        $stmt = $conn->prepare("INSERT INTO ticket_tbl (hoTen, maSV, email, subject, message) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $hoTen, $maSV, $email, $subject, $message);
+
+        if ($stmt->execute()) {
+            echo "<script>alert('Gửi phản hồi thành công!'); window.location.href = 'ticket.php';</script>";
+        } else {
+            echo "<script>alert('Gửi thất bại: " . $stmt->error . "');</script>";
+        }
+
+        $stmt->close();
+    } else {
+        echo "<script>alert('Vui lòng điền đầy đủ thông tin.');</script>";
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,6 +100,34 @@ require_once '../login/connect.php';
 
                 <button type="submit">Gửi</button>
             </form>
+            <?php
+            $user_email = $_SESSION['user_email'] ?? ''; // hoặc $_SESSION['email'] tùy bạn lưu từ trước
+
+            if (!empty($user_email)) {
+                $sql = "SELECT t.*, r.message AS admin_reply, r.reply_date 
+                        FROM ticket_tbl t 
+                        LEFT JOIN reply_tbl r ON t.ticket_id = r.ticket_id 
+                        WHERE t.email = ? ORDER BY t.ticket_id DESC";
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("s", $user_email);
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                echo "<h2>Lịch sử phản hồi</h2>";
+                while($row = $result->fetch_assoc()) {
+                    echo '<div class="feedback-box">';
+                    echo '<h4>Chủ đề: ' . htmlspecialchars($row['subject']) . '</h4>';
+                    echo '<p><strong>Nội dung bạn gửi:</strong> ' . nl2br(htmlspecialchars($row['message'])) . '</p>';
+                    echo '<p><strong>Phản hồi từ admin:</strong> ';
+                    echo $row['admin_reply'] ? nl2br(htmlspecialchars($row['admin_reply'])) : '<em>Chưa phản hồi</em>';
+                    echo '</p>';
+                    if ($row['admin_reply']) {
+                        echo '<p><strong>Ngày phản hồi:</strong> ' . $row['reply_date'] . '</p>';
+                    }
+                    echo '</div>';
+                }
+            }
+            ?>
         </div>
     </main>
 
