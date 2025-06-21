@@ -128,22 +128,6 @@ $feedbacks = [
     </aside>
 
     <section class="main-content-panel">
-        <div class="content-panel-header">
-            <div class="header-left-controls">
-                <i class="ri-checkbox-line icon-button"></i>
-                <i class="ri-star-line icon-button"></i>
-                <i class="ri-archive-line icon-button"></i>
-                <i class="ri-delete-bin-line icon-button"></i>
-            </div>
-            <div class="header-right-controls">
-                <i class="ri-share-line icon-button"></i>
-                <i class="ri-printer-line icon-button"></i>
-                <i class="ri-download-line icon-button"></i>
-                <i class="ri-arrow-go-back-line icon-button"></i>
-                <i class="ri-settings-4-line icon-button"></i>
-            </div>
-        </div>
-
         <div class="conversation-view">
             <div class="no-conversation-selected" id="noConversationSelected">
                 <i class="ri-mail-line"></i>

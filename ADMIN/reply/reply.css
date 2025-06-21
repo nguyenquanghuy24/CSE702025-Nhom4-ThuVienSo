@@ -25,7 +25,7 @@ a {
 
 header.navbar {
   display: flex;
-  justify-content: space-between; /* Đảm bảo các phần tử được phân bổ */
+  justify-content: space-between;
   align-items: center;
   background: #ffffff;
   padding: 10px 20px;
@@ -36,7 +36,6 @@ header.navbar {
 .logo {
   display: flex;
   align-items: center;
-  /* Giữ logo ở bên trái */
 }
 
 .logo a {
@@ -54,8 +53,8 @@ header.navbar {
 .nav-links {
   display: flex;
   align-items: center;
-  flex-grow: 1; /* Cho phép nó mở rộng để chiếm không gian */
-  justify-content: center; /* Căn giữa nội dung */
+  flex-grow: 1;
+  justify-content: center;
   gap: 50px;
 }
 
@@ -65,8 +64,7 @@ header.navbar {
 
 
 .auth {
-    /* Đảm bảo nút đăng nhập ở bên phải cùng */
-    margin-left: auto; /* Đẩy nút đăng nhập sang phải */
+    margin-left: auto;
     display: flex;
     align-items: center;
 }
@@ -482,7 +480,6 @@ header.navbar {
 }
 
 .header-left-controls, .header-right-controls {
-    display: flex;
     gap: 15px;
 }
 
@@ -529,6 +526,7 @@ header.navbar {
     border-bottom: 1px solid #eee;
     padding-bottom: 15px;
     margin-bottom: 15px;
+    text-align: left;
 }
 
 .conversation-subject {
@@ -608,7 +606,6 @@ header.navbar {
 }
 
 .compose-modal {
-    /* Đảm bảo modal ban đầu ẩn */
     display: none;
     position: fixed;
     z-index: 200;

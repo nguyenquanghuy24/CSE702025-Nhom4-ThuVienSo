@@ -18,7 +18,6 @@ a {
   color: #0077cc;
 }
 
-/* Header */
 header.navbar {
   display: flex;
   justify-content: space-between;
@@ -60,7 +59,6 @@ header.navbar {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* Dropdown Menu */
 .dropdown {
   position: relative;
   display: inline-block;
@@ -106,7 +104,6 @@ header.navbar {
   pointer-events: auto;
 }
 
-/* Footer */
 .footer {
   background-color: #2a2a2a;
   color: #d3d3d3;
@@ -175,7 +172,252 @@ header.navbar {
   border-top: 1px solid #333;
 }
 
-/* Modal Đăng nhập (giữ nguyên) */
+#loginModal .modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  animation: slideIn 0.3s ease-out;
+}
+
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.modal-content button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #004c99;
+}
+
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #555;
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.signup-link a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+.page-main-content {
+    flex-grow: 1;
+    padding: 30px 0;
+}
+
+.content-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.book-section {
+    background-color: #ffffff;
+    padding: 25px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.book-section h2 {
+    font-size: 1.6rem;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+}
+
+.search-feature {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-bar {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.search-input {
+    flex-grow: 1;
+    border: none;
+    padding: 12px;
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-button {
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    padding: 0 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #005c99;
+}
+
+
+.recommend-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.book-card-simple {
+    text-align: center;
+    cursor: pointer;
+}
+
+.book-card-simple img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s;
+}
+
+.book-card-simple:hover img {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+}
+
+.book-card-simple .book-title {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.borrowed-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.borrowed-item {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    transition: box-shadow 0.2s ease;
+    background-color: #fff;
+    margin-bottom: 0;
+}
+
+.borrowed-item:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.borrowed-item .book-cover { 
+    flex-shrink: 0;
+    width: 120px;
+    height: 160px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+}
+
+.borrowed-item .book-cover img {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+    display: block;
+    object-fit: contain;
+}
+
+.borrowed-item .book-info {
+    flex-grow: 1;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.borrow-details p i {
+    margin-right: 5px;
+    color: #007bff;
+}
+
+.btn-return {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+    margin-top: 10px;
+}
+
+.btn-return:hover {
+    background-color: #c9302c;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+  animation: fadeIn 0.3s;
+  z-index: 100;
+}
+
+#loginModal {
+  z-index: 101;
+}
+
 #loginModal .modal-content {
   background-color: #fff;
   margin: 10% auto;
@@ -243,289 +485,6 @@ header.navbar {
   text-decoration: underline;
 }
 
-.page-main-content {
-    flex-grow: 1;
-    padding: 30px 0;
-}
-
-.content-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.book-section {
-    background-color: #ffffff;
-    padding: 25px;
-    margin-bottom: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.book-section h2 {
-    font-size: 1.6rem;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #eee;
-}
-
-/* Search Bar*/
-.search-feature {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.search-bar {
-    display: flex;
-    width: 100%;
-    max-width: 600px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-.search-input {
-    flex-grow: 1;
-    border: none;
-    padding: 12px;
-    font-size: 1rem;
-    outline: none;
-}
-
-.search-button {
-    background-color: #0077cc;
-    color: white;
-    border: none;
-    padding: 0 25px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-.search-button:hover {
-    background-color: #005c99;
-}
-
-
-/* Thanh đề xuất sách */
-.recommend-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-}
-
-.book-card-simple {
-    text-align: center;
-    cursor: pointer;
-}
-
-.book-card-simple img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s;
-}
-
-.book-card-simple:hover img {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
-}
-
-.book-card-simple .book-title {
-    font-weight: bold;
-    font-size: 1rem;
-}
-/* Container của mỗi sách đang mượn */
-.borrowed-item {
-    display: flex; /* Dùng flexbox để ảnh và thông tin nằm cạnh nhau */
-    align-items: center; /* Căn chỉnh các mục theo chiều dọc */
-    gap: 25px;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    transition: box-shadow 0.2s ease;
-    background-color: #fff; /* Đảm bảo nền trắng */
-    margin-bottom: 20px; /* Thêm khoảng cách giữa các item */
-}
-
-.borrowed-item:hover {
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-/* KHUNG ẢNH CỦA SÁCH ĐANG MƯỢN */
-.borrowed-item .book-cover { 
-    flex-shrink: 0; /* Ngăn không cho khung ảnh bị co lại */
-    width: 120px; /* Chiều rộng cố định cho khung ảnh */
-    height: 160px; /* Chiều cao cố định cho khung ảnh (tỷ lệ 3:4 tương đối chuẩn cho bìa sách) */
-    border: 1px solid #eee;
-    border-radius: 4px;
-    overflow: hidden; /* Cắt bỏ phần ảnh tràn ra ngoài khung */
-    display: flex; /* Dùng flex để căn giữa ảnh */
-    justify-content: center;
-    align-items: center;
-    background-color: #f0f0f0; /* Màu nền nếu ảnh không tải được hoặc đang loading */
-}
-
-/* ẢNH BÌa SÁCH BÊN TRONG KHUNG */
-.borrowed-item .book-cover img {
-    max-width: 100%; /* Đảm bảo ảnh không vượt quá chiều rộng của khung */
-    max-height: 100%; /* Đảm bảo ảnh không vượt quá chiều cao của khung */
-    height: auto; /* Giữ tỷ lệ khung hình của ảnh */
-    width: auto; /* Giữ tỷ lệ khung hình của ảnh */
-    display: block; /* Loại bỏ khoảng trắng dưới ảnh */
-    object-fit: contain; /* Đảm bảo toàn bộ ảnh hiển thị vừa trong khung mà không bị cắt xén hoặc biến dạng */
-}
-
-/* Phần thông tin sách trong borrowed-item */
-.borrowed-item .book-info {
-    flex-grow: 1; /* Cho phép phần thông tin chiếm hết không gian còn lại */
-    font-size: 1rem;
-    line-height: 1.7;
-}
-
-/* Các icon trong borrow-details */
-.borrow-details p i {
-    margin-right: 5px;
-    color: #007bff; /* Màu xanh dương cho icon */
-}
-
-.btn-return {
-    background-color: #d9534f;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s;
-    flex-shrink: 0;
-    margin-top: 10px; /* Khoảng cách trên nút */
-}
-
-.btn-return:hover {
-    background-color: #c9302c;
-}
-
-/* New style for pending button */
-.btn-pending {
-    background-color: #ffc107; /* Màu vàng cam */
-    color: #333;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: default; /* Không phải con trỏ pointer */
-    opacity: 0.9;
-    transition: background-color 0.2s;
-    flex-shrink: 0;
-    margin-top: 10px;
-    display: inline-flex; /* Để icon và text trên cùng một hàng */
-    align-items: center;
-    gap: 5px;
-}
-.btn-pending i {
-    color: #333; /* Màu icon phù hợp với nền nút */
-}
-
-
-/* === MODAL STYLES (Chung cho tất cả modal) === */
-.modal {
-  display: none; /* Mặc định ẩn */
-  position: fixed; /* Giữ vị trí khi cuộn */
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  /* Dùng flexbox để căn giữa modal */
-  display: flex; /* Thay đổi từ 'none' sang 'flex' khi muốn hiển thị */
-  justify-content: center; /* Căn giữa theo chiều ngang */
-  align-items: center; /* Căn giữa theo chiều dọc */
-  overflow: auto;
-  background-color: rgba(0,0,0,0.6); /* Nền mờ */
-  animation: fadeIn 0.3s;
-  z-index: 100; /* Z-index cơ bản cho các modal */
-}
-
-/* Modal đăng nhập sẽ có z-index cao hơn modal chi tiết sách */
-#loginModal {
-  z-index: 101; /* Đảm bảo modal đăng nhập hiển thị trên các modal khác */
-}
-
-/* Modal content (nội dung popup nhỏ, ví dụ đăng nhập) */
-#loginModal .modal-content,
-#borrowCodePopup .modal-content.small-modal { /* Thêm .small-modal cho popup mã mượn */
-  background-color: #fff;
-  /* margin: 10% auto; */ /* Bỏ margin auto nếu dùng flexbox centering */
-  padding: 30px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px; /* Giữ max-width cho modal nhỏ */
-  position: relative;
-  animation: slideIn 0.3s ease-out;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-  text-align: center; /* Căn giữa text trong modal nhỏ */
-}
-
-.modal-content h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.modal-content input {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.modal-content button {
-  width: 100%;
-  padding: 12px;
-  background-color: #0066cc;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.modal-content button:hover {
-  background-color: #004c99;
-}
-
-.close-btn {
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  font-size: 24px;
-  cursor: pointer;
-  color: #555;
-}
-
-.close-btn:hover {
-    color: #000;
-}
-
-.signup-link {
-  text-align: center;
-  margin-top: 15px;
-}
-
-.signup-link a {
-  color: #0066cc;
-  text-decoration: none;
-}
-
-.signup-link a:hover {
-  text-decoration: underline;
-}
-
-/* Popup content (nội dung bookDetailModal, tên class cũ là popup-content) */
 #bookDetailModal .popup-content { 
     background-color: #fff;
     margin: 8% auto;
@@ -590,25 +549,23 @@ header.navbar {
     margin-bottom: 25px;
 }
 
-/* ĐÃ CHỈNH SỬA: LÀM CHO CÁC NÚT BẰNG NHAU */
 .popup-actions .popup-btn,
-.popup-actions .btn-action { /* Áp dụng cho cả popup-btn và btn-action */
-    flex-grow: 1; /* Chia đều không gian cho các nút */
-    padding: 12px 20px; /* Đảm bảo padding đủ lớn để có kích thước dễ bấm */
+.popup-actions .btn-action {
+    flex-grow: 1;
+    padding: 12px 20px;
     border-radius: 5px; 
-    border: none; /* Bỏ border mặc định nếu đã có */
+    border: none;
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
     display: inline-flex; 
     align-items: center; 
-    justify-content: center; /* Căn giữa ngang nội dung nút */
-    gap: 8px; /* Khoảng cách giữa icon và chữ */
+    justify-content: center;
+    gap: 8px;
 }
 
-/* Các styles riêng cho từng nút */
-.btn-view { /* Đổi từ popup-btn.btn-view sang chỉ .btn-view nếu dùng chung .popup-btn */
+.btn-view {
     background-color: #007bff;
     color: white;
 }
@@ -617,22 +574,22 @@ header.navbar {
     background-color: #0069d9;
 }
 
-.btn-borrow { /* Đổi từ popup-btn.btn-borrow sang chỉ .btn-borrow */
+.btn-borrow {
     background-color: #f8f9fa;
     color: #333;
-    border: 1px solid #ccc; /* Thêm border cho nút borrow để phân biệt */
+    border: 1px solid #ccc;
 }
 
 .btn-borrow:hover {
     background-color: #e2e6ea;
 }
 
-.btn-borrow.disabled { /* Nút mượn sách bị disabled */
+.btn-borrow.disabled {
     background-color: #e0e0e0;
     color: #666;
     cursor: not-allowed;
     opacity: 0.8;
-    border: 1px solid #ccc; /* Giữ border cho nút disabled */
+    border: 1px solid #ccc;
 }
 
 
@@ -663,95 +620,6 @@ header.navbar {
     margin-bottom: 8px;
 }
 
-/* Styles for borrow code popup */
-#borrowCodePopup {
-    z-index: 102; /* Đảm bảo popup này hiển thị trên cùng */
-}
-
-#borrowCodePopup .modal-content {
-    max-width: 500px; /* Adjust width as needed */
-    padding: 40px;
-}
-
-.borrow-code-text {
-    font-size: 2em;
-    color: #007bff;
-    margin: 20px 0;
-    font-weight: bold;
-    word-break: break-all; /* Ensure long codes wrap */
-}
-
-.btn-primary {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.1em;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-    background-color: #0056b3;
-}
-
-/* Styles for status badge */
-.status-badge {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.9em;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-.status-dang-cho-phe-duyet {
-    background-color: #ffc107; /* yellow */
-    color: #333;
-}
-
-.status-dang-muon {
-    background-color: #28a745; /* green */
-    color: white;
-}
-
-.status-da-tra {
-    background-color: #6c757d; /* gray */
-    color: white;
-}
-
-/* General alert styles (optional, as you have JS alerts) */
-.alert {
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    font-weight: bold;
-    text-align: center;
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    z-index: 1000;
-    animation: fadeIn 0.3s, fadeOut 0.5s 4.5s forwards; /* Fade in, then fade out after 4.5s */
-}
-
-.alert.success {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.alert.error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
 @keyframes slideIn {
   from { transform: translateY(-50px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
@@ -762,10 +630,6 @@ header.navbar {
   to { opacity: 1; }
 }
 
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
 
 @media (max-width: 768px) {
     .nav-links { display: none; }
@@ -783,17 +647,17 @@ header.navbar {
         text-align: left;
     }
     
-    .borrowed-item .book-cover { /* Đảm bảo kích thước ảnh trên mobile */
-        width: 100px; /* Giảm kích thước ảnh trên mobile */
+    .borrowed-item .book-cover {
+        width: 100px;
         height: 130px;
-        margin-bottom: 10px; /* Thêm khoảng cách dưới ảnh khi xếp cột */
+        margin-bottom: 10px;
     }
 
     .borrowed-item .book-info {
-        width: 100%; /* Đảm bảo thông tin chiếm hết chiều rộng */
+        width: 100%;
     }
 
-    .btn-return, .btn-pending {
+    .btn-return {
         align-self: flex-end;
     }
 
@@ -801,15 +665,84 @@ header.navbar {
         flex-direction: column;
     }
 
-    /* Kích thước modal trên mobile */
     #loginModal .modal-content,
-    #bookDetailModal .popup-content,
-    #borrowCodePopup .modal-content.small-modal { /* Sử dụng .popup-content cho modal chi tiết sách */
+    #bookDetailModal .popup-content {
         margin: 5% auto;
         padding: 20px;
         width: 95%;
     }
-    .alert {
-        width: 95%; /* Adjust width on smaller screens */
-    }
+}
+.borrow-status-pending {
+    color: #ff8c00;
+    font-weight: bold;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.borrow-status-approved {
+    color: #28a745;
+    font-weight: bold;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.borrow-code {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #0056b3;
+    background-color: #e6f7ff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    border: 1px dashed #99ccff;
+}
+
+.btn-return.hidden {
+    display: none;
+}
+
+.btn-browse {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-browse:hover {
+    background-color: #0056b3;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    animation: fadeOut 5s forwards;
+}
+
+.alert.success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; display: none; }
 }

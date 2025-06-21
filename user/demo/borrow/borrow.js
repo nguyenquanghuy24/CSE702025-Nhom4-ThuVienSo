@@ -88,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Scroll to footer when Contact is clicked
     const contactScrollBtn = document.getElementById('contact-scroll-btn');
     if (contactScrollBtn) {
         contactScrollBtn.addEventListener('click', () => {
@@ -98,4 +97,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        alert.addEventListener('animationend', function() {
+            if (this.classList.contains('fadeOut')) {
+                this.style.display = 'none';
+            }
+        });
+    });
 });
