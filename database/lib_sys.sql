@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 21, 2025 at 08:02 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th6 21, 2025 lúc 09:02 PM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `lib_sys`
+-- Cơ sở dữ liệu: `lib_sys`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `admin_tbl`
+-- Cấu trúc bảng cho bảng `admin_tbl`
 --
 
 CREATE TABLE `admin_tbl` (
@@ -36,7 +36,7 @@ CREATE TABLE `admin_tbl` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `admin_tbl`
+-- Đang đổ dữ liệu cho bảng `admin_tbl`
 --
 
 INSERT INTO `admin_tbl` (`admin_id`, `username`, `password`, `email`, `full_name`) VALUES
@@ -45,7 +45,7 @@ INSERT INTO `admin_tbl` (`admin_id`, `username`, `password`, `email`, `full_name
 -- --------------------------------------------------------
 
 --
--- Table structure for table `book_tbl`
+-- Cấu trúc bảng cho bảng `book_tbl`
 --
 
 CREATE TABLE `book_tbl` (
@@ -63,7 +63,7 @@ CREATE TABLE `book_tbl` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `book_tbl`
+-- Đang đổ dữ liệu cho bảng `book_tbl`
 --
 
 INSERT INTO `book_tbl` (`id`, `maSach`, `tieuDe`, `tacGia`, `theLoai`, `namXuatBan`, `ngonNgu`, `soLuong`, `trangThai`, `moTa`, `anhBia`) VALUES
@@ -85,7 +85,7 @@ INSERT INTO `book_tbl` (`id`, `maSach`, `tieuDe`, `tacGia`, `theLoai`, `namXuatB
 -- --------------------------------------------------------
 
 --
--- Table structure for table `borrow_tbl`
+-- Cấu trúc bảng cho bảng `borrow_tbl`
 --
 
 CREATE TABLE `borrow_tbl` (
@@ -99,7 +99,7 @@ CREATE TABLE `borrow_tbl` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `borrow_tbl`
+-- Đang đổ dữ liệu cho bảng `borrow_tbl`
 --
 
 INSERT INTO `borrow_tbl` (`borrow_id`, `user_id`, `ngayMuon`, `ngayHetHan`, `tinhTrang`, `book_id`, `maMuon`) VALUES
@@ -110,7 +110,7 @@ INSERT INTO `borrow_tbl` (`borrow_id`, `user_id`, `ngayMuon`, `ngayHetHan`, `tin
 -- --------------------------------------------------------
 
 --
--- Table structure for table `reply_tbl`
+-- Cấu trúc bảng cho bảng `reply_tbl`
 --
 
 CREATE TABLE `reply_tbl` (
@@ -123,7 +123,7 @@ CREATE TABLE `reply_tbl` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `reply_tbl`
+-- Đang đổ dữ liệu cho bảng `reply_tbl`
 --
 
 INSERT INTO `reply_tbl` (`reply_id`, `ticket_id`, `admin_id`, `subject`, `message`, `reply_date`) VALUES
@@ -132,7 +132,7 @@ INSERT INTO `reply_tbl` (`reply_id`, `ticket_id`, `admin_id`, `subject`, `messag
 -- --------------------------------------------------------
 
 --
--- Table structure for table `request_tbl`
+-- Cấu trúc bảng cho bảng `request_tbl`
 --
 
 CREATE TABLE `request_tbl` (
@@ -148,7 +148,7 @@ CREATE TABLE `request_tbl` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tbl_user`
+-- Cấu trúc bảng cho bảng `tbl_user`
 --
 
 CREATE TABLE `tbl_user` (
@@ -161,7 +161,7 @@ CREATE TABLE `tbl_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tbl_user`
+-- Đang đổ dữ liệu cho bảng `tbl_user`
 --
 
 INSERT INTO `tbl_user` (`id`, `user`, `pass`, `email`, `hoTen`, `maSV`) VALUES
@@ -170,7 +170,7 @@ INSERT INTO `tbl_user` (`id`, `user`, `pass`, `email`, `hoTen`, `maSV`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ticket_tbl`
+-- Cấu trúc bảng cho bảng `ticket_tbl`
 --
 
 CREATE TABLE `ticket_tbl` (
@@ -180,22 +180,23 @@ CREATE TABLE `ticket_tbl` (
   `email` varchar(255) NOT NULL,
   `subject` varchar(255) NOT NULL,
   `message` text NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `user_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `ticket_tbl`
+-- Đang đổ dữ liệu cho bảng `ticket_tbl`
 --
 
-INSERT INTO `ticket_tbl` (`ticket_id`, `hoTen`, `maSV`, `email`, `subject`, `message`, `created_at`) VALUES
-(4, 'Nguyen Quang Huy', '002', 'nghuy@gmail.com', 'Về sách Giải tích I bị hỏng', 'Kính gửi thư viện, tôi muốn báo cáo rằng cuốn sách Giải tích I tôi vừa mượn có một số trang bị rách và không đọc được. Mong thư viện có thể hỗ trợ đổi sách hoặc có biện pháp xử lý. Cảm ơn.', '2025-06-21 17:53:43');
+INSERT INTO `ticket_tbl` (`ticket_id`, `hoTen`, `maSV`, `email`, `subject`, `message`, `created_at`, `user_id`) VALUES
+(4, 'Nguyen Quang Huy', '002', 'nghuy@gmail.com', 'Về sách Giải tích I bị hỏng', 'Kính gửi thư viện, tôi muốn báo cáo rằng cuốn sách Giải tích I tôi vừa mượn có một số trang bị rách và không đọc được. Mong thư viện có thể hỗ trợ đổi sách hoặc có biện pháp xử lý. Cảm ơn.', '2025-06-21 17:53:43', NULL);
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `admin_tbl`
+-- Chỉ mục cho bảng `admin_tbl`
 --
 ALTER TABLE `admin_tbl`
   ADD PRIMARY KEY (`admin_id`),
@@ -203,14 +204,14 @@ ALTER TABLE `admin_tbl`
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indexes for table `book_tbl`
+-- Chỉ mục cho bảng `book_tbl`
 --
 ALTER TABLE `book_tbl`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `maSach` (`maSach`);
 
 --
--- Indexes for table `borrow_tbl`
+-- Chỉ mục cho bảng `borrow_tbl`
 --
 ALTER TABLE `borrow_tbl`
   ADD PRIMARY KEY (`borrow_id`),
@@ -219,7 +220,7 @@ ALTER TABLE `borrow_tbl`
   ADD KEY `fk_book` (`book_id`);
 
 --
--- Indexes for table `reply_tbl`
+-- Chỉ mục cho bảng `reply_tbl`
 --
 ALTER TABLE `reply_tbl`
   ADD PRIMARY KEY (`reply_id`),
@@ -227,7 +228,7 @@ ALTER TABLE `reply_tbl`
   ADD KEY `fk_reply_ticket` (`ticket_id`);
 
 --
--- Indexes for table `request_tbl`
+-- Chỉ mục cho bảng `request_tbl`
 --
 ALTER TABLE `request_tbl`
   ADD PRIMARY KEY (`id`),
@@ -235,76 +236,77 @@ ALTER TABLE `request_tbl`
   ADD KEY `book_id` (`book_id`);
 
 --
--- Indexes for table `tbl_user`
+-- Chỉ mục cho bảng `tbl_user`
 --
 ALTER TABLE `tbl_user`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `ticket_tbl`
+-- Chỉ mục cho bảng `ticket_tbl`
 --
 ALTER TABLE `ticket_tbl`
-  ADD PRIMARY KEY (`ticket_id`);
+  ADD PRIMARY KEY (`ticket_id`),
+  ADD KEY `fk_ticket_user` (`user_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `admin_tbl`
+-- AUTO_INCREMENT cho bảng `admin_tbl`
 --
 ALTER TABLE `admin_tbl`
   MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `book_tbl`
+-- AUTO_INCREMENT cho bảng `book_tbl`
 --
 ALTER TABLE `book_tbl`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT for table `borrow_tbl`
+-- AUTO_INCREMENT cho bảng `borrow_tbl`
 --
 ALTER TABLE `borrow_tbl`
   MODIFY `borrow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
--- AUTO_INCREMENT for table `reply_tbl`
+-- AUTO_INCREMENT cho bảng `reply_tbl`
 --
 ALTER TABLE `reply_tbl`
   MODIFY `reply_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT for table `request_tbl`
+-- AUTO_INCREMENT cho bảng `request_tbl`
 --
 ALTER TABLE `request_tbl`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `tbl_user`
+-- AUTO_INCREMENT cho bảng `tbl_user`
 --
 ALTER TABLE `tbl_user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `ticket_tbl`
+-- AUTO_INCREMENT cho bảng `ticket_tbl`
 --
 ALTER TABLE `ticket_tbl`
   MODIFY `ticket_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `borrow_tbl`
+-- Các ràng buộc cho bảng `borrow_tbl`
 --
 ALTER TABLE `borrow_tbl`
   ADD CONSTRAINT `fk_borrow_book` FOREIGN KEY (`book_id`) REFERENCES `book_tbl` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_borrow_user` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `reply_tbl`
+-- Các ràng buộc cho bảng `reply_tbl`
 --
 ALTER TABLE `reply_tbl`
   ADD CONSTRAINT `fk_reply_admin` FOREIGN KEY (`admin_id`) REFERENCES `admin_tbl` (`admin_id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -313,11 +315,17 @@ ALTER TABLE `reply_tbl`
   ADD CONSTRAINT `reply_tbl_ibfk_2` FOREIGN KEY (`ticket_id`) REFERENCES `ticket_tbl` (`ticket_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `request_tbl`
+-- Các ràng buộc cho bảng `request_tbl`
 --
 ALTER TABLE `request_tbl`
   ADD CONSTRAINT `request_tbl_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`id`),
   ADD CONSTRAINT `request_tbl_ibfk_2` FOREIGN KEY (`book_id`) REFERENCES `book_tbl` (`id`);
+
+--
+-- Các ràng buộc cho bảng `ticket_tbl`
+--
+ALTER TABLE `ticket_tbl`
+  ADD CONSTRAINT `fk_ticket_user` FOREIGN KEY (`user_id`) REFERENCES `tbl_user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
